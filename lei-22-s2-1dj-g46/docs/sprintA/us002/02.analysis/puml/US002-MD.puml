@@ -1,0 +1,46 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title US002 Real Estate Agent - Domain Model
+
+hide methods
+
+class Agent {
+ID
+___
+}
+
+class Owner {
+___
+}
+
+class Property {
+type
+area
+location
+distance from city centre
+requested price
+photographs
+___
+}
+
+
+Agent "1" -- "1" System : publishes sale\nannouncement on >
+
+Owner "1" -- "1" Property : sends request about\nthis to agent >
+
+class System {
+advertisements
+application
+___
+}
+Agent "1" -- "1..*" Property : published >
+Owner "1" -- "1" Agent : sends property\nrequest to >
+
+@enduml

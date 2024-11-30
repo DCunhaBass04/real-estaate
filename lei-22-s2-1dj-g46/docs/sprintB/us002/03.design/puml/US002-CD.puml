@@ -1,0 +1,129 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+title US002 Real State Agent - Class Diagram
+
+class Agent {
+-name
+-email
+-pwd
+----
++hasEmail(String email)
++getName()
++getEmail()
++toString()
++clone()
+}
+
+class AgentUI {
+----
++run()
+}
+
+class Repository {
+-Repositories instance
+-PropertyRepository propertyRepository
+___
++getInstance()
++getPropertyRepository()
+}
+
+class PropertyRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+interface Property{
+-String type
+-float area
+-String location
+-float distance from city centre
+-float requested price
+---
++equals(object)
++clone()
+}
+
+class SetCommissionUI {
+___
++run()
+}
+
+class SetCommissionController{
+___
++setCommissionFromOwner()
++printPropertyRequests(List<PropertyRequest> propertyRequests)
++choosePropertyRequest(PropertyRequestRepository propertyRequestRepository,\nList<PropertyRequest> propertyRequests, Scanner ler)
++setCommission(PropertyRequest propertyRequest, VerifyInput verifyInput, Scanner input)
++setCommissionValue(float finalValue, String wantedRange, Scanner input, VerifyInput verifyInput)
+}
+
+class House {
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-png photographs
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+-boolean basement
+-boolean inhabitableLoft
+-float sunExposure
+___
++equals(object)
++clone()
++toString()
+}
+
+class Apartment {
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-png photographs
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+___
++equals(object)
++clone()
++toString()
+}
+
+class Land{
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-png photographs
+___
++equals(object)
++clone()
++toString()
+}
+
+Agent --> AgentUI : sends request to the\nPropertyRepository to insert data
+AgentUI --> SetCommissionUI : runs
+SetCommissionUI -> SetCommissionController : creates
+SetCommissionController -> Repository :   ask for the property repository\n to insert property data
+Repository --> PropertyRepository : contains
+PropertyRepository --> Property : gets new
+SetCommissionController -> PropertyRepository : inserts property data
+Property --> House : can be
+Property --> Apartment : can be
+Property --> Land : can be
+
+
+@enduml

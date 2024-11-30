@@ -1,0 +1,121 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+title US020 Read a Response - Class Diagram
+
+class ReadResponseUI{
+- ReadResponseController controller
+___
++ printResponseList\n(responseList)
++ chooseResponse\n(responseList)
++ AcceptOrDeclineResponse()
++ specifyTheReasonToDecline()
+}
+
+class ReadResponseController{
+___
++ getResponsesToClient()
++ changeResponse\n(response)
++ changeResponseWithReason\n(response, reason)
+}
+
+class Repositories{
+___
++ getInstance()
++ getAuthenticationRepository()
++ getResponseRepository()
++ getClientRepository()
++ getResponseRepository()
+}
+
+class AuthenticationRepository{
+-AuthFacade authenticationFacade
+___
++ getCurrentUserSession()
+}
+
+class UserSession{
+- user
+___
++ getUserId()
+}
+
+class ClientRepository{
+-List<Client> clients
+___
++ getClientByEmail(email)
+}
+
+class Client {
+-String name
+-int passportNumber
+-socialSecurityNumber
+-String email
+-String phoneNumber
+-String pwd
+___
++ Client(email, name, phoneNumber)
++ getPhoneNumber()
++ getName()
+}
+
+class ResponseRepository{
+-List<response> responses
+___
++ create(subject, text, sender, recipient, state, reason)
++ addMessage(message)
++ validateResponse(response)
++ remove()
++ getResponses()
+}
+
+class Response{
+- String subject;
+- String text;
+- Client sender;
+- Client recipient;
+- String state;
+- String reason;
+___
++ Response (subject, text, sender, recipient, state)
++ MResponse (subject, text, sender, recipient, state, reason)
++ toString()
++clone()
++setState()
++setReason()
++getRecipient()
+}
+
+class ResponseRepository {
+-List<Response> responses
+___
++isEmpty()
++add(response)
+-validateResponse(response)
++remove(object)
++getResponses()
+}
+
+Client -> ReadResponseUI : asks to read a response
+Client -> ReadResponseUI : accepts or declines the response
+
+ReadResponseUI -> ReadResponseController : creates
+ReadResponseController --> Repositories : gets instance of
+Repositories --> "1" ResponseRepository : contains
+Repositories --> "1" ClientRepository : contains
+Repositories --> "1" ResponseRepository : contains
+Repositories --> "1" AuthenticationRepository : contains
+
+ReadResponseController -> Response : creates
+
+ReadResponseController --> ResponseRepository : change the state \nof the response
+ReadResponseController --> ResponseRepository : add a reason if the \nresponse is declined
+
+AuthenticationRepository --> "*" UserSession : has
+ClientRepository --> "*" Client : contains
+ResponseRepository --> "*" Response : contains
+
+
+@enduml

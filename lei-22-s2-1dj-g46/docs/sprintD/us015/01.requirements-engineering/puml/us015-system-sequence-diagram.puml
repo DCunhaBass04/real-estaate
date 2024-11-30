@@ -1,0 +1,33 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 015 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Agent" as Admin
+participant ":System" as System
+
+activate Admin
+
+    Admin -> System : requests to see all booking requests sent to them
+
+    activate System
+
+    System --> Admin : asks for them to select a time period
+
+    deactivate System
+
+    Admin -> System : selects begin date and end date
+
+    activate System
+
+'might have to add the choice between sorting algorithms
+
+    System --> Admin : shows the list of all booking requests made to that agent in that time period
+
+deactivate System
+
+@enduml

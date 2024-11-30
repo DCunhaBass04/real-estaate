@@ -1,0 +1,79 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title US008 List Property Announcement Requests - Domain Model
+
+hide methods
+
+class Agent {
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+interface Property {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class Request{
+-type
+-price
+-priceUnit
+-isItPublished
+-commissionDate
+-owner
+-commissionValue
+-duration
+}
+
+class Land{
+}
+
+class Apartment {
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+}
+
+class House {
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-basement
+-inhabitableLoft
+-sunExposure
+}
+
+Agent -> Property : asks to list property\nrequests, sorted and filtered\nas asked by the user
+
+Property -> Request : contains
+
+Property --> Apartment : can be
+Property --> House : can be
+Property --> Land : can be
+
+@enduml

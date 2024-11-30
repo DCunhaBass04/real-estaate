@@ -1,0 +1,56 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title US013-  List Employees by Store - Domain Model
+hide methods
+
+class NetworkManager {
+-name
+-email
+-password
+}
+
+class Employee{
+-email
+-name
+-role
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+}
+
+class Store{
+-name
+-address
+-phoneNumber
+-id
+-email
+}
+
+interface Property {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+NetworkManager "1" -  "*" Employee : wants a list of employees,\nsorted alphabetically >
+
+Store "1" -- "*" Employee : contains >
+Employee "1..*" -- "1" Store : grouped by >
+Store "1" -- "*" Property : owns >
+
+@enduml

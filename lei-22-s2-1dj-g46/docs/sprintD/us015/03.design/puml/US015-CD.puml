@@ -1,0 +1,79 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+title US015 Listing all bookings - Class Diagram
+
+class Agent{
+-String email
+-String name
+-String phoneNumber
+-String address
+-String store
+-int ccNumber
+-int taxNumber
+-String pwd
+___
+}
+
+class CheckVisitsUI{
+-CheckVisitsController controller
+___
+}
+
+class CheckVisitsController{
+-AuthenticationRepository authenticationRepository
+-MessageRepository messageRepository
+___
++CheckVisitsController()
+-getMessageRepository()
+-getAuthenticationRepository()
+}
+
+class Repositories{
+-Repositories instance
+-MessageRepository messageRepository
+-AuthenticationRepository authenticationRepository
+___
++ getInstance()
++ getMessageRepository()
++ getAuthenticationRepository()
+}
+
+class MessageRepository{
+-List<Message> messages
+___
++ create(text, name, phoneNumber, preferredDate, timeSlot)
++ addMessage(message)
++ validateMessage(message)
+}
+
+class AuthenticationRepository{
+-AuthFacade authenticationFacade
+___
++ getCurrentUserSession()
+}
+
+class Message{
+-Property property;
+-String agentID;
+-String text;
+-String name;
+-String phoneNumber;
+-String preferredDate;
+-int startOfVisit;
+-int endOfVisit;
+___
++ Message (text, name, phoneNumber, preferredDate, timeSlot)
++ toString()
+
+}
+
+Agent -> CheckVisitsUI
+CheckVisitsUI --> CheckVisitsController : controller
+CheckVisitsController --> Repositories : repositories
+Repositories --> MessageRepository : messageRepository
+Repositories --> AuthenticationRepository : authenticationRepository
+MessageRepository --> Message : contains
+@enduml

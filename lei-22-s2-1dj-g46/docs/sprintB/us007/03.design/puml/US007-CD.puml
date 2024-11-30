@@ -1,0 +1,82 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+title US007 Sign Up - Class Diagram
+
+class UnregisteredUser {
+___
+}
+
+class MainMenuUI {
+-List<MenuItem> options
+___
++run()
+}
+
+class MenuItem {
+-String description
+-Runnable ui
+___
++run()
+}
+
+class SignUpUI {
+___
++run()
+}
+
+class SignUpController{
+___
++requestInformation()
++verifyInformation(String name, int ccNumber, int taxNumber,\nString email, String phone, String address)
++generatePassword()
+}
+
+class Repository {
+-Repository instance
+___
++getInstance()
+}
+
+class UserRepository {
+-List<User> users
+___
++isEmpty()
++add(user)
++validateUser(user)
++getUser()
+}
+
+class User {
+-String name
+-int ccNumber
+-int taxNumber
+-String email
+-String phone
+-String address
+-String password
+___
++listProperties()
++sendPropertyRequest()
++buyProperty()
+}
+
+UnregisteredUser --> MainMenuUI : interacts with
+
+MainMenuUI -> MenuItem : creates
+MainMenuUI -> MenuItem : requests to get\nall properties
+
+MenuItem -> SignUpUI : runs
+SignUpUI -> SignUpController : creates
+
+SignUpController -up-> UnregisteredUser : request necessary\ninformation
+UnregisteredUser -> SignUpController : provides requested\ninformation
+SignUpController --> Repository : gets\ninstance of
+
+Repository -> UserRepository : contains
+SignUpController -> UserRepository : registers if successful,\nloops "requests necessary\ninformation" if not
+UserRepository -right-> User : contains
+
+@enduml

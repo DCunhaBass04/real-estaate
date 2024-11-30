@@ -1,0 +1,19 @@
+@startuml
+
+actor "Client" as CLT
+participant ":PlaceOrderUI" as UI
+
+activate CLT
+CLT <-- UI : request to select a property with an option and to send the correct amount
+        deactivate UI
+
+    CLT -> UI : send the selected option property and the amount
+
+
+    alt if the amount is higher
+
+            CLT <-- UI : Incorrect amount. Please insert the amount again.
+
+            end
+
+@enduml

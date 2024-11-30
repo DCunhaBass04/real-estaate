@@ -1,0 +1,22 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+title US003 Register a New Employee - Domain Model
+class Employee {
+role
+card number
+tax number
+address
+email
+phone
+agency
+___
+}
+class SystemAdministrator {
+___
+}
+SystemAdministrator "1" -- "*" Employee : registers >
+@enduml

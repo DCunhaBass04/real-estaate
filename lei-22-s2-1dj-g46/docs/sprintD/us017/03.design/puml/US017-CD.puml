@@ -1,0 +1,59 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+title US017 Listing all deals - Class Diagram
+
+class User {
+-String name
+-String role
+-String email
+-String pwd
+}
+
+class ListAllDealsUI{
+-ListAllDealsController listAllDealsController
+___
++run()
+}
+
+class ListAllDealsController {
+___
++getProperties()
++sortProperties(option, option2, properties)
+}
+
+class Repositories{
+-Repositories instance
+-PropertySoldRepository soldRepository
+___
++ getInstance()
++ getPropertySoldRepository()
+}
+
+class PropertySoldRepository {
+-List<Property> soldProperties
+-EditAndSortLists editAndSortLists
+}
+
+class Property{
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-String saleDate
+-Request request
+-Store store
+}
+
+User -> ListAllDealsUI : asks to see all deals made
+ListAllDealsUI --> ListAllDealsController : controller
+ListAllDealsController --> Repositories : repositories
+Repositories --> PropertySoldRepository : propertySoldRepository
+PropertySoldRepository --> Property : contains
+@enduml

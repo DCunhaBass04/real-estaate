@@ -1,0 +1,140 @@
+@startuml
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 002 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Agent" as User
+participant ":SetCommissionUI" as UI
+participant ":SetCommissionController" as CTRL
+participant ":Repository" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant ":PropertyRequestRepository" as PropertyRequest
+participant ":PropertyRepository" as Property
+
+    activate User
+    User -> UI : asks to list registered properties
+    activate UI
+
+        UI -> CTRL** : create
+
+        UI -> CTRL : getAllPropertiesFromCurrentAgent()
+        activate CTRL
+
+        CTRL -> RepositorySingleton : getInstance()
+        activate RepositorySingleton
+
+        RepositorySingleton --> CTRL: repositories
+        deactivate RepositorySingleton
+
+        CTRL -> PLAT : getPropertyRequestRepository()
+        activate PLAT
+
+        PLAT --> CTRL: propertyRequestRepository
+        deactivate PLAT
+
+        CTRL -> PropertyRequest : getPropertyRequests()
+        activate PropertyRequest
+
+        PropertyRequest --> CTRL : propertyRequestList
+        deactivate PropertyRequest
+
+        CTRL --> UI : propertyRequestList
+        deactivate CTRL
+
+        UI --> User : asks if they only want to see 'for rent', 'for sale' or both
+        deactivate UI
+
+        User -> UI : answers the question
+        activate UI
+
+            alt answer isn't "both"
+            UI -> CTRL : askAboutTypeOfSale(properties, scanner)
+            activate CTRL
+            CTRL -> ListEditor : getPropertiesWithXTypeOfSale(propertyList, type)
+            activate ListEditor
+            ListEditor -> ListEditor : create list with all the properties\nof the requested type
+            ListEditor --> CTRL : propertyList
+            deactivate ListEditor
+            CTRL --> UI : propertyList
+            deactivate CTRL
+            end
+
+        UI --> User : asks if they only want to see lands, apartments, houses or all of those
+        deactivate UI
+
+        User -> UI : answers the question
+        activate UI
+
+            alt answer isn't "all of them"
+            UI -> CTRL : askAboutTypeOfProperty(properties, scanner)
+            activate CTRL
+            alt answer is land
+            CTRL -> ListEditor : getPropertiesIfTheyAreLand(propertyList)
+            activate ListEditor
+            ListEditor -> ListEditor : create list with\nall the lands
+            ListEditor --> CTRL : propertyList
+            deactivate ListEditor
+
+            else answer is apartment
+            CTRL -> ListEditor : getPropertiesIfTheyAreApartment(propertyList)
+            activate ListEditor
+            ListEditor -> ListEditor : create list with\nall the apartments
+            ListEditor --> CTRL : propertyList
+            deactivate ListEditor
+
+            else answer is house
+            CTRL -> ListEditor : getPropertiesIfTheyAreLand(propertyList)
+            activate ListEditor
+            ListEditor -> ListEditor : create list with\nall the houses
+            ListEditor --> CTRL : propertyList
+            deactivate ListEditor
+            end
+            CTRL --> UI : propertyList
+            deactivate CTRL
+            end
+
+    alt there aren't any requests with the given specifications
+        UI --> User : shows message saying that there aren't any\nrequests that meet the given requirements
+    else there are
+        UI -> CTRL : setCommissionFromOwner(propertiesFromCurrentAgent)
+        deactivate UI
+        activate CTRL
+        CTRL --> User : shows all property requests done to the current agent
+        loop while there are property requests
+            CTRL --> CTRL : choosePropertyRequest(requestRepository, propertyList, scanner)
+            User -> CTRL : selects a property to set commission
+            CTRL --> CTRL : setCommission(propertyRequest, verifyInput, scanner)
+            activate CTRL
+            CTRL --> User : asks if there is an agreement on the current commission value
+            User -> CTRL : answers the question
+            alt if the answer is no
+                CTRL --> User : requests new commission value (% or flat value)
+                User -> CTRL : inserts new commission value
+                CTRL --> CTRL : updates the commission value
+            end
+            CTRL --> User : asks if there is an agreement on the final price
+            User -> CTRL : answers the question
+            alt if the answer is no
+                CTRL --> User : requests new final property price
+                User -> CTRL : inserts new final property price
+                CTRL --> CTRL : updates the new final property price
+            end
+            deactivate CTRL
+            CTRL --> CTRL : registers announcement date,\nregisters property on the system\nand deletes it from the list
+            CTRL -> PropertyRequest : removes property from
+            activate PropertyRequest
+            deactivate PropertyRequest
+            CTRL -> Property : registers property to
+            activate Property
+            deactivate Property
+            UI --> User : displays operation success
+        end
+    end
+    deactivate CTRL
+
+    deactivate User
+@enduml

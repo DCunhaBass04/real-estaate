@@ -1,0 +1,41 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 001 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Unregistered User" as User
+participant ":MainMenuUI" as MainUI
+participant ":ListPropertiesUI" as ListUI
+participant ":ListPropertiesController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "propertyRepository:\npropertyRepository" as PropertyRepository
+
+activate CTRL
+
+    CTRL -> RepositorySingleton : getInstance()
+    activate RepositorySingleton
+
+    RepositorySingleton --> CTRL : repositories
+    deactivate RepositorySingleton
+
+    CTRL -> PLAT : getPropertyRepository()
+    activate PLAT
+
+    PLAT --> CTRL : propertyRepository
+    deactivate PLAT
+
+    CTRL -> PropertyRepository : getProperties()
+    activate PropertyRepository
+
+    PropertyRepository --> CTRL : propertyList
+    deactivate PropertyRepository
+    deactivate ListUI
+
+    CTRL --> User : prints all properties (along with type, area, location, agent, price, commission, etc.)
+    deactivate MainUI
+
+@enduml

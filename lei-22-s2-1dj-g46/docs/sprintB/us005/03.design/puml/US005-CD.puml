@@ -1,0 +1,62 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+title US005 Register a Store - Class Diagram
+
+class Store {
+- String storeName
+- String address
+- int phoneNumber
+- int id
+- int taxIdentificationNumber
+- int businessLicensee
+- int bankAccountInformation
+- String products
+- String website
+- String email
+___
+}
+
+class SystemAdministrator {
+- String storeName
+- String address
+- int phoneNumber
+- int id
+- int taxIdentificationNumber
+- int businessLicensee
+- int bankAccountInformation
+- String products
+- String website
+- String email
+___
+}
+
+class StoreRepository{
+___
+}
+
+class AdminUI {
+___
++run()
+}
+
+class CreateStoreUI {
+___
++registerNewEStore()
++verifyData(storeName, address,\n phoneNumber, id, taxIdentificationNumber,\n businessLicensee, bankAccountInformation,\n products, website, email)
+}
+
+class CreateStoreController {
+___
++verifyIfNewStore(storeName, address,\n phoneNumber, id, taxIdentificationNumber,\n businessLicensee, bankAccountInformation,\n products, website, email)
++createStore(storeName, address,\n phoneNumber, id, taxIdentificationNumber,\n businessLicensee, bankAccountInformation,\n products, website, email)
+}
+
+SystemAdministrator --> AdminUI
+AdminUI --> CreateStoreUI
+CreateStoreUI .> CreateStoreController
+SystemAdministrator "1" --> "*" Store : registers 
+CreateStoreController --> "1" StoreRepository : StoreRepository
+StoreRepository --> Store : Store
+@enduml

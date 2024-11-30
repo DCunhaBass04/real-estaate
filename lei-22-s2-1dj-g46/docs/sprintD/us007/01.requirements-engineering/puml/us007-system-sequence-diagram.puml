@@ -1,0 +1,47 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 007 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Unregistered User" as User
+participant ":System" as System
+
+activate User
+
+User -> System : asks to register in the system
+activate System
+loop if invalid
+System --> User : requests necessary data
+
+deactivate System
+
+User -> System : types needed information (name,\n citizen's card number, tax number, \nemail and contact telephone number)\n and optional information (address)
+
+activate System
+
+System --> User : shows requested data
+
+deactivate System
+
+User -> System : submits data
+
+activate System
+
+
+alt if 'false'
+System --> User : operation unsuccessful, try again
+
+end
+
+activate System
+end
+
+System --> User : displays operation success
+
+deactivate System
+
+@enduml

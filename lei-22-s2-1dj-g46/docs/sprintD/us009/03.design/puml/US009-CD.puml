@@ -1,0 +1,130 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+title US009 Leaving a message - Class Diagram
+
+class LeaveMessageUI{
+-Message message
+-List<Property> propertyList
+-LeaveMessageController controller
+___
++run()
++requestToVisit()
++sendMessageToAgent()
++writeMessage()
++showPropertyList()
++askAboutFilters(properties, sc)
++printPropertyList(propertyList)
+}
+
+class LeaveMessageController{
+___
++ LeaveMessageController(authenticationRepository, clientRepository, messageRepository)
++ verifyMessage(message)
++ selectProperty(propertyList, input, verifyInput)
++ requestData(propertyList)
++ getEndOfVisit (start, input, verifyInput)
++ askAboutTypeOfSale(properties, sc)
++ askAboutTypeOfProperty(properties, sc)
++ askAboutAgent(properties, sc, agentList)
++ sortList(properties)
++ createMessage(text, name, phoneNumber, preferredDate, timeSlot)
+}
+
+class EditAndSortLists{
+___
++ getPropertiesIfTheyAreLand(properties)
++ getPropertiesIfTheyAreApartment(propertyList)
++ getPropertiesIfTheyAreHouse(propertyList)
++ getPropertiesByXAgent(propertyList, agentEmail)
+}
+
+class Repositories{
+___
+- Repositories()
++ getInstance() : Repositories
++ getAuthenticationRepository()
++ getClientRepository()
++ getMessageRepository()
+}
+
+class PropertyAnnouncementRepository{
+-List<Property> announcements
+___
+}
+
+class ClientRepository{
+-List<Client> clients
+___
++ getClientByEmail(email)
+}
+
+class AgentRepository{
+-List<Agent> agents
+___
++ getAgents()
+}
+
+class Client {
+-String name
+-int passportNumber
+-socialSecurityNumber
+-String email
+-String phoneNumber
+-String pwd
+___
++ Client(email, name, phoneNumber)
++ getPhoneNumber()
++ getName()
+}
+
+class MessageRepository{
+-List<Message> messages
+___
++ create(text, name, phoneNumber, preferredDate, timeSlot)
++ addMessage(message)
++ validateMessage(message)
+}
+
+class Message{
+-Property property;
+-String agentID;
+-String text;
+-String name;
+-String phoneNumber;
+-String preferredDate;
+-int startOfVisit;
+-int endOfVisit;
+___
++ Message (text, name, phoneNumber, preferredDate, timeSlot)
++ toString()
++clone()
++getAgentID()
++getPreferredDate()
++getPhoneNumber()
++getStartOfVisit()
++getEndOfVisit()
+}
+
+LeaveMessageUI .> LeaveMessageController
+Repositories -> Repositories : instance
+LeaveMessageController .> Repositories : repositories
+LeaveMessageController ..> ClientRepository : clientRepository
+LeaveMessageController ...> MessageRepository : messageRepository
+LeaveMessageController ..> AgentRepository : agentRepository
+LeaveMessageController ..> PropertyAnnouncementRepository : propertyAnnouncementRepository
+LeaveMessageController ..> EditAndSortLists : editAndSortLists
+Repositories --> "1" ClientRepository
+Repositories --> "1" MessageRepository
+Repositories --> "1" AgentRepository
+Repositories --> "1" PropertyAnnouncementRepository
+ClientRepository --> "*" Client
+MessageRepository ---> "*" Message
+LeaveMessageController ..> "1" Client : client
+LeaveMessageController ..> "*" Message : message
+Client --> "*" Message : sends
+
+
+@enduml

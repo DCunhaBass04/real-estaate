@@ -1,0 +1,30 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 003 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "System Administrator" as Admin
+participant ":System" as System
+participant ":Employee" as Employee
+
+activate Admin
+
+    Admin -> System : asks to register a new employee
+    activate System
+
+        System --> Admin : requests data
+    deactivate System
+
+    Admin -> System : types requested data (role, name, cc number, tax number, \naddress, email, phone number)
+    activate System
+
+        System --> Admin : verifies given information and accepts request.
+
+        System --> Employee : generates a 7 character password and sends it via email
+    deactivate System
+
+@enduml

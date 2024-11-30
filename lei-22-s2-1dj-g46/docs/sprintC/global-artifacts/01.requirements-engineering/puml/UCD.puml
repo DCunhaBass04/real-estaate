@@ -1,0 +1,44 @@
+@startuml
+title Use Case Diagram
+left to right direction
+
+actor "Unregistered User" as Unreg
+
+
+package "Registered Users"{
+actor Client as Cl
+actor Agent as Ag
+actor "System Administrator" as Admin
+actor "Owner" as O
+actor "Network Manager" as Manager
+}
+
+package Application{
+usecase "UC1 - display listed properties" as (Use1)
+usecase "UC7 - sign up" as (Use7)
+usecase "UC9 - leave a message to the agent" as (Use9)
+usecase "UC10 - place an order to purchase the property" as (Use10)
+usecase "UC8 - see list of property announcements" as (Use8)
+usecase "UC2 - publish sale announcements" as (Use2)
+usecase "UC11 - accept/decline purchase orders" as (Use11)
+usecase "UC3 - register a new employee" as (Use3)
+usecase "UC5 - register a store" as (Use5)
+usecase "UC12 - import information from legacy system" as (Use12)
+usecase "UC4 - submit a request for listing a property sale or rent, \n choosing the responsible agent" as (Use4)
+usecase "UC13 - list every employee from every store" as (Use13)
+}
+
+Unreg --> Use1
+Unreg --> Use7
+Cl --> Use9
+Cl --> Use10
+Ag --> Use8
+Ag --> Use2
+Ag --> Use11
+Admin --> Use3
+Admin --> Use5
+Admin --> Use12
+O --> Use4
+Manager --> Use13
+
+@enduml

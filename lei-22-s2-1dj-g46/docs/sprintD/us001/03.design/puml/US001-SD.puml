@@ -1,0 +1,220 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 001 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Unregistered User" as User
+participant ":ListPropertiesUI" as UI
+participant ":ListPropertiesController" as CTRL
+participant "EditAndSortLists" as ListEditor
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "propertyRepository\n:PropertyRepository" as PropertyRepository
+participant ":agentRepository\n:AgentRepository" as AgentRepository
+'participant "Property" as Property
+'participant "Request" as Request
+
+    activate User
+    User -> UI : asks to list registered properties
+    activate UI
+
+    UI -> CTRL** : create
+
+    UI -> CTRL : getProperties()
+    activate CTRL
+
+    CTRL -> RepositorySingleton : getInstance()
+    activate RepositorySingleton
+
+    RepositorySingleton --> CTRL: repositories
+    deactivate RepositorySingleton
+
+    CTRL -> PLAT : getPropertyRepository()
+    activate PLAT
+
+    PLAT --> CTRL: propertyRepository
+    deactivate PLAT
+
+    CTRL -> PropertyRepository : getProperties()
+    activate PropertyRepository
+
+    PropertyRepository --> CTRL : propertyList
+    deactivate PropertyRepository
+
+    CTRL --> UI : propertyList
+    deactivate CTRL
+
+    UI --> User : asks if they only want to see 'for rent', 'for sale' or both
+    deactivate UI
+
+    User -> UI : answers the question
+    activate UI
+
+        alt answer isn't "both"
+        UI -> CTRL : askAboutTypeOfSale(properties, scanner)
+        activate CTRL
+        CTRL -> ListEditor : getPropertiesWithXTypeOfSale(propertyList, type)
+        activate ListEditor
+        ListEditor -> ListEditor : create list with all the properties\nof the requested type
+        ListEditor --> CTRL : propertyList
+        deactivate ListEditor
+        CTRL --> UI : propertyList
+        deactivate CTRL
+        end
+
+    UI --> User : asks if they only want to see lands, apartments, houses or all of those
+    deactivate UI
+
+    User -> UI : answers the question
+    activate UI
+
+        alt answer isn't "all of them"
+        UI -> CTRL : askAboutTypeOfProperty(properties, scanner)
+        activate CTRL
+        alt answer is land
+        CTRL -> ListEditor : getPropertiesIfTheyAreLand(propertyList)
+        activate ListEditor
+        ListEditor -> ListEditor : create list with\nall the lands
+        ListEditor --> CTRL : propertyList
+        deactivate ListEditor
+
+        else answer is apartment
+        CTRL -> ListEditor : getPropertiesIfTheyAreApartment(propertyList)
+        activate ListEditor
+        ListEditor -> ListEditor : create list with\nall the apartments
+        ListEditor --> CTRL : propertyList
+        deactivate ListEditor
+
+        else answer is house
+        CTRL -> ListEditor : getPropertiesIfTheyAreLand(propertyList)
+        activate ListEditor
+        ListEditor -> ListEditor : create list with\nall the houses
+        ListEditor --> CTRL : propertyList
+        deactivate ListEditor
+        end
+        CTRL --> UI : propertyList
+        deactivate CTRL
+        end
+
+    UI -> CTRL : getAgents()
+    activate CTRL
+
+    CTRL -> RepositorySingleton : getInstance()
+    activate RepositorySingleton
+
+    RepositorySingleton --> CTRL: repositories
+    deactivate RepositorySingleton
+
+    CTRL -> PLAT : getAgentRepository()
+    activate PLAT
+
+    PLAT --> CTRL: agentRepository
+    deactivate PLAT
+
+    CTRL -> AgentRepository : getAgents()
+    activate AgentRepository
+
+    AgentRepository --> CTRL : agentList
+    deactivate AgentRepository
+
+    CTRL --> UI : agentList
+    deactivate CTRL
+
+    UI --> User : asks if the user wants to only see properties from a specific agent,\nprinting a list of all agents registered in the system
+    deactivate UI
+
+    User -> UI : answers the question (choosing one of the agents or none of them)
+    activate UI
+
+            alt answer isn't "none of them"
+            UI -> CTRL : askAboutAgent(properties, scanner, agentList)
+            activate CTRL
+            CTRL -> ListEditor : getPropertiesByXAgent(propertyList, agentEmail)
+            activate ListEditor
+            ListEditor -> ListEditor : create list with all the properties\nof the requested type
+            ListEditor --> CTRL : propertyList
+            deactivate ListEditor
+            CTRL --> UI : propertyList
+            deactivate CTRL
+            end
+
+    UI --> User : asks if they want to sort by price, area, distance from\ncity centre, number of photos (in ascending\nor descending order) or none of them
+    deactivate UI
+
+    User -> UI : gives their answer
+    activate UI
+
+    alt they want to sort
+        UI -> CTRL : askAboutSortSetting(scanner)
+        activate CTRL
+        UI -> CTRL : askAboutOrder(scanner)
+        CTRL -> CTRL : sortList(properties, sortItem, sortOrder)
+        alt order is ascending
+            alt item is price
+                CTRL -> ListEditor : sortPropertiesByAscendingPrice(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in\nascending order of price
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is area
+                CTRL -> ListEditor : sortPropertiesByAscendingArea(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in\nascending order of area
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is distance
+                CTRL -> ListEditor : sortPropertiesByAscendingDistance(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in ascending\norder of distance from city centre
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is number of photos
+                CTRL -> ListEditor : sortPropertiesByAscendingNumOfPhotographs(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in ascending\norder of number of photographs
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            end
+        else order is descending
+            alt item is price
+                CTRL -> ListEditor : sortPropertiesByDescendingPrice(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in\ndescending order of price
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is area
+                CTRL -> ListEditor : sortPropertiesByDescendingArea(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in\ndescending order of area
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is distance
+                CTRL -> ListEditor : sortPropertiesByDescendingDistance(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in descending\norder of distance from city centre
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is number of photos
+                CTRL -> ListEditor : sortPropertiesByDescendingNumOfPhotographs(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in descending\norder of number of photographs
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            end
+        end
+        deactivate CTRL
+        CTRL --> UI : propertyList
+    end
+
+    alt there aren't any requests with the given specifications
+        UI --> User : shows message saying that there aren't any\nrequests that meet the given requirements
+        else there are
+        UI --> User : shows all property requests as the user requested
+    end
+    deactivate UI
+
+
+@enduml

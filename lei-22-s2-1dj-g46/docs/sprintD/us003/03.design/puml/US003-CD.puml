@@ -1,0 +1,119 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+title US003 Register a New Employee - Class Diagram
+
+class Employee {
+- String name
+- String role
+- int ccNumber
+- int taxNumber
+- String address
+- String email
+- String phone
+- String agency
+- String password
+___
+}
+
+class SystemAdministrator {
+- String name
+- String role
+- int ccNumber
+- int taxNumber
+- String address
+- String email
+- String phone
+- String agency
+- String password
+___
+}
+
+class EmployeeRepository{
+-List<Employee> employees
+___
++add()
++getEmployees()
+}
+
+class CreateEmployeeUI {
+-Employee employee
+-CreateEmployeeController controller
+___
++run()
++registerNewEmployee()
++submitData(employee)
+}
+
+class CreateEmployeeController {
+-EmployeeRepository employeeRepository
+-AuthenticationRepository authenticationRepository
+-StoreRepository storeRepository
+___
++requestData()
++getEmail()
++requestAddress(email, name, role, \nphoneNumber, agency, ccNumber, taxNumber)
++choseRole()
++choseAgency()
++verifyData(employee)
++verifyIfNewEmployee(ccNumber, taxNumber, email)
++getOrganizationRepository
++createEmployee(employee, password)
++addAuthentication(copyOfEmployee)
+}
+
+class GenerateAndSavePassword {
+___
++generatePassword()
++sendEmployeePassword(employee)
+}
+
+class StoreRepository {
+___
++getStoreRepository()
+}
+
+class Store{
+- String storeName
+- String address
+- String phoneNumber
+- String id
+- String email
+___
++addEmployee()
+}
+
+class Repositories{
+___
+- Repositories()
++ getInstance() : Repositories
++getEmployeeRepository()
++getAuthenticationRepository()
++getStoreRepository()
+}
+
+class AuthenticationRepository{
+-AuthFacade authenticationFacade
+___
++addUserRole(id, description)
++addUserWithRole()
+}
+
+SystemAdministrator--> CreateEmployeeUI
+CreateEmployeeUI .> CreateEmployeeController
+CreateEmployeeUI -> GenerateAndSavePassword
+GenerateAndSavePassword "1" --> "1" Employee : makes password for
+SystemAdministrator "1" -- "*" Employee : registers >
+CreateEmployeeController .> Repositories : repositories
+Repositories --> StoreRepository : contains
+Repositories --> AuthenticationRepository : contains
+Repositories --> EmployeeRepository : contains
+CreateEmployeeController .> StoreRepository : Store Repository
+StoreRepository --> Store : Store
+CreateEmployeeController .> EmployeeRepository : Employee Repository
+EmployeeRepository --> Employee : Employee
+Store --> Employee : Employee
+CreateEmployeeController .> AuthenticationRepository : AuthenticationRepository
+AuthenticationRepository --> Employee : User
+@enduml

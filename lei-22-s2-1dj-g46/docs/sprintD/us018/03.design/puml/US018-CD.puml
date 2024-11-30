@@ -1,0 +1,110 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+title US018 Deal Analysis - Class Diagram
+
+class StoreManager {
+-Store store
+-String name
+-String email
+-String password
+}
+
+class AnalyzeDealsUI {
+-AnalyzeDealsController ctrl
+-String item
+___
++run()
+-getOption()
+-doLinearRegression()
+-getDesiredLinearRegression(option)
+-doMultipleLinearRegression(listOfValues)
++askAboutFilters(properties)
++askAboutSortSetting(properties)
++printPropertyList(propertyList, listOfValues)
+}
+
+class AnalyzeDealsController {
+-OLSMultipleLinearRegression multipleRegression
+-SimpleRegression simpleRegression
+___
++getApartmentsAndHouses()
++getAreaToPriceLinearRegression()
++getDistanceToPriceLinearRegression()
++getNumOfBedroomsToPriceLinearRegression()
++getNumOfBathroomsToPriceLinearRegression()
++getNumOfParkingSpacesToPriceLinearRegression()
++getRRating(r)
++getMultipleLinearRegression()
++calculateSimpleLinearPrice(listOfValues, item, property)
+}
+
+class PropertySoldRepository {
+-List<Property> propertySoldList
+___
++isEmpty()
++add(property)
+-validateProperty(property)
++getProperties()
+}
+
+class Repositories {
+-Repositories instance
+-PropertySoldRepository soldRepository
+___
++getInstance()
++getSoldRepository()
+}
+
+interface Property {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-String saleDate
+-Request request
+-Store store
+}
+
+class Apartment {
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+}
+
+class House {
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-boolean basement
+-boolean inhabitableLoft
+-String sunExposure
+}
+
+StoreManager -> AnalyzeDealsUI : requests to get\nforecast values\nfrom a chosen\nregression model
+AnalyzeDealsUI -> AnalyzeDealsController : creates
+AnalyzeDealsController --> PropertySoldRepository : gets all deals from\n(except lands)
+AnalyzeDealsController --> Apartment : gets
+AnalyzeDealsController --> House : gets
+
+AnalyzeDealsController -----> AnalyzeDealsUI : delivers list of\nparameters regarding the\nchosen regression model
+AnalyzeDealsUI --> StoreManager : prints all apartments and houses\nalong with their new estimated\nprice (calculated using the chosen\nregression model)
+
+AnalyzeDealsController --> Repositories : gets instance of
+Repositories --> PropertySoldRepository : contains
+
+PropertySoldRepository -> Property : contains
+Property --> Apartment : can be
+Property --> House : can be
+
+
+@enduml

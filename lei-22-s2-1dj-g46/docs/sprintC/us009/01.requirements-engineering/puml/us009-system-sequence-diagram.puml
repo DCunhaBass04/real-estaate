@@ -1,0 +1,43 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 009 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "System Administrator" as Admin
+participant ":System" as System
+
+activate Admin
+
+    Admin -> System : asks to see properties to request a visit
+
+    activate System
+
+    System --> Admin : asks if they only want to see 'for rent', 'for sale' or both
+
+    Admin -> System : answers the question
+
+    System --> Admin : asks if they only want to see lands, apartments, houses or all of those
+
+    Admin -> System : answers the question
+
+    System --> Admin : asks if the user wants to only see properties from a specific agent,\nprinting a list of all agents registered in the system
+
+    Admin -> System : answers the question (choosing one of the agents or none of them)
+
+    System --> Admin : shows property list
+
+    Admin -> System :types the number of visit requests they want to make
+
+    System --> Admin : requests data to leave a message to the agent responsible for the \nproperty chosen in each iteration
+
+    Admin -> System : types requested data (text, preferred date, start of visit,\nend of visit)
+
+    System --> Admin : displays operation success
+
+deactivate System
+
+@enduml

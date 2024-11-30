@@ -1,0 +1,57 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+title US018 Deal Analysis - Domain Model
+
+class StoreManager {
+-store
+-name
+-email
+-password
+}
+
+interface Property {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class Apartment {
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+}
+
+class House {
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-basement
+-inhabitableLoft
+-sunExposure
+}
+
+StoreManager "1" -- "*" Property : requests to get\nforecast values\nfrom a chosen\nregression model >
+Property "1" ----- "1" StoreManager : prints each\nproperty's details\nand its newly calculated\nestimated price >
+
+Property "1" -- "1" Apartment : can be >
+Property "1" -- "1" House : can be >
+
+
+@enduml

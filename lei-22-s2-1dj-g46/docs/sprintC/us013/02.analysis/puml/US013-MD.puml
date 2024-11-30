@@ -1,0 +1,123 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title US013-  List Employees by Store - Domain Model
+hide methods
+
+class NetworkManager {
+-name
+-email
+-password
+}
+
+class System{
+-listOfEmployees
+-listOfStores
+}
+
+class Employee{
+-email
+-name
+-role
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+}
+
+class Store{
+-name
+-address
+-phoneNumber
+-id
+-email
+}
+
+interface Property {
+}
+
+class Request{
+-type
+-price
+-priceUnit
+-isItPublished
+-commissionDate
+-owner
+-commissionValue
+-duration
+}
+
+class Land{
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class Apartment {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class House {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-basement
+-inhabitableLoft
+-sunExposure
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+NetworkManager "1" - "1" System : sends a request to list\nthe employees >
+
+System "1" -- "*" Store : has a list of stores, sorted by\nnumber of property listings >
+System "1" -- "*" Employee : has a list of employees, sorted\nalphabetically and grouped\nby each store >
+
+Store "1" -- "*" Employee : contains >
+Store "1" -- "*" Property : owns >
+
+
+Property "1" - "1" Request : has >
+
+Property "1" -- "1" Apartment : can be >
+Property "1" -- "1" Land : can be >
+Property "1" -- "1" House : can be >
+
+@enduml

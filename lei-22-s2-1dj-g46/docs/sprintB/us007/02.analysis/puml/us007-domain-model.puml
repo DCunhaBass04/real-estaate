@@ -1,0 +1,38 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+title US007 Sign Up - Domain Model
+
+class UnregisteredUser {
+___
++signIn(name, cardNumber, taxNumber,\nemailAddress, telephoneNumber,\npassword, address)
+}
+
+class System {
+___
++registerUser(name, cardNumber, taxNumber,\nemailAddress, telephoneNumber,\npassword, address)
+}
+
+class User {
+-name
+-cardNumber
+-taxNumber
+-emailAddress
+-telephoneNumber
+-password
+-address
+___
+}
+
+UnregisteredUser "1" --> "1" System : provides information\nneeded to sign up
+
+System -> System : verifies sign up\nwith given information
+
+System "1" --> "1" User : creates user with\nprovided information
+@enduml

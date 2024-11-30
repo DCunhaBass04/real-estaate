@@ -1,0 +1,56 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+title  US011 Accept offers - Domain Model
+
+class Order {
+-clientEmail
+-property
+-amount
+}
+
+class Agent {
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+class Client {
+-name
+-passportNumber
+-socialSecurityNumber
+-email
+-phoneNumber
+-pwd
+}
+
+interface Property {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-request
+}
+
+Client "1" -- "1..*" Order : placed >
+
+Order "1" - "1" Property : regarding >
+
+Agent "1" -- "*" Property : is responsible for >
+
+Agent "1" -- "1" Order : accepts/denies each order,\none by one >
+
+@enduml

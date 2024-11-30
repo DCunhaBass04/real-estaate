@@ -1,0 +1,56 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+title US016 - Sending an Email Response - Domain Model
+
+class Agent {
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+class Message {
+-clientName
+-clientPhoneNumber
+-preferredDate
+-timeSlot
+}
+
+class Response {
+-message
+-subject
+-text
+}
+
+class Client {
+-name
+-phoneNumber
+}
+
+interface Property{
+-request
+-area
+-location
+-distanceFromCityCentre
+-requestedPrice
+-photographs
+}
+
+Response "1" -- "1" Message : is a response to >
+Message "1" -- "1" Property : regarding >
+Agent "1" -- "1" Response : writes >
+Message "1" -- "1" Client : written by >
+Agent "1" -- "1" Client : sends response\nthrough email\n(the configurations\nare in the file\n'config.properties') >
+
+
+@enduml

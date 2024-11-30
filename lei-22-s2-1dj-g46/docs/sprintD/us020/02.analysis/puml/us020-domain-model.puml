@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+title US020 - Read a Response - Domain Model
+
+class Response {
+-clientName
+-clientPhoneNumber
+-preferredDate
+-timeSlot
+}
+
+class Client {
+-name
+-phoneNumber
+}
+
+Response "1" -- "1" Client : print to  >
+Client "1" -- "1" Response : accepts or \ndeclines >
+
+
+
+@enduml

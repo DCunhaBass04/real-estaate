@@ -1,0 +1,92 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+title US019 Getting Close Subsets - Class Diagram
+
+class NetworkManager {
+-String role
+-String name
+-String email
+-String password
+}
+
+interface Property {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-String saleDate
+-Request request
+-Store store
+}
+
+class Store {
+-String address
+-String emailAddress
+-String name
+-String email
+-String phoneNumber
+-int ID
+-List<Property> properties
+___
++getID()
++getPropertyList()
+}
+
+class StoreRepository {
+___
++getStoreRepository()
+}
+
+class Repositories{
+-Repositories instance
+___
++getInstance()
++getStoreRepository()
+}
+
+class Tuple{
+-int storeID
+-int numberOfProperties
+___
++getID()
++getNumberOfProperties()
+}
+
+class CreateSubsetsOfStoresUI{
+-CreateSubsetsOfStoresController ctrl
+___
++run()
+}
+
+class CreateSubsetsOfStoresController{
+___
++generatePartitions(stores)
++getTotalProperties(tuples)
+}
+
+Store --> Property : has some number of
+
+
+NetworkManager -> CreateSubsetsOfStoresUI : interacts with
+CreateSubsetsOfStoresUI --> CreateSubsetsOfStoresController : creates
+CreateSubsetsOfStoresController -> Repositories : gets instance of
+
+StoreRepository -> CreateSubsetsOfStoresController : storeList
+
+CreateSubsetsOfStoresController --> CreateSubsetsOfStoresUI : tuples
+CreateSubsetsOfStoresUI --> NetworkManager : subsets of\nstores, with\nthe closest\nnumber of\nproperty\nlistings
+
+Store -> CreateSubsetsOfStoresController : ID and Property List's Size
+CreateSubsetsOfStoresController --> Tuple : creates
+
+Repositories --> StoreRepository : contains
+
+StoreRepository --> Store : contains
+
+@enduml

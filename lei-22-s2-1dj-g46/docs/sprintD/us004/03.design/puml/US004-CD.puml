@@ -1,0 +1,180 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+title US004 Request For Listing - Class Diagram
+
+class Client {
+-String name
+-int passportNumber
+-String socialSecurityNumber
+-String email
+-String phoneNumber
+-String pwd
+----
+}
+
+class SendPropertyRequestUI{
+___
++run()
+}
+
+class SendPropertyRequestController{
+___
++chooseAgent(Scanner input, VerifyInput verifyInput)
++chooseNumberOfProperties(Scanner input, String agentName, VerifyInput verifyInput)
++fillRequest(Scanner input, Agent agent, VerifyInput verifyInput)
++fillRequestForApartment(float area, String location, float distanceFromCityCentre,\n  Agent agent, float requestedPrice, File[] photographs, Scanner input, VerifyInput verifyInput)
++fillRequestForHouse(float area, String location, float distanceFromCityCentre,\n  Agent agent, float requestedPrice, File[] photographs, Scanner input, VerifyInput verifyInput)
++insertType(Scanner input, VerifyInput verifyInput)
++insertPhotographs(Scanner input, VerifyInput verifyInput)
+}
+
+class Agent {
+-String email
+-String name
+-String phoneNumber
+-String address
+-String store
+-int ccNumber
+-int taxNumber
+-String pwd
+----
++hasEmail(String email)
++getName()
++getEmail()
++toString()
++clone()
+}
+
+class PropertyRequestRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
+-validateProperty(property)
++printProperties()
++getProperties()
+}
+
+class AgentRepository {
+-List<Agent> agents
+___
++isEmpty()
++add(agent)
+-validateAgent(agent)
++printAgents()
++getAgents()
+}
+
+class Repositories {
+-Repositories instance
+-PropertyRepository propertyRepository
+___
++getInstance()
++getPropertyRepository()
+}
+
+interface Property{
+-String type
+-float area
+-String location
+-float distance from city centre
+-float requested price
+---
++equals(object)
++clone()
+}
+
+class Request{
+-String type
+-float price
+-String priceUnit
+-boolean isItPublished
+-String commissionDate
+-Owner owner
+-String commissionValue
+-int duration
+}
+
+class Land{
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class Apartment {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class House {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-boolean basement
+-boolean inhabitableLoft
+-String sunExposure
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+Client -> SendPropertyRequestUI : runs
+SendPropertyRequestUI --> SendPropertyRequestController : creates\nand runs
+
+SendPropertyRequestUI -> AgentRepository : gets list of all agents to choose\n one and send them the request
+SendPropertyRequestController --> Repositories :   get instance of PropertyRequestRepository\nand AgentRepository
+Repositories --> PropertyRequestRepository : contains
+Repositories --> AgentRepository : contains
+
+SendPropertyRequestController -> Client : requests necessary\ninformation
+Client -> SendPropertyRequestController : provides requested\ninformation
+SendPropertyRequestController -> PropertyRequestRepository : stores\ninformation in
+PropertyRequestRepository -> Agent : requested agent\ngets access to\nspecified property request
+
+PropertyRequestRepository --> Property : contains
+AgentRepository --> Agent : contains
+
+Property -> Request : contains
+
+Property --> Apartment : can be
+Property --> House : can be
+Property --> Land : can be
+
+@enduml

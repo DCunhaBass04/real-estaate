@@ -1,0 +1,117 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+title US013 List Employees by Store - Class Diagram
+
+
+'left to right direction
+
+class NetworkManager {
+-String name
+-String email
+-String password
+}
+
+class StoreRepository {
+-List<Store> listOfStores
+___
++getStoreByName(name)
+}
+
+class Store {
+-String storeName
+-String address
+-String phoneNumber
+-int id
+-String email
+___
++compareTo(otherStore)
+}
+
+class EmployeeRepository {
+-List<Employee> listOfEmployees
+___
+}
+
+class Employee {
+-String email
+-String name
+-String role
+-String phoneNumber
+-String address
+-String store
+-int ccNumber
+-int taxNumber
+-String password
+___
++compareTo(otherEmployee)
+}
+
+class ListEveryEmployeeUI{
+-ListEveryEmployeeController ctrl
+___
++run()
++printAllStoresAndItsEmployees(storeList)
+}
+
+class ListEveryEmployeeController{
+___
++getListOfStores()
++sortStoresByNumOfProperties(listOfStores)
++printAllEmployeesByStore(store)
+-sortEmployeesAlphabetically(employeeList)
+}
+
+interface Property {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class Repositories{
+-Repositories instance
+-EmployeeRepository employeeRepository
+-StoreRepository storeRepository
+___
++getInstance()
++getStoreRepository()
++getEmployeeRepository()
+}
+
+NetworkManager -> ListEveryEmployeeUI : asks for a list of all employees\ngrouped by stores
+
+ListEveryEmployeeController -> ListEveryEmployeeController : sorts store list by\nnumber of properties
+ListEveryEmployeeController -left-> ListEveryEmployeeController : sorts employees\nalphabetically
+
+ListEveryEmployeeUI --left--> NetworkManager : prints list of stores, each with their own\nlist of employees
+
+ListEveryEmployeeUI --> ListEveryEmployeeController : runs
+ListEveryEmployeeController --> Repositories : gets\ninstance of
+Repositories --> StoreRepository : contains
+Repositories --> EmployeeRepository : contains
+ListEveryEmployeeController --> StoreRepository : gets store\nlist from
+ListEveryEmployeeController --> EmployeeRepository : gets employee\nlist from
+
+StoreRepository --> Store : has list of
+EmployeeRepository --> Employee : has list of
+
+Store -left-> Property : contains list of
+Store -> Employee : contains list of
+
+
+@enduml

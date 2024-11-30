@@ -1,0 +1,243 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title Domain Model
+
+'US1
+class UnregisteredUser {
+}
+
+interface Property {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class Request{
+-type
+-price
+-priceUnit
+-isItPublished
+-commissionDate
+-owner
+-commissionValue
+-duration
+}
+
+class Land{
+}
+
+class Apartment {
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+}
+
+class House {
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-basement
+-inhabitableLoft
+-sunExposure
+}
+
+UnregisteredUser "1" --- "*" Property : requests to list properties\nand give filter and sort criteria >
+Property "*" - "1" UnregisteredUser : lists all properties\naccording to the user's\nespecifications >
+
+Property "1" - "1" Request : has >
+
+Property "1" -- "1" Apartment : can be >
+Property "1" -- "1" Land : can be >
+Property "1" -- "1" House : can be >
+
+'US2
+class Agent {
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+
+Agent "1" --- "0..*" Property : publishes >
+
+
+'US3
+class Employee {
+role
+card number
+tax number
+address
+email
+phone
+agency
+___
+}
+class SystemAdministrator {
+-role
+-name
+-email
+-password
+___
+}
+SystemAdministrator "1" -- "*" Employee : registers >
+
+
+'US4
+
+class Owner {
+-name
+-passportNumber
+-socialSecurityNumber
+-email
+-phoneNumber
+-password
+}
+
+Owner "1" - "1" Agent : chooses one from\nlist of all agents >
+Owner "1" -- "1..*" Property : owns >
+Property "1..*" -- "1" Agent : request is sent to >
+
+
+'US5
+
+class Store {
+-address
+-emailAddress
+-name
+-email
+-phoneNumber
+-ID
+___
+}
+
+SystemAdministrator "1" -- "*" Store : registers >
+
+
+'US7
+class UnregisteredUser {
+}
+
+class User {
+-name
+-cardNumber
+-taxNumber
+-emailAddress
+-telephoneNumber
+-password
+-address
+}
+
+UnregisteredUser "1" --> "1" User : creates user with\nprovided information
+
+
+'US8
+Agent --> Property : asks to list property\nrequests, sorted and filtered\nas asked by the user
+
+
+'US9
+class Message {
+-clientName
+-clientPhoneNumber
+-preferredDate
+-timeSlot
+}
+
+class Client {
+-name
+-phoneNumber
+}
+
+Client "1" --> "*" Message : sends
+Message "*" --> "1" Agent : available to
+
+
+'US11
+class Order {
+-property
+-amount
+-clientEmail
+-state
+}
+
+Order "1..*" -- "1" Client : done by >
+Order "1" -- "1" Property : done for >
+
+
+'US12
+SystemAdministrator "1" --- "*" Property : creates through\ntheir .csv file
+Property "1" -- "1" Store : associated to
+
+
+'US13
+class NetworkManager {
+-name
+-email
+-password
+}
+NetworkManager "1" -  "*" Employee : wants a list of employees,\nsorted alphabetically >
+
+Store "1" -- "*" Employee : contains >
+Employee "1..*" -- "1" Store : grouped by >
+
+
+'US15
+
+'US16
+class Response {
+-message
+-subject
+-text
+}
+Response "1" -- "1" Message : is a response to >
+Agent "1" -- "1" Response : writes >
+Agent "1" -- "1" Client : sends response\nthrough email\n(the configurations\nare in the file\n'config.properties') >
+
+
+'US17
+User --> Property : lists deals
+
+
+'US18
+class StoreManager {
+-store
+-name
+-email
+-password
+}
+StoreManager "1" -- "*" Property : requests to get\nforecast values\nfrom a chosen\nregression model >
+Property "1" ----- "1" StoreManager : prints each\nproperty's details\nand its newly calculated\nestimated price >
+
+
+'US19
+Store - Store : divides stores into\ntwo sublists >
+
+NetworkManager "1" - "2" Store : gets the two\nstore sublists >
+
+
+'US20
+Response "1" -- "1" Client : print to  >
+Client "1" -- "1" Response : accepts or \ndeclines >
+
+@enduml

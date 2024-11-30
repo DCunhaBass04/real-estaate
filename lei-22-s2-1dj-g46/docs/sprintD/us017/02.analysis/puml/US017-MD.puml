@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+title US017 Listing all deals - Domain Model
+
+class User {
+-name
+-role
+-email
+-pwd
+}
+
+class Property{
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+User --> Property : lists deals
+
+@enduml

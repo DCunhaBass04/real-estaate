@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title User Story 20 - System Sequence Diagram
+autonumber
+actor "Client" as Client
+participant "System" as System
+activate Client
+
+Client -> System: chooses a response to read
+activate System
+
+System --> Client: requests acceptance or decline of the response
+deactivate System
+
+Client -> System: accepts the response
+activate System
+
+alt if the response is declined
+Client -> System: writes the reason for declining the response
+end
+
+System --> Client: displays operation success
+deactivate System
+deactivate Client
+
+@enduml

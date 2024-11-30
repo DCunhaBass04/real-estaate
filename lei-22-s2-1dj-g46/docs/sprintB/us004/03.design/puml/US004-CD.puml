@@ -1,0 +1,129 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+title US004 Request For Listing - Class Diagram
+
+class Owner {
+----
+}
+class OwnerUI{
+___
++run()
+}
+
+class SendPropertyRequestUI{
+___
++run()
+}
+
+class SendPropertyRequestController{
+___
++chooseAgent(Scanner input, VerifyInput verifyInput)
++chooseNumberOfProperties(Scanner input, String agentName, VerifyInput verifyInput)
++fillRequest(Scanner input, Agent agent, VerifyInput verifyInput)
++fillRequestForApartment(float area, String location, float distanceFromCityCentre,\n  Agent agent, float requestedPrice, File[] photographs, Scanner input, VerifyInput verifyInput)
++fillRequestForHouse(float area, String location, float distanceFromCityCentre,\n  Agent agent, float requestedPrice, File[] photographs, Scanner input, VerifyInput verifyInput)
++insertType(Scanner input, VerifyInput verifyInput)
++insertPhotographs(Scanner input, VerifyInput verifyInput)
+}
+
+class Agent {
+-name
+-email
+-pwd
+----
++hasEmail(String email)
++getName()
++getEmail()
++toString()
++clone()
+}
+
+class HouseRequest {
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-png photographs
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+-boolean basement
+-boolean inhabitableLoft
+-float sunExposure
+___
++equals(object)
++clone()
++toString()
+}
+
+class ApartmentRequest {
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-png photographs
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+___
++equals(object)
++clone()
++toString()
+}
+
+class LandRequest{
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-png photographs
+___
++equals(object)
++clone()
++toString()
+}
+
+class PropertyRequestRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+interface PropertyRequest{
+-String type
+-float area
+-String location
+-float distance from city centre
+-float requested price
+---
++equals(object)
++clone()
+}
+
+Owner -> OwnerUI : interacts and asks\nto send a request
+OwnerUI -> SendPropertyRequestUI : runs
+SendPropertyRequestUI --> SendPropertyRequestController : creates\nand runs
+
+SendPropertyRequestController -> Owner : requests necessary\ninformation
+Owner -> SendPropertyRequestController : provides requested\ninformation
+SendPropertyRequestController -> PropertyRequestRepository : stores information in
+PropertyRequestRepository -> Agent : Requested agent\ngets access to\nspecified property request
+
+PropertyRequestRepository --> PropertyRequest : contains
+
+PropertyRequest --> ApartmentRequest : can be
+PropertyRequest --> HouseRequest : can be
+PropertyRequest --> LandRequest : can be
+
+@enduml

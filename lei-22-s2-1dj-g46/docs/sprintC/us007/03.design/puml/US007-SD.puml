@@ -1,0 +1,179 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 007 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Unregistered User" as User
+participant ":SignUpUI" as UI
+participant ":SignUpController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "clientRepository\n:ClientRepository" as CLIENTRepository
+participant ":copyOfUser:\nClient" as COPY
+participant "authenticationRepository\n:AuthenticationRepository" as AUTHRepository
+participant ":GenerateAndSavePassword" as PassGenerator
+
+activate User
+
+User -> UI : asks to register in the system
+
+activate UI
+
+UI -> CTRL** : create
+
+loop if invalid
+
+UI -> CTRL : signUp()
+
+activate CTRL
+
+CTRL --> UI : requests data
+
+deactivate CTRL
+
+UI --> User : requests necessary data
+
+deactivate UI
+
+User -> UI : types needed information (name,\n citizen's card number, tax number, \nemail and contact telephone number)\n and optional information (address)
+
+activate UI
+
+UI --> User : shows requested data
+
+deactivate UI
+
+User -> UI : submits data
+
+activate UI
+
+UI -> CTRL : submitData(user)
+
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getClientRepository()
+
+activate PLAT
+
+PLAT --> CTRL: clientRepository
+
+deactivate PLAT
+
+CTRL -> CTRL : verifyData(client)
+
+activate CTRL
+
+CTRL -> CLIENTRepository : verifyIfNewUser(email)
+
+activate CLIENTRepository
+
+CLIENTRepository --> CTRL : true/false
+
+deactivate CLIENTRepository
+
+CTRL --> CTRL : true/false
+
+deactivate CTRL
+
+CTRL --> UI : operation unsuccessful
+
+UI --> User : operation unsuccessful, try again
+
+deactivate UI
+
+end
+
+CTRL --> UI : operation successful
+
+activate UI
+
+UI --> User : displays operation success
+
+deactivate UI
+
+CTRL -> CTRL : createNewUser(user)
+
+activate CTRL
+
+CTRL -> COPY**: create(name, passportNumber, socialSecurityNumber, email, phoneNumber, pwd)
+
+CTRL -> CTRL : addAuthentication(copyOfUser)
+
+activate CTRL
+
+CTRL -> COPY : getName()
+
+activate COPY
+
+COPY --> CTRL : name
+
+deactivate COPY
+
+CTRL -> COPY : getEmail()
+
+activate COPY
+
+COPY --> CTRL : email
+
+deactivate COPY
+
+CTRL -> COPY : getPwd()
+
+activate COPY
+
+COPY --> CTRL: password
+
+deactivate COPY
+
+CTRL -> AUTHRepository : addUserRole(AuthenticationController.ROLE_OWNER, AuthenticationController.ROLE_OWNER)
+
+activate AUTHRepository
+
+CTRL -> AUTHRepository : addUserWithRole(name, email, password, AuthenticationController.ROLE_OWNER)
+
+deactivate AUTHRepository
+
+CTRL --> CTRL
+
+deactivate CTRL
+
+CTRL -> CLIENTRepository : add(copyOfUser)
+
+activate CLIENTRepository
+
+CLIENTRepository -> CLIENTRepository : validateClient(client)
+
+activate CLIENTRepository
+
+CLIENTRepository --> CLIENTRepository : true/false
+
+deactivate CLIENTRepository
+
+CLIENTRepository -> CLIENTRepository : add(newClient.get())
+
+activate CLIENTRepository
+
+CLIENTRepository --> CLIENTRepository : newClient
+
+deactivate CLIENTRepository
+
+CLIENTRepository --> CTRL
+
+deactivate CLIENTRepository
+
+CTRL -> PassGenerator: sendOwnerPassword(user)
+
+activate PassGenerator
+
+@enduml

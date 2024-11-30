@@ -1,0 +1,101 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 019 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Network Manager" as User
+participant ":CreateSubsetsOfStoresUI" as UI
+participant ":CreateSubsetsOfStoresController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "storeRepository\n:StoreRepository" as Repository
+participant "store\n:Store" as Store
+participant "property\n:Property" as Property
+participant "tuple\n:Tuple" as Tuple
+
+activate User
+User -> UI : asks to divide all stores into two subsets
+activate UI
+
+UI -> CTRL** : create
+    UI -> CTRL : getStores()
+    activate CTRL
+
+    CTRL -> RepositorySingleton : getInstance()
+    activate RepositorySingleton
+
+    RepositorySingleton --> CTRL: repositories
+    deactivate RepositorySingleton
+
+    CTRL -> PLAT : getStoreRepository()
+    activate PLAT
+
+    PLAT --> CTRL: storeRepository
+    deactivate PLAT
+
+    CTRL -> Repository : getStores()
+    activate Repository
+
+    Repository --> CTRL : storeList
+    deactivate Repository
+
+    CTRL --> UI : storeList
+    deactivate CTRL
+
+
+alt store list isn't empty
+UI -> CTRL : generatePartitions(storeList)
+activate CTRL
+
+CTRL -> CTRL : new List<Tuple> minSubset1
+CTRL -> CTRL : new List<Tuple> minSubset2
+
+loop 2^(storeList.size()) times
+CTRL -> CTRL : new List<Tuple> subset1
+CTRL -> CTRL : new List<Tuple> subset2
+loop storeList.size() times
+CTRL -> Store : getID()
+activate Store
+Store --> CTRL : ID
+deactivate Store
+CTRL -> Store : getPropertyList()
+activate Store
+Store -> Property : gets list of..
+activate Property
+Property --> Store : property list
+deactivate Property
+Store --> CTRL : propertyList
+deactivate Store
+CTRL -> Tuple : new Tuple(ID, propertyList.size())
+activate Tuple
+Tuple --> CTRL
+deactivate Tuple
+alt i & 2^j != 0
+CTRL --> CTRL : subset1.add(tuple)
+else otherwise
+CTRL --> CTRL : subset2.add(tuple)
+end
+end
+CTRL -> CTRL : getPropertyNumberDifference(subset1, subset2)
+activate CTRL
+CTRL --> CTRL : difference
+deactivate CTRL
+alt difference < minDifference
+CTRL -> CTRL : minDifference = difference\nminSubset1 = subset1\nminSubset2 = subset2
+end
+end
+CTRL --> UI : (minSubset1, minSubset2)
+deactivate CTRL
+UI --> User : prints the subsets, each one with a list of stores\nand a total number of properties
+else otherwise
+UI --> User : tells the user that the store list is empty, so this\nstudy cannot be done in that moment.
+end
+deactivate UI
+
+deactivate User
+
+@enduml

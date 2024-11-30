@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 003 - Sequence Diagram (SD)
+
+autonumber
+
+participant ":CreateEmployeeUI" as CRTUI
+participant ":CreateEmployeeController" as CNTRL
+participant ":EmployeeRepository" as Repository
+participant ":Organization" as Organization
+actor ":Employee" as Employee
+
+
+activate CRTUI
+
+activate CNTRL
+
+CRTUI -> CNTRL : generatePassword();
+
+deactivate CRTUI
+
+CNTRL -> Repository: createEmployee(role, name, ccNumber, taxNumber, \naddress, email, phoneNumber, password)
+
+CNTRL -> Organization: createEmployee(role, name, ccNumber, taxNumber, \naddress, email, phoneNumber, password)
+
+CNTRL -> Employee : sendPassword(email, password)
+
+@enduml

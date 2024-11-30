@@ -1,0 +1,115 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+title US010 Place an Order - Domain Model
+
+class Client {
+-name
+-email
+-password
+}
+
+class System {
+
+}
+
+interface Property {
+}
+
+class Request{
+-type
+-price
+-priceUnit
+-isItPublished
+-commissionDate
+-owner
+-commissionValue
+-duration
+}
+
+class Land{
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class Apartment {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class House {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-basement
+-inhabitableLoft
+-sunExposure
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class Order {
+-property
+-amount
+-clientEmail
+-state
+}
+
+Client "1" --- System : requests to \nplace an order >
+
+System "1" --- Client : requests select \nthe desired filters >
+
+Client "1" --- System : sends the \nrequested filters >
+
+System "1" --- Client : requests to send\n the correct amount >
+
+Client "1" --- System : sends the \nrequested amount >
+
+System "1" -- Property : lists >
+
+System "1" - Order : Place the order >
+
+Property "1" - Request : has >
+
+Property "1" -- Apartment : can be >
+Property "1" -- Land : can be >
+Property "1" -- House : can be >
+
+
+@enduml

@@ -1,0 +1,332 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 018 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Store Manager" as User
+participant "AnalyzeDealsUI" as UI
+participant "AnalyzeDealsController" as CTRL
+participant "EditAndSortLists" as ListEditor
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "propertySoldRepository\n:PropertySoldRepository" as PropertyRepository
+participant ":storeRepository\n:StoreRepository" as StoreRepository
+
+activate User
+
+User -> UI: chooses to analyze all deals made
+activate UI
+
+UI -> CTRL** : create
+
+    UI -> CTRL : getProperties()
+    activate CTRL
+
+    CTRL -> RepositorySingleton : getInstance()
+    activate RepositorySingleton
+
+    RepositorySingleton --> CTRL: repositories
+    deactivate RepositorySingleton
+
+    CTRL -> PLAT : getPropertySoldRepository()
+    activate PLAT
+
+    PLAT --> CTRL: propertySoldRepository
+    deactivate PLAT
+
+    CTRL -> PropertyRepository : getProperties()
+    activate PropertyRepository
+
+    PropertyRepository --> CTRL : propertyList
+    deactivate PropertyRepository
+
+CTRL -> ListEditor** : create
+CTRL -> ListEditor : getPropertiesIfTheyAreApartmentsOrHouses(properties)
+activate ListEditor
+ListEditor --> CTRL : filtered property list
+deactivate ListEditor
+CTRL --> UI : property list
+deactivate CTRL
+
+alt there are no apartment or house deals
+UI --> User : tells the user that there are no apartment or house deals on the system
+else otherwise
+UI --> User : prints all possible regression\nmodels and tells the user to choose one of those
+deactivate UI
+User -> UI : picks one of the printed options
+activate UI
+
+alt option is 'Area' to 'Price'
+UI -> CTRL : getAreaToPriceLinearRegression()
+activate CTRL
+CTRL -> CTRL : getEquation(areas, prices)
+activate CTRL
+CTRL --> CTRL : listOfValues (a, b, R and R^2)
+deactivate CTRL
+CTRL --> UI : listOfValues
+deactivate CTRL
+
+else option is 'Distance from city centre' to 'Price'
+UI -> CTRL : getDistanceToPriceLinearRegression()
+activate CTRL
+CTRL -> CTRL : getEquation(distances, prices)
+activate CTRL
+CTRL --> CTRL : listOfValues (a, b, R and R^2)
+deactivate CTRL
+CTRL --> UI : listOfValues
+deactivate CTRL
+
+else option is 'Number of Bedrooms' to 'Price'
+UI -> CTRL : getNumOfBedroomsToPriceLinearRegression()
+activate CTRL
+CTRL -> CTRL : getEquation(bedrooms, prices)
+activate CTRL
+CTRL --> CTRL : listOfValues (a, b, R and R^2)
+deactivate CTRL
+CTRL --> UI : listOfValues
+deactivate CTRL
+
+else option is 'Number of Bathrooms' to 'Price'
+UI -> CTRL : getNumOfBathroomsToPriceLinearRegression()
+activate CTRL
+CTRL -> CTRL : getEquation(bathrooms, prices)
+activate CTRL
+CTRL --> CTRL : listOfValues (a, b, R and R^2)
+deactivate CTRL
+CTRL --> UI : listOfValues
+deactivate CTRL
+
+else option is 'Number of Parking Spaces' to 'Price'
+UI -> CTRL : getNumOfParkingSpacesToPriceLinearRegression()
+activate CTRL
+CTRL -> CTRL : getEquation(parkingSpaces, prices)
+activate CTRL
+CTRL --> CTRL : listOfValues (a, b, R and R^2)
+deactivate CTRL
+CTRL --> UI : listOfValues
+deactivate CTRL
+
+else option is Multilinear regression
+UI -> CTRL : getMultipleLinearRegression()
+activate CTRL
+CTRL -> CTRL : getEquation()
+activate CTRL
+CTRL --> CTRL : listOfValues (a, b, R, R^2 and Adjusted R^2)
+deactivate CTRL
+CTRL --> UI : listOfValues
+deactivate CTRL
+end
+
+UI --> User : prints that regression model's equation along with its R and\nasks the user if they want to use that equation to\nestimate the price of all deals
+deactivate UI
+User -> UI : chooses "Yes" or "No"
+activate UI
+alt the answer was yes
+UI --> User : asks if they only want to see 'for rent', 'for sale' or both
+    deactivate UI
+
+    User -> UI : answers the question
+    activate UI
+
+        alt answer isn't "both"
+        UI -> CTRL : askAboutTypeOfSale(properties, scanner)
+        activate CTRL
+        CTRL -> ListEditor : getPropertiesWithXTypeOfSale(propertyList, type)
+        activate ListEditor
+        ListEditor -> ListEditor : create list with all the properties\nof the requested type
+        ListEditor --> CTRL : propertyList
+        deactivate ListEditor
+        CTRL --> UI : propertyList
+        deactivate CTRL
+        end
+
+    UI --> User : asks if they only want to see apartments, houses or all of those
+    deactivate UI
+
+    User -> UI : answers the question
+    activate UI
+
+        alt answer isn't "all of them"
+        UI -> CTRL : askAboutTypeOfProperty(properties, scanner)
+        activate CTRL
+
+        alt answer is apartment
+        CTRL -> ListEditor : getPropertiesIfTheyAreApartment(propertyList)
+        activate ListEditor
+        ListEditor -> ListEditor : create list with\nall the apartments
+        ListEditor --> CTRL : propertyList
+        deactivate ListEditor
+
+        else answer is house
+        CTRL -> ListEditor : getPropertiesIfTheyAreLand(propertyList)
+        activate ListEditor
+        ListEditor -> ListEditor : create list with\nall the houses
+        ListEditor --> CTRL : propertyList
+        deactivate ListEditor
+        end
+        CTRL --> UI : propertyList
+        deactivate CTRL
+        end
+
+
+    UI --> User : asks if the user wants to only see properties from a specific store
+    deactivate UI
+
+    User -> UI : answers the question
+    activate UI
+
+    alt answer isn't "none of them"
+    UI -> CTRL : getProperties()
+        activate CTRL
+
+        CTRL -> RepositorySingleton : getInstance()
+        activate RepositorySingleton
+
+        RepositorySingleton --> CTRL: repositories
+        deactivate RepositorySingleton
+
+        CTRL -> PLAT : getStoreRepository()
+        activate PLAT
+
+        PLAT --> CTRL: storeRepository
+        deactivate PLAT
+
+        CTRL -> StoreRepository : getStores()
+        activate StoreRepository
+
+        StoreRepository --> CTRL : storeList
+        deactivate StoreRepository
+
+        CTRL --> UI : storeList
+        deactivate CTRL
+    UI -> CTRL : askAboutStore(properties, scanner, storeList)
+    activate CTRL
+    CTRL -> ListEditor : getPropertiesByXStore(propertyList, storeEmail)
+    activate ListEditor
+    ListEditor -> ListEditor : create list with all the properties\nof the requested type
+    ListEditor --> CTRL : propertyList
+    deactivate ListEditor
+    CTRL --> UI : propertyList
+    deactivate CTRL
+    end
+
+    UI --> User : asks if they want to sort by price, area, distance from\ncity centre, number of photos (in ascending\nor descending order), number of bedrooms,\nnumber of bathrooms, number of parking spaces or none of them
+    deactivate UI
+
+    User -> UI : gives their answer
+    activate UI
+
+alt they want to sort
+        UI -> CTRL : askAboutSortSetting(scanner)
+        activate CTRL
+        UI -> CTRL : askAboutOrder(scanner)
+        CTRL -> CTRL : sortList(properties, sortItem, sortOrder)
+        alt order is ascending
+            alt item is price
+                CTRL -> ListEditor : sortPropertiesByAscendingPrice(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in\nascending order of price
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is area
+                CTRL -> ListEditor : sortPropertiesByAscendingArea(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in\nascending order of area
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is distance
+                CTRL -> ListEditor : sortPropertiesByAscendingDistance(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in ascending\norder of distance from city centre
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is number of photos
+                CTRL -> ListEditor : sortPropertiesByAscendingNumOfPhotographs(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in ascending\norder of number of photographs
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is number of bedrooms
+                CTRL -> ListEditor : sortPropertiesByAscendingNumOfBedrooms(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in ascending\norder of number of bedrooms
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is number of bathrooms
+                CTRL -> ListEditor : sortPropertiesByAscendingNumOfBathrooms(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in ascending\norder of number of bathrooms
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is number of parking spaces
+                CTRL -> ListEditor : sortPropertiesByAscendingNumOfParkingSpaces(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in ascending\norder of number of parking spaces
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            end
+        else order is descending
+            alt item is price
+                CTRL -> ListEditor : sortPropertiesByDescendingPrice(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in\ndescending order of price
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is area
+                CTRL -> ListEditor : sortPropertiesByDescendingArea(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in\ndescending order of area
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is distance
+                CTRL -> ListEditor : sortPropertiesByDescendingDistance(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in descending\norder of distance from city centre
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is number of photos
+                CTRL -> ListEditor : sortPropertiesByDescendingNumOfPhotographs(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in descending\norder of number of photographs
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is number of bedrooms
+                CTRL -> ListEditor : sortPropertiesByDescendingNumOfBedrooms(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in descending\norder of number of bedrooms
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is number of bathrooms
+                CTRL -> ListEditor : sortPropertiesByDescendingNumOfBathrooms(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in descending\norder of number of bathrooms
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            else item is number of parking spaces
+                CTRL -> ListEditor : sortPropertiesByDescendingNumOfParkingSpaces(propertyList)
+                activate ListEditor
+                ListEditor -> ListEditor : sorts given list in descending\norder of number of parking spaces
+                ListEditor --> CTRL : propertyList
+                deactivate ListEditor
+            end
+        end
+        deactivate CTRL
+        CTRL --> UI : propertyList
+    end
+    loop for every deal
+    UI -> CTRL : calculateEstimatedPrice
+    activate CTRL
+    CTRL --> UI : estimatedPrice
+    deactivate CTRL
+    end
+    UI --> User : prints all deals in the requested order, each one with its\nnewly calculated estimated price
+    deactivate UI
+    end
+end
+deactivate User
+
+
+@enduml

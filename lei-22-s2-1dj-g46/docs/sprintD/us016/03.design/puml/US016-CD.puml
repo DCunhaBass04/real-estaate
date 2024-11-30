@@ -1,0 +1,189 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+title US016 Sending an Email - Class Diagram
+
+class CheckVisitsUI{
+-CheckVisitsController controller
+___
++respondToXMessage(message, messageList)
+}
+
+class CheckVisitsController{
+___
++ deleteFromRepositoryAndSendEmail(message, responseText)
+}
+
+class Repositories{
+-Repositories instance
+-ClientRepository clientRepository
+-MessageRepository messageRepository
+-ResponseRepository responseRepository
+-AgentRepository agentRepository
+___
++ getInstance()
++ getClientRepository()
++ getMessageRepository()
++ getAgentRepository()
++ getResponseRepository()
+}
+
+class PropertyAnnouncementRepository{
+-List<Property> announcements
+___
+}
+
+class ClientRepository{
+-List<Client> clients
+___
++ getClientByEmail(email)
+}
+
+class AgentRepository{
+-List<Agent> agents
+___
++ getAgents()
+}
+
+class Client {
+-String name
+-int passportNumber
+-socialSecurityNumber
+-String email
+-String phoneNumber
+-String pwd
+___
++ Client(email, name, phoneNumber)
++ getPhoneNumber()
++ getName()
+}
+
+class MessageRepository{
+-List<Message> messages
+___
++ create(text, name, phoneNumber, preferredDate, timeSlot)
++ addMessage(message)
++ validateMessage(message)
+}
+
+class Message{
+-Property property;
+-String agentID;
+-String subject;
+-String text;
+-String name;
+-String phoneNumber;
+-String preferredDate;
+-int startOfVisit;
+-int endOfVisit;
+___
++ Message (text, name, phoneNumber, preferredDate, timeSlot)
++ toString()
++clone()
++getAgentID()
++getPreferredDate()
++getPhoneNumber()
++getStartOfVisit()
++getEndOfVisit()
+}
+
+class Response {
+-String subject;
+-String text;
+-Agent sender;
+-Client recipient;
+-String state;
+-String reason;
+___
++equals(object)
++setState(state)
++setReason(reason)
++getRecipient()
++clone()
+}
+
+class ResponseRepository {
+-List<Response> responses
+___
++isEmpty()
++add(response)
+-validateResponse(response)
++remove(object)
++getResponses()
+}
+
+class Agent {
+-String email
+-String name
+-String phoneNumber
+-String address
+-String store
+-int ccNumber
+-int taxNumber
+-String pwd
+----
++hasEmail(String email)
++getName()
++getEmail()
++toString()
++clone()
+}
+
+class SendEmail {
+___
++sendAnEmail(message, agent, client, responseText)
+}
+
+object configProperties{
+email.username
+email.password
+email.smtp.host
+email.smtp.port
+email.smtp.auth
+mail.smtp.ssl.protocols
+email.smtp.starttls.enable
+mail.smtp.ssl.trust
+}
+
+interface Property{
+-Request request
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-File[] photographs
+___
+}
+
+Agent -> CheckVisitsUI : asks to respond\nto a booking request
+Agent -> CheckVisitsUI : writes full response\nto booking request
+
+CheckVisitsUI -> CheckVisitsController : creates
+CheckVisitsController --> Repositories : gets instance of
+Repositories --> "1" ResponseRepository : contains
+Repositories --> "1" ClientRepository : contains
+Repositories --> "1" MessageRepository : contains
+Repositories --> "1" AgentRepository : contains
+Repositories --> "1" PropertyAnnouncementRepository : contains
+
+CheckVisitsController -> Response : creates
+
+CheckVisitsController --> MessageRepository : deletes answered\nmessage from
+CheckVisitsController --> ResponseRepository : adds new\nresponse to
+
+CheckVisitsController -> SendEmail : asks to send\nemail to the client
+SendEmail ---> configProperties : gets configurations from
+
+ClientRepository --> "*" Client : contains
+MessageRepository --> "*" Message : contains
+AgentRepository --> "*" Agent : contains
+ResponseRepository --> "*" Response : contains
+Client --> "*" Message : sends
+
+PropertyAnnouncementRepository --> Property : contains
+Message -> Property : regarding
+
+
+@enduml

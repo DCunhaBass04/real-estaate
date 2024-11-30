@@ -1,0 +1,109 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+title US003 Register a New Employee - Class Diagram
+
+class Employee {
+- String role
+- int ccNumber
+- int taxNumber
+- String address
+- String email
+- String phone
+- String agency
+- String password
+___
+}
+
+class SystemAdministrator {
+- String role
+- int ccNumber
+- int taxNumber
+- String address
+- String email
+- String phone
+- String agency
+- String password
+___
+}
+
+class EmployeeRepository{
+___
++add()
+}
+
+class AdminUI {
+___
++run()
+}
+
+class CreateEmployeeUI {
+___
++run()
++registerNewEmployee()
++submitData(employee)
+}
+
+class CreateEmployeeController {
+___
++requestData()
++getEmail()
++requestAddress(email, name, role, \nphoneNumber, agency, ccNumber, taxNumber)
++choseRole()
++choseAgency()
++verifyData(employee)
++verifyIfNewEmployee(ccNumber, taxNumber, email)
++getOrganizationRepository
++createEmployee(employee, password)
++addAuthentication(copyOfEmployee)
+}
+
+class GenerateAndSavePassword {
+___
++generatePassword()
++sendPassword(employee)
+}
+
+class OrganizationRepository {
+___
++getOrganizationRepository()
+}
+
+class Organization{
+- String name
+- String vatNumber
+- String website
+- String phone
+- String email
+___
++addEmployee()
+}
+
+class Repositories{
+___
++getInstance()
+}
+
+class AuthenticationRepository{
+___
++addUserRole(id, description)
++addUserWithRole()
+}
+
+SystemAdministrator --> AdminUI
+AdminUI --> CreateEmployeeUI
+CreateEmployeeUI .> CreateEmployeeController
+CreateEmployeeUI -> GenerateAndSavePassword
+GenerateAndSavePassword "1" --> "1" Employee : sends password
+SystemAdministrator "1" -- "*" Employee : registers >
+CreateEmployeeController .> Repositories : repositories
+Repositories --> OrganizationRepository
+CreateEmployeeController .> OrganizationRepository : Organization Repository
+OrganizationRepository --> Organization : Organization
+CreateEmployeeController .> EmployeeRepository : Employee Repository
+EmployeeRepository --> Employee : Employee
+Organization --> Employee : Employee
+CreateEmployeeController .> AuthenticationRepository : AuthenticationRepository
+AuthenticationRepository --> Employee : User
+@enduml

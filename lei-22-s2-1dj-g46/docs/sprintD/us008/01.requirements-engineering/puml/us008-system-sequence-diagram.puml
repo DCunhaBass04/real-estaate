@@ -1,0 +1,38 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 008 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Agent" as User
+participant ":System" as System
+
+    activate User
+    User -> System : asks to post an announcement
+    activate System
+
+    System --> User : asks if they only want to see 'for rent', 'for sale' or both
+    deactivate System
+
+    User -> System : answers the question
+    activate System
+
+    System --> User : asks if they only want to see lands, apartments, houses or all of those
+    deactivate System
+
+    User -> System : answers the question
+    activate System
+
+    alt there aren't any requests with the given specifications
+    System --> User : shows message saying that there aren't any\nrequests that meet the given requirements
+    else there are
+    System --> User : shows all property requests to that specific agent starting from most recent\n(this sorting criteria takes priority above any other one)
+    end
+    deactivate System
+
+
+
+@enduml

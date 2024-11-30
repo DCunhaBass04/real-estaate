@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title User Story 11 - System Sequence Diagram
+autonumber
+actor "Agent" as Agent
+participant "System" as System
+activate Agent
+
+Agent->System: ask for the orders of properties
+activate System
+loop for every property
+alt property doesn't have any orders
+System --> Agent : displays empty list of orders
+else property has orders
+System-->Agent:prints sorted list of orders
+loop the number of orders
+System --> Agent : ask if the agent accepts the order
+deactivate System
+Agent-> System: accepts or denies an order
+activate System
+alt order is accepted
+System --> System : all other orders for that property\nare automatically denied
+
+end
+System --> System : sends a message to\nthe respective client
+System-->Agent : shows operation success
+deactivate System
+end
+end
+end
+
+@enduml

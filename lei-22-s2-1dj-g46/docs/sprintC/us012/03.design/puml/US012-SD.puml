@@ -1,0 +1,92 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 012 - Sequence Diagram (SD)
+
+autonumber
+
+actor "System Administrator" as User
+participant ":ImportLegacySystemUI" as System
+participant ":ImportLegacySystemController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "propertyRepository\n:PropertyRepository" as PropertyRepository
+
+activate User
+
+    activate User
+    User -> System : asks to list import information from a legacy system
+    activate System
+
+    System --> User : asks if the user wants to list requested format for the .csv file
+    deactivate System
+
+    User -> System : answers the question (Yes/No)
+    activate System
+
+    alt answer is 'Yes'
+    System --> User : prints requested format (what each line is and must have)
+    end
+
+    System --> User : asks for the file's full path
+    deactivate System
+
+    User -> System : writes full path to .csv file
+    activate System
+
+    System -> CTRL** : create
+    System -> CTRL : verifyFile(file)
+    activate CTRL
+
+    CTRL --> System : true/false
+    deactivate CTRL
+
+    alt file doesn't exist
+        System --> User : tells user that the given file does not exist
+    else file isn't .csv
+        System --> User : tells user to insert a .csv file
+    else file exists and is .csv
+        System -> CTRL : importFile(file)
+        activate CTRL
+        CTRL -> RepositorySingleton : getInstance()
+        activate RepositorySingleton
+
+        RepositorySingleton --> CTRL: repositories
+        deactivate RepositorySingleton
+
+        CTRL -> PLAT : getPropertyRepository()
+        activate PLAT
+
+        PLAT --> CTRL: propertyRepository
+        deactivate PLAT
+
+        CTRL -> PropertyRepository : getProperties()
+        activate PropertyRepository
+
+        PropertyRepository --> CTRL : propertyList
+        deactivate PropertyRepository
+        loop for every line (except the first one)
+        activate CTRL
+            CTRL -> CTRL : useLine(line)
+            CTRL -> CTRL : get property information
+            CTRL -> CTRL : createRequest(line)
+            CTRL -> CTRL : createOwner(line)
+            CTRL -> CTRL : creates new Property object\n(Land, Apartment or House)
+            CTRL -> CTRL : adds new property to\nproperty repository
+        end
+        deactivate CTRL
+        CTRL --> System : true/false if the file\nwas valid/not valid
+        deactivate CTRL
+        alt file isn't in the requested format
+            System --> User : displays operation fail
+        else file is valid
+            System --> User : registers all key information from the given file and displays operation success
+        end
+    end
+
+    deactivate System
+
+
+@enduml

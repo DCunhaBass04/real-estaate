@@ -1,0 +1,108 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+title US007 Sign Up - Class Diagram
+
+class UnregisteredUser {
+___
+}
+
+class SignUpUI {
+___
++run()
++signUp()
++submitData(user)
+}
+
+class SignUpController{
+___
++requestData()
++getPassword()
++getEmail()
++verifyData(client)
++verifyIfNewUser(email)
++createNewUser(user)
++addAuthentication(copyOfUser)
+}
+
+class AuthenticationRepository{
+___
++ getCurrentUserSession()
+}
+
+class Repositories {
+-Repositories instance
+-ClientRepository clientRepository
+-UserRepository userRepository
+-AuthenticationRepository authenticationRepository
+___
++getInstance()
++getClientRepository()
++getUserRepository()
++getAuthenticationRepository()
+}
+
+class ClientRepository{
+-List<Client> clients
+___
++isEmpty()
++add(user)
++validateUser(user)
++getUser()
+}
+
+class UserRepository{
+-List<User> users
+___
++isEmpty()
++add(user)
++validateUser(user)
++getUser()
+}
+
+class User {
+-String name
+-String email
+-String pwd
+}
+
+class Client {
+-String name
+-int passportNumber
+-int socialSecurityNumber
+-String email
+-String phone
+-String pwd
+___
++listProperties()
++sendPropertyRequest()
++buyProperty()
+}
+
+class GenerateAndSavePassword{
+___
++generatePassword()
++sendClientPassword(client)
++verifyPassword(password)
+}
+
+UnregisteredUser --> SignUpUI : runs
+SignUpUI -> SignUpController : creates
+
+SignUpController -up-> UnregisteredUser : request necessary\ninformation
+UnregisteredUser -> SignUpController : provides requested\ninformation
+SignUpController --> Repositories : gets\ninstance of
+
+Repositories --> UserRepository : contains
+Repositories --> AuthenticationRepository : contains
+Repositories --> ClientRepository : contains
+SignUpController -> GenerateAndSavePassword : gets password through
+SignUpController -> AuthenticationRepository : registers new user
+SignUpController -> UserRepository : registers if successful,\nloops "requests necessary\ninformation" if not
+SignUpController -> ClientRepository : registers if successful,\nloops "requests necessary\ninformation" if not
+UserRepository --> User : contains
+ClientRepository --> Client : contains
+
+@enduml

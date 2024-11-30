@@ -1,0 +1,250 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 009 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Agent" as ADM
+participant ":CheckVisitsUI" as UI
+
+participant ":CheckVisitsController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "authenticationRepository\n:AuthenticationRepository" as AUTHRepository
+participant "userSession\n:User Session" as SESSION
+participant "messageRepository\n:MessageRepository" as MSGRepository
+participant ":EditAndSortLists" as EDIT
+
+
+participant ":ConfigFile" as CONFIG
+participant ":Message" as Message
+
+
+
+activate ADM
+
+    ADM -> UI : requests to see all booking requests\nsent to them
+
+    activate UI
+
+        UI -> CTRL** : create
+
+        UI -> CTRL : CheckVisitsController()
+
+            activate CTRL
+
+            CTRL -> CTRL: getMessageRepository()
+
+                activate CTRL
+
+                    alt messageRepository = null
+
+                        CTRL -> RepositorySingleton : getInstance()
+
+                            activate RepositorySingleton
+
+                            RepositorySingleton --> CTRL: repositories
+
+                        deactivate RepositorySingleton
+
+                        CTRL -> PLAT : getMessageRepository()
+
+                            activate PLAT
+
+                            PLAT --> CTRL: messageRepository
+
+                            deactivate PLAT
+
+                        CTRL --> CTRL : messageRepository
+
+                        deactivate CTRL
+
+                    end
+
+            CTRL -> CTRL: getAuthenticationRepository()
+
+                activate CTRL
+
+                    alt authenticationRepository = null
+
+                        CTRL -> RepositorySingleton : getInstance()
+
+                            activate RepositorySingleton
+
+                            RepositorySingleton --> CTRL: repositories
+
+                        deactivate RepositorySingleton
+
+                        CTRL -> PLAT : getAuthenticationRepository()
+
+                            activate PLAT
+
+                            PLAT --> CTRL: authenticationRepository
+
+                            deactivate PLAT
+
+                        CTRL --> CTRL : authenticationRepository
+
+                        deactivate CTRL
+
+                    end
+
+                CTRL --> UI
+
+            deactivate CTRL
+
+            UI -> CTRL : getMessages()
+
+            activate CTRL
+
+                CTRL -> AUTHRepository: getCurrentUserSession()
+
+                activate AUTHRepository
+
+                AUTHRepository --> CTRL: userSession
+
+                deactivate AUTHRepository
+
+                CTRL -> SESSION : getUserID
+
+                activate SESSION
+
+                SESSION --> CTRL : agentID
+
+                deactivate SESSION
+
+                CTRL -> MSGRepository : getMessages()
+
+                activate MSGRepository
+
+                MSGRepository --> CTRL : messages
+
+                deactivate MSGRepository
+
+                CTRL -> EDIT : getMessagesDoneToXAgent(messages)
+
+                activate EDIT
+
+                EDIT --> CTRL : messages
+
+                deactivate EDIT
+
+            CTRL --> UI : messageList
+
+            deactivate CTRL
+
+            UI -> CTRL : getDates(messageList)
+
+            activate CTRL
+
+            CTRL --> UI : dateList
+
+            deactivate CTRL
+
+
+
+
+
+
+
+        UI --> ADM : asks for them to select a time period
+
+    deactivate UI
+
+        ADM -> UI : selects begin date and end date
+
+        activate UI
+
+            UI -> CTRL : changeListWithTimePeriod(messageList, beginDate, endDate)
+
+            activate CTRL
+
+            CTRL --> UI : messageList
+
+            deactivate CTRL
+
+        UI -> EDIT : sortListThroughConfigFile(messageList)
+
+        activate EDIT
+
+        EDIT -> CONFIG** : create
+
+        EDIT -> CONFIG : getProperty("algorithm")
+
+        activate CONFIG
+
+        CONFIG --> EDIT : algorithm
+
+        deactivate CONFIG
+
+
+
+        alt algorithm = bubble
+
+        EDIT -> EDIT : bubbleSort(list)
+
+        activate EDIT
+
+        EDIT -> Message : getPreferredDateInComparableInt()
+
+        activate Message
+
+        Message --> EDIT : preferredDateInt
+
+        deactivate Message
+
+        EDIT --> EDIT : list
+
+        deactivate EDIT
+
+        end
+
+
+
+        alt algorithm = merge
+
+        EDIT -> EDIT : genericMergeSortStart(list)
+
+        activate EDIT
+
+        EDIT -> EDIT : mergeSortMessageList((List<Message>) list)
+
+        activate EDIT
+
+        EDIT -> EDIT : mergeArrayList(messageList, leftSideOfList, rightSideOfList)
+
+        activate EDIT
+
+                EDIT -> Message : getPreferredDateInComparableInt()
+
+                activate Message
+
+                Message --> EDIT : preferredDateInt
+
+                deactivate Message
+
+        EDIT --> EDIT
+
+        deactivate EDIT
+
+        EDIT --> EDIT
+
+        deactivate EDIT
+
+        EDIT --> EDIT : list
+
+        deactivate EDIT
+
+        end
+
+        EDIT -> UI : messageList
+
+        UI --> ADM : shows the list of all booking requests\nmade to that agent in that time period
+
+    deactivate UI
+
+deactivate ADM
+@enduml

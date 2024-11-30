@@ -1,0 +1,128 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title US002 Real Estate Agent - Domain Model
+
+hide methods
+
+class Employee {
+-role
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+class Agent {
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+class System {
+-listOfProperties
+}
+
+class PropertyRequestList{
+-List<Property> requests
+}
+
+class PropertyList {
+-List<Property> properties
+}
+
+interface Property {
+}
+
+class Request{
+-type
+-price
+-priceUnit
+-isItPublished
+-commissionDate
+-owner
+-commissionValue
+-duration
+}
+
+class Land{
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-request
+}
+
+class Apartment {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-photographs
+-finalPrice
+-announcementDate
+-request
+}
+
+class House {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-basement
+-inhabitableLoft
+-sunExposure
+-photographs
+-finalPrice
+-announcementDate
+-request
+}
+
+
+Agent "1" -- "1" System : requests to set\ncommission(s) >
+PropertyRequestList "1" - "1" System : delivers list of all requests done to\nthat agent with the requested filters >
+System "1" -- "1" Agent : prints given list\nto the agent >
+System "1" -- "1" PropertyRequestList : removes property from\n(after publishing it) >
+System "1" -- "1" PropertyList : publishes sale\nannouncement on >
+
+Agent "1" -- "1..*" Property : publishes >
+
+PropertyRequestList "1" - "*" Property : has >
+PropertyList "1" - "*" Property : has >
+Property "1" - "1" Request : has >
+
+Property "1" -- "1" Apartment : can be >
+Property "1" -- "1" Land : can be >
+Property "1" -- "1" House : can be >
+
+Agent "1" - "1" Employee : is a >
+
+@enduml

@@ -1,0 +1,530 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class ApplicationPOT
+{
+  +static getInstance()
+  +getCurrentSession()
+}
+
+class UserSession
+{
+  +getUserEmail()
+}
+
+class Task {
+  -String reference
+  -String designation
+  -String informalDescription
+  -String technicalDescription
+  -Integer duration
+  -Double cost
+  +Task(ref,designation,informalDesc,technicalDesc,duration,cost,cat)
+}
+
+class Category {
+  -String id
+  -String description
+}
+
+class Organization {
+  -String name
+  -String VatNumber
+  -String website
+  -String phone
+  -String email
+  +Organization(name, VatNumber, webSite, phone, email, postalAddress, manager)
+  +createTask(ref,designation,informalDesc,technicalDesc,duration,cost,cat)
+  +saveTask(task)
+  -addTask(task)
+  -validateTask(task)
+}
+
+class Platform {
+  -String designation
+  +getCategories()
+  +getCategoryById(catId)
+  +getOrganizationByUserEmail(email)
+}
+
+class CreateTaskController {
+  +getCategories()
+  +createTask(ref,designation,informalDesc,technicalDesc,duration,cost,categoryId)
+  +saveTask()
+}
+
+class CreateTaskUI {
+
+}
+
+class UnregisteredUser {
+___
+}
+
+class MainMenuUI {
+-List<MenuItem> options
+___
++run()
+}
+
+class MenuItem {
+-String description
+-Runnable ui
+___
++run()
+}
+
+class ListPropertiesUI {
+ListPropertyController listPropertyController
+___
++run()
+}
+
+class ListPropertyController {
+PropertyRepository propertyRepository
+___
++printPropertiesToUser()
+}
+
+class Repositories {
+-Repositories instance
+-PropertyRepository propertyRepository
+___
++getInstance()
++getPropertyRepository()
+}
+
+class PropertyRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+interface Property {
+___
++equals(object)
++clone()
+}
+
+class Apartment {
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+-File[] photographs
+-String commissionDate
+-float commissionValue
+___
++equals(object)
++clone()
++toString()
+}
+
+class House {
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+-boolean basement
+-boolean inhabitableLoft
+-float sunExposure
+-File[] photographs
+-String commissionDate
+-float commissionValue
+___
++equals(object)
++clone()
++toString()
+}
+
+class Land{
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-File[] photographs
+-String commissionDate
+-float commissionValue
+___
++equals(object)
++clone()
++toString()
+}
+
+class Agent {
+-name
+-email
+-pwd
+----
++hasEmail(String email)
++getName()
++getEmail()
++toString()
++clone()
+}
+
+class AgentUI {
+----
++run()
+}
+
+
+class SetCommissionUI {
+___
++run()
+}
+
+class SetCommissionController{
+___
++setCommissionFromOwner()
++printPropertyRequests(List<PropertyRequest> propertyRequests)
++choosePropertyRequest(PropertyRequestRepository propertyRequestRepository,\nList<PropertyRequest> propertyRequests, Scanner ler)
++setCommission(PropertyRequest propertyRequest, VerifyInput verifyInput, Scanner input)
++setCommissionValue(float finalValue, String wantedRange, Scanner input, VerifyInput verifyInput)
+}
+
+class Owner {
+----
+}
+class OwnerUI{
+___
++run()
+}
+
+class SendPropertyRequestUI{
+___
++run()
+}
+
+class SendPropertyRequestController{
+___
++chooseAgent(Scanner input, VerifyInput verifyInput)
++chooseNumberOfProperties(Scanner input, String agentName, VerifyInput verifyInput)
++fillRequest(Scanner input, Agent agent, VerifyInput verifyInput)
++fillRequestForApartment(float area, String location, float distanceFromCityCentre,\n  Agent agent, float requestedPrice, File[] photographs, Scanner input, VerifyInput verifyInput)
++fillRequestForHouse(float area, String location, float distanceFromCityCentre,\n  Agent agent, float requestedPrice, File[] photographs, Scanner input, VerifyInput verifyInput)
++insertType(Scanner input, VerifyInput verifyInput)
++insertPhotographs(Scanner input, VerifyInput verifyInput)
+}
+
+class HouseRequest {
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-png photographs
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+-boolean basement
+-boolean inhabitableLoft
+-float sunExposure
+___
++equals(object)
++clone()
++toString()
+}
+
+class ApartmentRequest {
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-png photographs
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+___
++equals(object)
++clone()
++toString()
+}
+
+class LandRequest{
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-png photographs
+___
++equals(object)
++clone()
++toString()
+}
+
+class PropertyRequestRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+interface PropertyRequest{
+-String type
+-float area
+-String location
+-float distance from city centre
+-float requested price
+---
++equals(object)
++clone()
+}
+
+class Store {
+- String storeName
+- String address
+- int phoneNumber
+- int id
+- int taxIdentificationNumber
+- int businessLicensee
+- int bankAccountInformation
+- String products
+- String website
+- String email
+___
+}
+
+class Employee {
+- String role
+- int ccNumber
+- int taxNumber
+- String address
+- String email
+- String phone
+- String agency
+- String password
+___
+}
+
+class SystemAdministrator {
+- String storeName
+- String address
+- int phoneNumber
+- int id
+- int taxIdentificationNumber
+- int businessLicensee
+- int bankAccountInformation
+- String products
+- String website
+- String email
+___
+}
+
+class EmployeeRepository{
+___
++add()
+}
+
+class AuthenticationRepository{
+___
++addUserRole(id, description)
++addUserWithRole()
+}
+
+class CreateEmployeeUI {
+___
++run()
++registerNewEmployee()
++submitData(employee)
+}
+
+class CreateEmployeeController {
+___
++requestData()
++getEmail()
++requestAddress(email, name, role, \nphoneNumber, agency, ccNumber, taxNumber)
++choseRole()
++choseAgency()
++verifyData(employee)
++verifyIfNewEmployee(ccNumber, taxNumber, email)
++getOrganizationRepository
++createEmployee(employee, password)
++addAuthentication(copyOfEmployee)
+}
+
+class GenerateAndSavePassword {
+___
++generatePassword()
++sendPassword(employee)
+}
+
+class OrganizationRepository {
+___
++getOrganizationRepository()
+}
+
+class Organization{
+- String name
+- String vatNumber
+- String website
+- String phone
+- String email
+___
++addEmployee()
+}
+class StoreRepository{
+___
+}
+
+class AdminUI {
+___
++run()
+}
+
+class CreateStoreUI {
+___
++registerNewEStore()
++verifyData(storeName, address,\n phoneNumber, id, taxIdentificationNumber,\n businessLicensee, bankAccountInformation,\n products, website, email)
+}
+
+class CreateStoreController {
+___
++verifyIfNewStore(storeName, address,\n phoneNumber, id, taxIdentificationNumber,\n businessLicensee, bankAccountInformation,\n products, website, email)
++createStore(storeName, address,\n phoneNumber, id, taxIdentificationNumber,\n businessLicensee, bankAccountInformation,\n products, website, email)
+}
+
+class SignUpUI {
+___
++run()
+}
+
+class SignUpController{
+___
++requestInformation()
++verifyInformation(String name, int ccNumber, int taxNumber,\nString email, String phone, String address)
++generatePassword()
+}
+
+class UserRepository {
+-List<User> users
+___
++isEmpty()
++add(user)
++validateUser(user)
++getUser()
+}
+
+class User {
+-String name
+-int ccNumber
+-int taxNumber
+-String email
+-String phone
+-String address
+-String password
+___
++listProperties()
++sendPropertyRequest()
++buyProperty()
+}
+
+SystemAdministrator --> AdminUI
+AdminUI --> CreateStoreUI
+CreateStoreUI .> CreateStoreController
+SystemAdministrator "1" --> "*" Store : registers
+CreateStoreController --> "1" StoreRepository : StoreRepository
+StoreRepository --> Store : Store
+
+Owner -> OwnerUI : interacts and asks\nto send a request
+OwnerUI -> SendPropertyRequestUI : runs
+SendPropertyRequestUI --> SendPropertyRequestController : creates\nand runs
+
+SendPropertyRequestController -> Owner : requests necessary\ninformation
+Owner -> SendPropertyRequestController : provides requested\ninformation
+SendPropertyRequestController -> PropertyRequestRepository : stores information in
+PropertyRequestRepository -> Agent : Requested agent\ngets access to\nspecified property request
+
+PropertyRequestRepository --> PropertyRequest : contains
+
+PropertyRequest --> ApartmentRequest : can be
+PropertyRequest --> HouseRequest : can be
+PropertyRequest --> LandRequest : can be
+
+AdminUI --> CreateEmployeeUI
+CreateEmployeeUI .> CreateEmployeeController
+CreateEmployeeUI -> GenerateAndSavePassword
+GenerateAndSavePassword "1" --> "1" Employee : sends password
+SystemAdministrator "1" -- "*" Employee : registers >
+CreateEmployeeController .> Repositories : repositories
+Repositories --> EmployeeRepository : contains
+Repositories --> OrganizationRepository : contains
+CreateEmployeeController .> OrganizationRepository : Organization Repository
+OrganizationRepository --> Organization : Organization
+CreateEmployeeController .> EmployeeRepository : Employee Repository
+EmployeeRepository --> Employee : Employee
+Organization --> Employee : Employee
+CreateEmployeeController .> AuthenticationRepository : AuthenticationRepository
+AuthenticationRepository --> Employee : User
+
+UnregisteredUser --> MainMenuUI : interacts with
+
+MainMenuUI -> MenuItem : creates
+MainMenuUI -> MenuItem : requests to get\nall properties
+
+MenuItem -> ListPropertiesUI : runs
+
+ListPropertiesUI --> ListPropertiesUI : implements Runnable\ninterface
+ListPropertiesUI --> ListPropertyController : runs
+ListPropertyController --> Repositories : gets\ninstance of
+Repositories -> PropertyRepository : contains
+ListPropertyController --> PropertyRepository : gets property\nlist from
+
+Agent --> AgentUI : sends request to the\nPropertyRepository to insert data
+AgentUI --> SetCommissionUI : runs
+SetCommissionUI -> SetCommissionController : creates
+SetCommissionController -> Repositories :   ask for the property repository\n to insert property data
+
+
+PropertyRepository --> Property : contains
+
+Property --> Apartment : can be
+Property --> House : can be
+Property --> Land : can be
+
+MenuItem -> SignUpUI : runs
+SignUpUI -> SignUpController : creates
+
+SignUpController --> UnregisteredUser : request necessary\ninformation
+UnregisteredUser -> SignUpController : provides requested\ninformation
+SignUpController --> Repositories : gets\ninstance of
+
+Repositories --> UserRepository : contains
+Repositories --> PropertyRequestRepository : contains
+Repositories -> StoreRepository : contains
+SignUpController -> UserRepository : registers if successful,\nloops "requests necessary\ninformation" if not
+UserRepository -right-> User : contains
+
+CreateTaskUI ..> CreateTaskController
+CreateTaskController ..> Platform
+CreateTaskController ..> Category
+CreateTaskController ..> Task
+CreateTaskController ..> Organization
+CreateTaskController ..> ApplicationPOT
+CreateTaskController ..> UserSession
+Task "*" -> "1" Category : classified in
+Platform "1" --> "*" Category : defines
+Organization "1" --> "*" Task : owns
+@enduml

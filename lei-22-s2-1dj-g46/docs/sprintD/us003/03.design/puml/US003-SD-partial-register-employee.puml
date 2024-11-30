@@ -1,0 +1,39 @@
+@startuml
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 003 - Sequence Diagram (SD)
+
+autonumber
+
+actor "System Administrator" as ADM
+participant ":AdminUI" as ADMUI
+participant ":CreateEmployeeUI" as CRTUI
+participant ":CreateEmployeeController" as CNTRL
+
+activate ADM
+
+ADM -> ADMUI : Requests to register a new employee
+
+activate ADMUI
+
+ADMUI -> CRTUI : Requests to register a new employee
+
+deactivate ADMUI
+
+activate CRTUI
+
+CRTUI -> CNTRL** : Creates
+
+CRTUI -> CNTRL : registerNewEmployee()
+
+activate CNTRL
+
+CNTRL --> CRTUI : requests data
+
+deactivate CNTRL
+
+CRTUI --> ADM : requests data
+@enduml

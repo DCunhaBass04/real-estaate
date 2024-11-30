@@ -1,0 +1,136 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title US004 Request for Listing - Domain Model
+
+
+class AgentList {
+-agents
+}
+
+class Employee {
+-role
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+class Agent {
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+class Owner {
+-name
+-passportNumber
+-socialSecurityNumber
+-email
+-phoneNumber
+-password
+}
+
+class System {
+-advertisements
+-application
+-listOfProperties
+}
+
+interface Property {
+}
+
+class Request{
+-type
+-price
+-priceUnit
+-isItPublished
+-commissionDate
+-owner
+-commissionValue
+-duration
+}
+
+class Land{
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-request
+}
+
+class Apartment {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-photographs
+-finalPrice
+-announcementDate
+-request
+}
+
+class House {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-basement
+-inhabitableLoft
+-sunExposure
+-photographs
+-finalPrice
+-announcementDate
+-request
+}
+
+class PropertyRequestList {
+-properties
+}
+
+Owner "1" - "1" System : asks to send property\nrequest to an agent >
+
+PropertyRequestList "1" - "*" Property : contains list of >
+
+System "1" -- "1" PropertyRequestList : uploads new request to >
+
+Property "1" - "1" Request : has >
+
+Property "1" -- "1" Apartment : can be >
+Property "1" -- "1" Land : can be >
+Property "1" -- "1" House : can be >
+
+System "1" - "1" AgentList : gets agent list from >
+System "1" - "1" Owner : prints agent list to >
+
+AgentList "1" - "*" Agent : contains >
+Agent "1" - "1" Employee : is a >
+
+@enduml

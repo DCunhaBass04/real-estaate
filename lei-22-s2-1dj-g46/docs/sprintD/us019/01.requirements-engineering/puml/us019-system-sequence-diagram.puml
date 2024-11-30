@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title User Story 19 - System Sequence Diagram
+autonumber
+actor "Network Manager" as User
+participant "System" as System
+activate User
+User -> System : asks to divide all stores into two subsets
+activate System
+alt store list isn't empty
+System --> User : prints the subsets, each one with a list of stores\nand a total number of properties
+else otherwise
+System --> User : tells the user that the store list is empty, so this\nstudy cannot be done in that moment.
+end
+deactivate System
+
+deactivate User
+
+@enduml

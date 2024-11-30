@@ -1,0 +1,124 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 016 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Client" as Client
+participant ":ReadResponseUI" as UI
+participant ":ReadResponseController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant ":repositories\n:Repositories" as PLAT
+participant ":ResponseRepository" as ResponseRepository
+participant ":clientRepository:\nclientRepository" as ClientRepository
+
+activate Client
+
+Client -> UI: chooses a response to read
+activate UI
+
+UI --> Client : requests acceptance or decline of the response
+deactivate UI
+
+Client -> UI : accepts the response
+activate UI
+
+alt if the response is declined
+Client -> UI: writes the reason for declining the response
+end
+
+activate UI
+
+UI -> CTRL** : creates
+UI -> CTRL : getResponsesToClient()
+activate CTRL
+
+CTRL -> CTRL : response.getClient()
+activate CTRL
+CTRL --> CTRL : client
+deactivate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getResponseRepository()
+activate PLAT
+
+PLAT --> CTRL: responseRepository
+deactivate PLAT
+
+CTRL -> ResponseRepository : getResponses()
+activate ResponseRepository
+
+ResponseRepository --> CTRL : messageList
+deactivate ResponseRepository
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getClientRepository()
+activate PLAT
+
+PLAT --> CTRL: ClientRepository
+deactivate PLAT
+
+CTRL -> ClientRepository : getClients()
+activate ClientRepository
+
+ClientRepository --> CTRL : clientList
+deactivate ClientRepository
+
+CTRL -> ClientRepository : getClientByEmail(currentUserEmail)
+activate ClientRepository
+
+ClientRepository --> CTRL : currentClient
+deactivate ClientRepository
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getResponseRepository()
+activate PLAT
+
+PLAT --> CTRL: responseRepository
+deactivate PLAT
+
+CTRL -> ResponseRepository : getResponses()
+activate ResponseRepository
+
+ResponseRepository --> CTRL : responseList
+deactivate ResponseRepository
+
+CTRL -> CTRL : responseList.add(response)
+
+CTRL -> CTRL : changeResponse(Response response)
+CTRL -> ResponseRepository** : response.setState("Accepted")
+
+alt if the response is declined
+CTRL -> CTRL : changeResponseWithReason
+CTRL -> ResponseRepository** : response.setState("Declined")
+CTRL -> ResponseRepository** : response.setReason(reason)
+end
+
+CTRL --> UI : operation success
+deactivate CTRL
+
+UI --> Client: displays operation success
+deactivate UI
+deactivate Client
+
+
+
+@enduml

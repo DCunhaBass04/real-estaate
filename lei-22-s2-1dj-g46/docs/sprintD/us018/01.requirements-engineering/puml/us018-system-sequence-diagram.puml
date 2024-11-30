@@ -1,0 +1,54 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title User Story 18 - System Sequence Diagram
+autonumber
+actor "Store Manager" as User
+participant "System" as System
+activate User
+
+User -> System: chooses to analyze all deals made
+activate System
+
+alt there are no apartment or house deals
+System --> User : tells the user that there are no apartment or house deals on the system
+else otherwise
+System --> User : prints all possible regression\nmodels and tells the user to choose one of those
+deactivate System
+User -> System : picks one of the printed options
+activate System
+System --> User : prints that regression model's equation along with its R and\nasks the user if they want to use that equation to\nestimate the price of all deals
+deactivate System
+User -> System : chooses "Yes" or "No"
+activate System
+alt the answer was yes
+    System --> User : asks if the user only wants to see 'for rent', 'for sale' or both
+    deactivate System
+
+    User -> System : answers the question
+    activate System
+
+    System --> User : asks if they only want to see apartments, houses or both
+    deactivate System
+
+    User -> System : answers the question
+    activate System
+
+    System --> User : asks if the user wants to only see properties from a specific store
+    deactivate System
+
+    User -> System : answers the question
+    activate System
+
+    System --> User : asks if they want to sort by price, area, distance from\ncity centre, number of photos (in ascending\nor descending order), number of bedrooms,\nnumber of bathrooms, number of parking spaces or none of them
+    deactivate System
+
+    User -> System : gives their answer
+    activate System
+
+    System --> User : prints all deals in the requested order, each one with its\nnewly calculated estimated price
+    deactivate System
+    end
+end
+deactivate User
+
+@enduml

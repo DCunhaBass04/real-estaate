@@ -1,0 +1,419 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 003 - Sequence Diagram (SD)
+
+autonumber
+
+actor "System Administrator" as ADM
+participant ":CreateEmployeeUI" as UI
+participant ":CreateEmployeeController" as CNTRL
+participant ":employee:\nEmployee" as Employee
+participant ":Repositories" as Repositories
+participant "repositories\n:Repositories" as REPS
+participant ":employeeRepository:\nEmployeeRepository" as EMPLOYEERepository
+participant ":storeRepository:\nStoreRepository" as STORERepository
+participant ":authenticationRepository:\nAuthenticationRepository" as AUTHRepository
+participant ":GenerateAndSavePassword" as PassGenerator
+participant ":copyOfEmployee:\nEmployee" as COPY
+participant ":agentRepository:\nAgentRepository" as AGENTRepository
+participant ":store:\nStore" as STORE
+
+activate ADM
+
+ADM -> UI : requests to register a new employee
+
+activate UI
+
+UI -> CNTRL** : creates
+
+UI -> CNTRL : registerNewEmployee()
+
+activate CNTRL
+
+CNTRL --> UI : requests data
+
+deactivate CNTRL
+
+UI --> ADM : requests data
+
+deactivate UI
+
+
+loop if invalid
+
+ADM -> UI : types requested data (role, name,\n ccNumber, taxNumber, address,\n email, phoneNumber)
+
+activate UI
+
+    UI -> Employee** : create(role, name, ccNumber, taxNumber, \naddress, email, phoneNumber)
+
+UI --> ADM : shows requested data
+
+deactivate UI
+
+ADM -> UI : submits data
+
+activate UI
+
+UI -> CNTRL : submitData(employee)
+
+activate CNTRL
+
+
+
+CNTRL -> CNTRL : verifyData(employee)
+
+activate CNTRL
+
+CNTRL -> Employee : getCcNumber()
+
+activate Employee
+
+Employee --> CNTRL : ccNumber
+
+deactivate Employee
+
+CNTRL -> Employee : getTaxNumber()
+
+activate Employee
+
+Employee --> CNTRL : taxNumber
+
+deactivate Employee
+
+CNTRL -> Employee : getStore()
+
+activate Employee
+
+Employee --> CNTRL : store
+
+deactivate Employee
+
+CNTRL -> CNTRL : verifyIfNewEmployee(ccNumber, taxNumber, email)
+
+activate CNTRL
+
+CNTRL -> Repositories : getInstance()
+
+activate Repositories
+
+Repositories --> CNTRL : repositories
+
+deactivate Repositories
+
+CNTRL -> REPS : getEmployeeRepository()
+
+activate REPS
+
+REPS --> CNTRL : employeeRepository
+
+deactivate REPS
+
+CNTRL -> EMPLOYEERepository : getEmployees()
+
+activate EMPLOYEERepository
+
+EMPLOYEERepository --> CNTRL : employeeList
+
+deactivate EMPLOYEERepository
+
+CNTRL --> CNTRL: true/false
+
+deactivate CNTRL
+
+CNTRL -> CNTRL : verifyIfAgentSlotIsEmpty(store)
+
+activate CNTRL
+
+CNTRL -> Repositories : getInstance()
+
+activate Repositories
+
+Repositories --> CNTRL : repositories
+
+deactivate Repositories
+
+CNTRL -> REPS : getStoreRepository()
+
+activate REPS
+
+REPS --> CNTRL : storeRepository
+
+deactivate REPS
+
+CNTRL -> STORERepository : getStoreByName(store)
+
+activate STORERepository
+
+STORERepository --> CNTRL : requestedStore
+
+deactivate STORERepository
+
+CNTRL --> CNTRL: true/false
+
+deactivate CNTRL
+
+CNTRL --> CNTRL : true/false
+
+deactivate CNTRL
+
+CNTRL --> UI : operation unsuccessful
+
+UI -->ADM : operation unsuccessful, try again
+
+deactivate UI
+
+end
+
+
+
+
+deactivate EMPLOYEERepository
+
+activate CNTRL
+
+CNTRL --> UI : operation successful
+
+deactivate CNTRL
+
+activate UI
+
+UI --> ADM : operation successful
+
+UI -> PassGenerator** : creates
+
+UI -> PassGenerator : generatePassword()
+
+activate PassGenerator
+
+PassGenerator --> UI : password
+
+deactivate PassGenerator
+
+UI -> CNTRL : createEmployee(employee, password)
+
+deactivate UI
+
+activate CNTRL
+
+CNTRL -> Employee : getName()
+
+activate Employee
+
+Employee --> CNTRL : name
+
+deactivate Employee
+
+CNTRL -> Employee : getEmail()
+
+activate Employee
+
+Employee --> CNTRL : email
+
+deactivate Employee
+
+CNTRL -> Employee : getPhoneNumber()
+
+activate Employee
+
+Employee --> CNTRL : phoneNumber
+
+deactivate Employee
+
+CNTRL -> Employee : getAddress()
+
+activate Employee
+
+Employee --> CNTRL : address
+
+deactivate Employee
+
+CNTRL -> Employee : getStore()
+
+activate Employee
+
+Employee --> CNTRL : store
+
+deactivate Employee
+
+CNTRL -> Employee : getRole()
+
+activate Employee
+
+Employee --> CNTRL : role
+
+deactivate Employee
+
+CNTRL -> Employee : getCcNumber()
+
+activate Employee
+
+Employee --> CNTRL : ccNumber
+
+deactivate Employee
+
+CNTRL -> Employee : getTaxNumber()
+
+activate Employee
+
+Employee --> CNTRL : taxNumber
+
+deactivate Employee
+
+CNTRL -> COPY**: create(role, name, ccNumber, taxNumber, \naddress, email, phoneNumber, password)
+
+CNTRL -> CNTRL: addAuthentication(Employee copyOfEmployee)
+
+activate CNTRL
+
+CNTRL -> COPY : getName()
+
+activate COPY
+
+COPY --> CNTRL : name
+
+deactivate COPY
+
+CNTRL -> COPY : getEmail()
+
+activate COPY
+
+COPY --> CNTRL : email
+
+deactivate COPY
+
+CNTRL -> COPY : getPassword()
+
+activate COPY
+
+COPY --> CNTRL : password
+
+deactivate COPY
+
+CNTRL -> COPY : getRole()
+
+activate COPY
+
+COPY --> CNTRL : role
+
+deactivate COPY
+
+CNTRL -> COPY : getStore()
+
+activate COPY
+
+COPY --> CNTRL : store
+
+deactivate COPY
+
+CNTRL -> Repositories : getInstance()
+
+activate Repositories
+
+Repositories --> CNTRL : repositories
+
+deactivate Repositories
+
+CNTRL -> REPS : getAuthenticationRepository()
+
+activate REPS
+
+REPS --> CNTRL : authenticationRepository
+
+deactivate REPS
+
+CNTRL -> AUTHRepository : addUserRole(AuthenticationController.ROLE_EMPLOYEE, AuthenticationController.ROLE_EMPLOYEE)
+
+activate AUTHRepository
+
+CNTRL -> AUTHRepository : addUserWithRole(name, email, password, AuthenticationController.ROLE_EMPLOYEE)
+
+deactivate AUTHRepository
+
+alt if role = agent
+
+CNTRL -> Repositories : getInstance()
+
+activate Repositories
+
+Repositories --> CNTRL : repositories
+
+deactivate Repositories
+
+CNTRL -> REPS : getAgentRepository()
+
+activate REPS
+
+REPS --> CNTRL : agentRepository
+
+deactivate REPS
+
+CNTRL -> AGENTRepository : add(new Agent(copyOfEmployee))
+
+end
+
+CNTRL --> CNTRL
+
+deactivate CNTRL
+
+CNTRL -> Repositories : getInstance()
+
+activate Repositories
+
+Repositories --> CNTRL : repositories
+
+deactivate Repositories
+
+CNTRL -> REPS : getEmployeeRepository()
+
+activate REPS
+
+REPS --> CNTRL : employeeRepository
+
+deactivate REPS
+
+CNTRL -> EMPLOYEERepository : add(copyOfEmployee)
+
+activate EMPLOYEERepository
+
+deactivate EMPLOYEERepository
+
+CNTRL -> Repositories : getInstance()
+
+activate Repositories
+
+Repositories --> CNTRL : repositories
+
+deactivate Repositories
+
+CNTRL -> REPS : getStoreRepository()
+
+activate REPS
+
+REPS --> CNTRL : storeRepository
+
+deactivate REPS
+
+CNTRL -> STORERepository : getStoreByName(store)
+
+activate STORERepository
+
+STORERepository -> STORE** : create()
+
+STORERepository --> CNTRL : store
+
+deactivate STORERepository
+
+CNTRL -> STORE : addEmployee(copyOfEmployee)
+
+CNTRL -> PassGenerator** : create()
+
+CNTRL -> PassGenerator : sendEmployeePassword(email, password)
+
+activate PassGenerator
+
+
+@enduml

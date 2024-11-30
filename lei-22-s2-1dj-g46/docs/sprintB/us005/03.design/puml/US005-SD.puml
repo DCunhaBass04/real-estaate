@@ -1,0 +1,67 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 005 - Sequence Diagram (SD)
+
+autonumber
+
+actor "System Administrator" as SADM
+participant ":AdminUI" as ADMUI
+participant ":CreateStoreUI" as CSUI
+participant ":CreateStoreController" as CSC
+participant ":StoreRepository" as Repository
+participant ":System Admistrator" as Store
+
+activate SADM
+
+SADM -> ADMUI : Requests to register a Store
+
+activate ADMUI
+
+ADMUI -> CSUI
+
+deactivate ADMUI
+
+activate CSUI
+
+CSUI -> CSC** : create
+
+CSUI -> CSC : registerStore()
+
+activate CSC
+
+CSC --> CSUI : requests data
+
+deactivate CSC
+
+CSUI --> SADM : requests data
+
+deactivate CSUI
+
+SADM -> CSUI : types requested data (storeName, storeAddress,\n phoneNumber, id , taxIdentificationNumber,\n businessLicense, bankAccountInformation,\n products, website, email)
+
+activate CSUI
+
+CSUI -> CSC : sendStoreData(storeName, storeAddress,\n phoneNumber, id , taxIdentificationNumber,\n businessLicense, bankAccountInformation,\n products, website, email)
+
+deactivate CSUI
+
+activate CSC
+
+CSC -> Repository : verifyStoreData(storeName, storeAddress,\n phoneNumber, id , taxIdentificationNumber,\n businessLicense, bankAccountInformation,\n products, website, email)
+
+deactivate CSC
+
+activate Repository
+
+
+CSC -> Repository : createStore(storeName, storeAddress,\n phoneNumber, id , taxIdentificationNumber,\n businessLicense, bankAccountInformation,\n products, website, email)
+
+deactivate Repository
+
+
+deactivate CSC
+
+@enduml

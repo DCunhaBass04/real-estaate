@@ -1,0 +1,124 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 016 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Agent" as Agent
+participant ":CheckVisitsUI" as UI
+participant ":CheckVisitsController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant ":repositories\n:Repositories" as PLAT
+participant ":messageRepository:\nMessageRepository" as MessageRepository
+participant ":agentRepository:\nAgentRepository" as AgentRepository
+participant ":SendAnEmail" as SendAnEmail
+participant ":responseRepository:\nResponseRepository" as ResponseRepository
+
+activate Agent
+
+Agent -> UI: chooses a booking request to answer
+activate UI
+
+UI --> Agent : requests an answer to that specific request
+deactivate UI
+
+Agent -> UI : writes the full response, registering (or not) the visit
+activate UI
+
+UI -> CTRL** : creates
+UI -> CTRL : deleteFromRepositoryAndSendEmail(message, response)
+activate CTRL
+
+CTRL -> CTRL : message.getClient()
+activate CTRL
+CTRL --> CTRL : client
+deactivate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getMessageRepository()
+activate PLAT
+
+PLAT --> CTRL: messageRepository
+deactivate PLAT
+
+CTRL -> MessageRepository : getMessages()
+activate MessageRepository
+
+MessageRepository --> CTRL : messageList
+deactivate MessageRepository
+
+CTRL -> CTRL : messageList.remove(message)
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getAgentRepository()
+activate PLAT
+
+PLAT --> CTRL: agentRepository
+deactivate PLAT
+
+CTRL -> AgentRepository : getAgents()
+activate AgentRepository
+
+AgentRepository --> CTRL : agentList
+deactivate AgentRepository
+
+CTRL -> AgentRepository : getAgentByEmail(authenticationRepository.getCurrentUserSession().getUserId().toString()
+activate AgentRepository
+
+AgentRepository --> CTRL : currentAgent
+deactivate AgentRepository
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getResponseRepository()
+activate PLAT
+
+PLAT --> CTRL: responseRepository
+deactivate PLAT
+
+CTRL -> ResponseRepository : getResponses()
+activate ResponseRepository
+
+ResponseRepository --> CTRL : responseList
+deactivate ResponseRepository
+
+CTRL -> CTRL : responseList.add(response)
+
+CTRL -> SendAnEmail** : creates
+CTRL -> SendAnEmail : sendAnEmail(message, agent, client, responseText)
+activate SendAnEmail
+
+SendAnEmail -> SendAnEmail : gets data from file\n'config.properties'
+SendAnEmail -> SendAnEmail : sends an email to\nthe specific client
+
+SendAnEmail --> CTRL
+deactivate SendAnEmail
+CTRL --> UI : operation success/failure
+deactivate CTRL
+
+alt if the operation fails at any point
+UI --> Agent : displays operation failure
+else otherwise
+UI --> Agent : displays operation success
+end
+deactivate UI
+deactivate Agent
+
+@enduml

@@ -1,0 +1,61 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 005 - Sequence Diagram (SD)
+
+autonumber
+
+actor "System Administrator" as ADM
+participant ":CreateStoreUI" as CRTUI
+participant ":CreateStoreController" as CNTRL
+participant ":StoreRepository" as Repository
+
+activate ADM
+
+activate CRTUI
+
+loop invalid
+
+ADM -> CRTUI : types requested data (storeName, storeAddress,\n phoneNumber, id , taxIdentificationNumber,\n businessLicense, bankAccountInformation,\n products, website, email)
+
+CRTUI --> ADM : shows requested data
+
+ADM -> CRTUI : submits data
+
+CRTUI -> CNTRL : verifyData(storeName, storeAddress,\n phoneNumber, id , taxIdentificationNumber,\n businessLicense, bankAccountInformation,\n products, website, email)
+
+activate CNTRL
+
+CNTRL -> Repository : verifyIfNewStore(storeName, storeAddress,\n phoneNumber, id , taxIdentificationNumber,\n businessLicense, bankAccountInformation,\n products, website, email)
+
+deactivate CNTRL
+
+activate Repository
+
+Repository --> CNTRL : operation unsuccessful
+
+activate CNTRL
+
+CNTRL --> CRTUI : operation unsuccessful
+
+deactivate CNTRL
+
+CRTUI -->ADM : operation unsuccessful,try again
+
+end
+
+
+
+Repository --> CNTRL : operation successful
+
+deactivate Repository
+
+activate CNTRL
+
+CNTRL --> CRTUI : operation successful
+
+CRTUI --> ADM : operation successful
+
+@enduml

@@ -1,0 +1,319 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title Domain Model
+
+class NetworkManager {
+-name
+-email
+-password
+}
+
+class UnregisteredUser {
+}
+
+class File {
+-ownerNames
+-ownerPassportNumbers
+-ownerSSNs
+-ownerEmails
+-ownerPhoneNumbers
+-propertyTypes
+-propertyAreas
+-propertyLocations
+-propertyDistances
+-propertyNumOfBedrooms
+-propertyNumOfBathrooms
+-propertyNumOfParkingSpaces
+-propertyCentralHeating
+-propertyAirConditioning
+-propertyBasement
+-propertyLoft
+-propertySunExposure
+-propertyRequestedPrice
+-propertyPrice
+-commissionValue
+-contractDuration
+-propertyRequestDate
+-propertySaleDate
+-requestType
+-storeID
+-storeName
+-storeLocation
+-storePhoneNumber
+-storeEmail
+}
+
+class Client {
+-name
+-email
+-password
+}
+
+class System {
+-advertisements
+-application
+-listOfProperties
+-listOfUsers
+}
+
+interface Property {
+}
+
+class Request{
+-type
+-price
+-priceUnit
+-isItPublished
+-commissionDate
+-owner
+-commissionValue
+-duration
+}
+
+class Land{
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class Apartment {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class House {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-basement
+-inhabitableLoft
+-sunExposure
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class Employee {
+-role
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+class PropertyRequestList{
+-List<Property> requests
+}
+
+class PropertyList {
+-List<Property> properties
+}
+
+class Owner {
+-name
+-passportNumber
+-socialSecurityNumber
+-email
+-phoneNumber
+-password
+___
+}
+
+class AgentList {
+-agents
+}
+
+class Agent {
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+
+class SystemAdministrator {
+-name
+-email
+-password
+}
+
+
+class NetworkBranch {
+-designation
+-location
+-email
+-phone number
+}
+
+class Store {
+-location
+}
+
+class User {
+-name
+-cardNumber
+-taxNumber
+-emailAddress
+-telephoneNumber
+-password
+-address
+}
+
+class Message {
+-clientName
+-clientPhoneNumber
+-preferredDate
+-timeSlot
+}
+
+class Order {
+-property
+-amount
+-clientEmail
+-state
+}
+
+'US1
+UnregisteredUser "1" -- "1" System : requests to list properties\nand give filter and sort criteria >
+PropertyList "1" - "*" Property : has >
+System "1" - "*" Property : lists >
+Property "1" - "1" Request : has >
+Property "1" -- "1" Apartment : can be >
+Property "1" -- "1" Land : can be >
+Property "1" -- "1" House : can be >
+PropertyRequestList "1" - "*" Property : has >
+
+
+
+
+'US2
+Agent ---> System : asks to post announcement(s), giving the\nfilters and sorting settings that they want
+Agent "1" -- "1..*" Property : publishes >
+System -> System : updates the list of\nproperties
+System "1" - "1" PropertyRequestList : removes property from\n(after publishing it) >
+System "1" - "1" PropertyList : publishes sale\nannouncement on >
+
+
+
+
+'US3
+Agent "1" - "1" Employee : is a >
+Store "1" -- "*" Employee : contains >
+SystemAdministrator "1" -- "*" Employee : registers >
+
+
+
+
+'US4
+Owner "1" - "1" System : asks to send property\nrequest to an agent >
+System "1" - "1" AgentList : gets agent list from >
+System "1" - "1" Owner : prints agent list to >
+AgentList "1" - "*" Agent : contains >
+
+
+
+
+'US5
+SystemAdministrator "1" -- "*" NetworkBranch : registers >
+SystemAdministrator "1" -- "*" Store : registers >
+SystemAdministrator "1" -- "1" System : prepares >
+
+
+
+
+'US7
+UnregisteredUser "1" --> "1" System : provides information\nneeded to sign up
+System -> System : verifies information
+System "1" --> "1" User : creates user with\nprovided information
+
+
+
+
+'US8
+System -> System : sorts, filters and prints\nthe property list as the\nagent requested
+
+
+
+
+'US9
+Client "1" --> "*" Message : sends
+Message "*" --> System : registered in
+System ---> "1" Agent : available to
+
+
+
+'US10
+Client "1" -- System : requests to \nplace an order, selecting\nfilters typing amount >
+System "1" --- Order : place the order >
+
+
+
+'US11
+Agent "1" --- "1" System : asks for property offers >
+System "1" --- "1" Agent: send the list of\nproperty offers >
+System "1" --- "1" System : updates list of orders, deleting\nevery one of them and sending an\nemail to the respective clients
+Agent "1" -- "1" System: sends the answer to each offer >
+System "1" -- "1..*" Client: notify the client via email >
+
+
+
+'US12
+SystemAdministrator ---> File : owns
+SystemAdministrator ---> System : sends .csv\nfile to
+System --> File : validates\nfile
+System --> Owner : registers
+System --> Property : registers
+System --> Store : registers if unique
+
+
+
+'US13
+NetworkManager "1" - "1" System : sends a request to list\nthe employees >
+System "1" -- "*" Store : has a list of stores, sorted by\nnumber of property listings >
+System "1" -- "*" Employee : has a list of employees, sorted\nalphabetically and grouped\nby each store >
+Store "1" -- "*" Property : owns >
+
+@enduml

@@ -1,0 +1,44 @@
+Manifest-Version: 1.0
+Main-Class: pt.ipp.isep.dei.esoft.project.ui.AbsoluteMain
+Class-Path: commons-statistics-distribution-1.0.jar commons-statistics-d
+ istribution-1.0-javadoc.jar commons-statistics-distribution-1.0-sources
+ .jar mockito-all-1.10.19.jar junit-platform-engine-1.9.2.jar objenesis-
+ 3.3.jar javafx-base-19.jar javafx-graphics-19-win.jar javafx-controls-1
+ 9.jar bcrypt-0.9.0.jar javafx-fxml-19.jar byte-buddy-agent-1.12.22.jar 
+ bytes-1.3.0.jar commons-lang3-3.12.0.jar javafx-graphics-19.jar javafx-
+ fxml-19-win.jar javafx-controls-19-win.jar junit-platform-commons-1.9.2
+ .jar javafx-base-19-win.jar javafx-swt.jar javafx.web.jar javafx.base.j
+ ar javafx.fxml.jar javafx.media.jar javafx.swing.jar javafx.controls.ja
+ r javafx.graphics.jar activation.jar apiguardian-api-1.1.2.jar opentest
+ 4j-1.2.0.jar AuthLib-1.0-20220308.131530-2.jar junit-jupiter-engine-5.9
+ .2.jar junit-jupiter-api-5.9.2.jar commons-math4-core-4.0-beta1.jar com
+ mons-math4-legacy-4.0-beta1.jar commons-math4-neuralnet-4.0-beta1.jar c
+ ommons-math4-transform-4.0-beta1.jar commons-math4-legacy-core-4.0-beta
+ 1.jar commons-math4-core-4.0-beta1-javadoc.jar commons-math4-core-4.0-b
+ eta1-sources.jar commons-math4-legacy-4.0-beta1-javadoc.jar commons-mat
+ h4-legacy-4.0-beta1-sources.jar commons-math4-legacy-exception-4.0-beta
+ 1.jar commons-math4-neuralnet-4.0-beta1-javadoc.jar commons-math4-neura
+ lnet-4.0-beta1-sources.jar commons-math4-transform-4.0-beta1-javadoc.ja
+ r commons-math4-transform-4.0-beta1-sources.jar commons-math4-legacy-co
+ re-4.0-beta1-javadoc.jar commons-math4-legacy-core-4.0-beta1-sources.ja
+ r commons-math4-legacy-exception-4.0-beta1-javadoc.jar commons-math4-le
+ gacy-exception-4.0-beta1-sources.jar byte-buddy-1.12.22.jar mail.jar mo
+ ckito-core-5.1.1.jar commons-numbers-core-1.1.jar commons-numbers-angle
+ -1.1.jar commons-numbers-field-1.1.jar commons-numbers-gamma-1.1.jar co
+ mmons-numbers-arrays-1.1.jar commons-numbers-primes-1.1.jar commons-num
+ bers-complex-1.1.jar commons-numbers-fraction-1.1.jar commons-numbers-q
+ uaternion-1.1.jar commons-numbers-rootfinder-1.1.jar commons-numbers-co
+ re-1.1-javadoc.jar commons-numbers-core-1.1-sources.jar commons-numbers
+ -angle-1.1-javadoc.jar commons-numbers-angle-1.1-sources.jar commons-nu
+ mbers-combinatorics-1.1.jar commons-numbers-field-1.1-javadoc.jar commo
+ ns-numbers-field-1.1-sources.jar commons-numbers-gamma-1.1-javadoc.jar 
+ commons-numbers-gamma-1.1-sources.jar commons-numbers-arrays-1.1-javado
+ c.jar commons-numbers-arrays-1.1-sources.jar commons-numbers-primes-1.1
+ -javadoc.jar commons-numbers-primes-1.1-sources.jar commons-numbers-com
+ plex-1.1-javadoc.jar commons-numbers-complex-1.1-sources.jar commons-nu
+ mbers-fraction-1.1-javadoc.jar commons-numbers-fraction-1.1-sources.jar
+  commons-numbers-quaternion-1.1-javadoc.jar commons-numbers-quaternion-
+ 1.1-sources.jar commons-numbers-rootfinder-1.1-javadoc.jar commons-numb
+ ers-rootfinder-1.1-sources.jar commons-numbers-combinatorics-1.1-javado
+ c.jar commons-numbers-combinatorics-1.1-sources.jar
+

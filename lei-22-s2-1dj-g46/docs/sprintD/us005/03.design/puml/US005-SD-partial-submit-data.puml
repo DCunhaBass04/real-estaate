@@ -1,0 +1,20 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 005 - Sequence Diagram (SD)
+
+autonumber
+
+participant ":CreateStoreUI" as CRTUI
+participant ":CreateStoreController" as CNTRL
+participant ":StoreRepository" as Repository
+
+activate CRTUI
+
+activate CNTRL
+
+CNTRL -> Repository: createStore(storeName, storeAddress,\n phoneNumber, id , taxIdentificationNumber,\n businessLicense, bankAccountInformation,\n products, website, emailr)
+
+@enduml

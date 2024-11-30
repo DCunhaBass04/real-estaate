@@ -1,0 +1,61 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 003 - Sequence Diagram (SD)
+
+autonumber
+
+actor "System Administrator" as ADM
+participant ":CreateEmployeeUI" as CRTUI
+participant ":CreateEmployeeController" as CNTRL
+participant ":EmployeeRepository" as Repository
+
+activate ADM
+
+activate CRTUI
+
+loop invalid
+
+ADM -> CRTUI : types requested data (role, name, ccNumber, taxNumber, \naddress, email, phoneNumber)
+
+CRTUI --> ADM : shows requested data
+
+ADM -> CRTUI : submits data
+
+CRTUI -> CNTRL : verifyData(role, name, ccNumber, taxNumber, \naddress, email, phoneNumber)
+
+activate CNTRL
+
+CNTRL -> Repository : verifyIfNewEmployee(ccNumber, taxNumber)
+
+deactivate CNTRL
+
+activate Repository
+
+Repository --> CNTRL : operation unsuccessful
+
+activate CNTRL
+
+CNTRL --> CRTUI : operation unsuccessful
+
+deactivate CNTRL
+
+CRTUI -->ADM : operation unsuccessful,try again
+
+end
+
+
+
+Repository --> CNTRL : operation successful
+
+deactivate Repository
+
+activate CNTRL
+
+CNTRL --> CRTUI : operation successful
+
+CRTUI --> ADM : operation successful
+
+@enduml

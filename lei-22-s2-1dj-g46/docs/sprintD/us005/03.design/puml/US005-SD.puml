@@ -1,0 +1,85 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 005 - Sequence Diagram (SD)
+
+autonumber
+
+actor "System Administrator" as Employee
+participant ":CreateStoreUI" as System
+participant ":CreateStoreController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "storeRepository\n:StoreRepository" as Repository
+participant "store\n:Store" as Store
+
+activate Employee
+
+    Employee -> System : asks to register a store
+    activate System
+    System -> CTRL** : create
+    System -> CTRL : registerStore()
+
+
+        activate CTRL
+
+         CTRL --> System : requests data
+
+         deactivate CTRL
+
+         System --> Employee : requests data
+
+         deactivate System
+
+    Employee -> System : types requested data (such as name, address, contact details,\n and other relevant data.)
+    activate System
+
+System -> CTRL : sendStoreData(storeName, storeAddress,\n phoneNumber, id , taxIdentificationNumber,\n businessLicense, bankAccountInformation,\n products, website, email)
+
+
+activate CTRL
+
+    CTRL -> RepositorySingleton : getInstance()
+    activate RepositorySingleton
+
+    RepositorySingleton --> CTRL: repositories
+    deactivate RepositorySingleton
+
+    CTRL -> PLAT : getPropertyRepository()
+    activate PLAT
+
+    PLAT --> CTRL: storeRepository
+    deactivate PLAT
+
+CTRL -> Repository : verifyStoreData(storeName, storeAddress,\n phoneNumber, id , taxIdentificationNumber,\n businessLicense, bankAccountInformation,\n products, website, email)
+activate Repository
+
+Repository --> CTRL : true/false
+deactivate Repository
+
+alt new store is valid
+CTRL -> Store : createStore(storeName, storeAddress,\n phoneNumber, id , taxIdentificationNumber,\n businessLicense, bankAccountInformation,\n products, website, email)
+activate Store
+Store --> CTRL : operation success/failure
+deactivate Store
+CTRL -> Repository : add(store)
+activate Repository
+Repository --> CTRL : operation success/failure
+deactivate
+
+end
+CTRL --> System
+deactivate CTRL
+
+
+
+
+deactivate CTRL
+
+
+        System --> Employee : displays operation success/failure
+    deactivate System
+
+@enduml

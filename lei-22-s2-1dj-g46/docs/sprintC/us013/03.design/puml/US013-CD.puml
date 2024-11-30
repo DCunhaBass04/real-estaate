@@ -1,0 +1,176 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+title US013 List Employees by Store - Class Diagram
+
+
+'left to right direction
+
+class NetworkManager {
+-name
+-email
+-password
+}
+
+class StoreRepository {
+-List<Store> listOfStores
+___
++getStoreByName(name)
+}
+
+class Store {
+-String storeName
+-String address
+-String phoneNumber
+-int id
+-String email
+___
++compareTo(otherStore)
+}
+
+class EmployeeRepository {
+-List<Employee> listOfEmployees
+___
+}
+
+class Employee {
+-String email
+-String name
+-String role
+-String phoneNumber
+-String address
+-String store
+-int ccNumber
+-int taxNumber
+-String password
+___
++compareTo(otherEmployee)
+}
+
+class ListEveryEmployeeUI{
+-ListEveryEmployeeController ctrl
+___
++run()
++printAllStoresAndItsEmployees(storeList)
+}
+
+class ListEveryEmployeeController{
+___
++getListOfStores()
++sortStoresByNumOfProperties(listOfStores)
++printAllEmployeesByStore(store)
+-sortEmployeesAlphabetically(employeeList)
+}
+
+interface Property {
+___
++equals(object)
++clone()
+}
+
+class Request{
+-String type
+-float price
+-String priceUnit
+-boolean isItPublished
+-String commissionDate
+-Owner owner
+-String commissionValue
+-int duration
+}
+
+class Land{
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class Apartment {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class House {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-boolean basement
+-boolean inhabitableLoft
+-String sunExposure
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class Repositories{
+-Repositories()
++getInstance():Repositories
++NetworkManagerRepository()
+}
+
+NetworkManager -> ListEveryEmployeeUI : asks for a list of all employees\ngrouped by stores
+
+ListEveryEmployeeController -> ListEveryEmployeeController : sorts store list by\nnumber of properties
+ListEveryEmployeeController -left-> ListEveryEmployeeController : sorts employees\nalphabetically
+
+ListEveryEmployeeUI --left--> NetworkManager : prints list of stores, each with their own\nlist of employees
+
+ListEveryEmployeeUI --> ListEveryEmployeeController : runs
+ListEveryEmployeeController --> Repositories : gets\ninstance of
+Repositories --> StoreRepository : contains
+Repositories --> EmployeeRepository : contains
+ListEveryEmployeeController --> StoreRepository : gets store\nlist from
+ListEveryEmployeeController --> EmployeeRepository : gets employee\nlist from
+
+StoreRepository --> Store : has list of
+StoreRepository --> Property : has own list of
+EmployeeRepository --> Employee : has list of
+
+Property -> Request : contains
+
+Property --> Apartment : can be
+Property --> House : can be
+Property --> Land : can be
+
+@enduml

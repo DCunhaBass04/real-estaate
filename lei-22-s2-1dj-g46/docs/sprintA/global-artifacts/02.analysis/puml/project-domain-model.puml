@@ -1,0 +1,162 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title Domain Model
+
+class UnregisteredUser {
+___
++listProperties()
+}
+
+class User {
+name
+email
+password
+___
++listProperties()
+}
+
+class Organization {
+name
+vatNumber
+website
+phoneNumber
+email
+}
+
+class Task {
+reference
+description
+informalDesc
+technicalDesc
+duration
+cost
+}
+
+class Category {
+    description
+}
+
+class Employee {
+role
+card number
+tax number
+address
+email
+phone
+agency
+___
+}
+
+class Platform {
+  -description
+}
+
+class System {
+advertisements
+application
+___
+}
+
+class SystemAdministrator {
+___
+}
+
+class Agent {
+ID
+___
+}
+
+class Owner {
+___
+}
+
+class NetworkBranch {
+designation
+location
+email
+phone number
+___
+}
+
+class Store {
+location
+___
+}
+
+class Property {
+type
+area
+location
+distance from city centre
+requested price
+photographs
+___
+}
+
+class Apartment {
+___
+}
+
+class House {
+existence of a basement
+existence of an inhabitable loft
+sun exposure
+___
+}
+
+class Client {
+___
+}
+
+class ApartmentOrHouse {
+no. of bedrooms
+no. of bathrooms
+no. of parking spaces
+available equipment
+___
+}
+class Land{
+}
+
+SystemAdministrator "1" -- "*" Employee : registers >
+SystemAdministrator "1" -- "*" NetworkBranch : registers >
+SystemAdministrator "1" -- "*" Store : registers >
+SystemAdministrator "1" -- "1" System : prepares >
+
+Agent "1" -- "1" System : publishes sale\nannouncement on >
+Agent "1" -- "1..*" Property : published >
+
+Owner "1" -- "1" Agent : sends property\nrequest to >
+Owner "1" -- "1" Property : sends request about\nthis to agent >
+
+Property "1" -- "1" ApartmentOrHouse : can be >
+Property "1" -- "1" Land : can be >
+
+ApartmentOrHouse "1" -- "1" Apartment : can be >
+ApartmentOrHouse "1" -- "1" House : can be >
+
+User "1" -- "1" Client : can be >
+User "1" -- "1" Employee : can be >
+
+Employee "1" -- "1" Agent : can be >
+Employee "1" -- "1" Owner : can be >
+Employee "1" -- "1" SystemAdministrator : can be >
+
+Client "1" -- "1" Agent : request to\nschedule a\nvisit >
+
+Platform "1" -- "*" Organization : has registered >
+Platform "1" -- "*" Category : defines >
+
+Organization "1" -- "0..*" Employee : has >
+Organization "1" -- "0..*" Task: owns >
+
+Task "*" -- "1" Category: cataloged as >
+
+Employee "1" -- "*" Task : creates >
+@enduml

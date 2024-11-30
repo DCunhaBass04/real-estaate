@@ -1,0 +1,834 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+title Class Diagram
+
+'US1
+class UnregisteredUser {
+___
+}
+
+class ListPropertiesUI {
+ListPropertyController listPropertyController
+___
++run()
+}
+
+class ListPropertyController {
+PropertyRepository propertyRepository
+___
++printPropertiesToUser()
+}
+
+class Repositories {
+-Repositories instance
+-PropertyRequestRepository requestRepository
+-PropertyRepository propertyRepository
+-PropertySoldRepository soldRepository
+-EmployeeRepository employeeRepository
+-StoreRepository storeRepository
+-AgentRepository agentRepository
+-MessageRepository messageRepository
+-ResponseRepository responseRepository
+-OrderRepository orderRepository
+___
++getInstance()
++getRequestRepository()
++getPropertyRepository()
++getSoldRepository()
++getStoreRepository()
++getEmployeeRepository()
++getAgentRepository()
++getMessageRepository()
++getResponseRepository()
++getOrderRepository()
+}
+
+class PropertyRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+interface Property {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class Request{
+-String type
+-float price
+-String priceUnit
+-boolean isItPublished
+-String commissionDate
+-Owner owner
+-String commissionValue
+-int duration
+}
+
+class Land{
+}
+
+class Apartment {
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+}
+
+class House {
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-boolean basement
+-boolean inhabitableLoft
+-String sunExposure
+}
+
+
+class EditAndSortLists{
+___
++getPropertiesWithXTypeOfSale(propertyList, type)
++getPropertiesIfTheyAreLand(propertyList)
++getPropertiesIfTheyAreApartment(propertyList)
++getPropertiesIfTheyAreHouse(propertyList)
+getPropertiesByXAgent(propertyList, agentEmail)
++sortPropertiesByAscendingPrice(propertyList)
++sortPropertiesByDescendingPrice(propertyList)
++sortPropertiesByAscendingArea(propertyList)
++sortPropertiesByDescendingArea(propertyList)
++sortPropertiesByAscendingDistance(propertyList)
++sortPropertiesByDescendingDistance(propertyList)
++sortPropertiesByAscendingNumOfPhotographs(propertyList)
++sortPropertiesByDescendingNumOfPhotographs(propertyList)
+}
+
+UnregisteredUser -> ListPropertiesUI : \n\nrequests to list properties
+
+ListPropertiesUI --> UnregisteredUser : asks about what\nfilters and sorting settings\nthey want
+ListPropertiesUI --> ListPropertyController : tells it to filter\nand sort the list according\nto the agent's request
+
+ListPropertyController -> EditAndSortLists : runs the necessary methods\nfor the requested result
+
+ListPropertiesUI --> ListPropertiesUI : implements Runnable\ninterface
+ListPropertiesUI --> ListPropertyController : runs
+ListPropertyController --> Repositories : gets\ninstance of
+Repositories -> PropertyRepository : contains
+ListPropertyController --> PropertyRepository : gets property\nlist from
+
+PropertyRepository --> Property : contains
+
+Property -> Request : contains
+
+Property --> Apartment : can be
+Property --> House : can be
+Property --> Land : can be
+
+'US2
+class Agent {
+-String email
+-String name
+-String phoneNumber
+-String address
+-String store
+-int ccNumber
+-int taxNumber
+-String pwd
+----
++hasEmail(String email)
++getName()
++getEmail()
++toString()
++clone()
+}
+
+class PropertyRequestRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+class SetCommissionUI {
+___
++run()
+}
+
+class SetCommissionController{
+___
++setCommissionFromOwner()
++printPropertyRequests(List<PropertyRequest> propertyRequests)
++choosePropertyRequest(PropertyRequestRepository propertyRequestRepository,\nList<PropertyRequest> propertyRequests, Scanner ler)
++setCommission(PropertyRequest propertyRequest, VerifyInput verifyInput, Scanner input)
++setCommissionValue(float finalValue, String wantedRange, Scanner input, VerifyInput verifyInput)
+}
+
+Agent --> SetCommissionUI : runs and inputs the\nnecessary information\n(choosing the requests to set\ncommission and agreeing or not with commission\nvalue and final property price)
+SetCommissionUI -> SetCommissionController : creates
+SetCommissionUI -> PropertyRequestRepository : gets list of all requests done to\nthat agent with the requested filters
+SetCommissionController --> Repositories :   get instance of PropertyRequestRepository\nand PropertyRepository
+Repositories --> PropertyRequestRepository : contains
+
+SetCommissionController -> SetCommissionController : updates each request\naccording to the agents' choice\nto agree or not agree with the commission\nvalue and final property price
+
+SetCommissionController -> PropertyRequestRepository : removes published\nproperty from
+SetCommissionController -> PropertyRepository : adds published\nproperty to
+
+PropertyRepository --> Property : has
+PropertyRequestRepository --> Property : has
+
+'US3
+class Employee {
+- String name
+- String role
+- int ccNumber
+- int taxNumber
+- String address
+- String email
+- String phone
+- String agency
+- String password
+___
+}
+
+class EmployeeRepository{
+-List<Employee> employees
+___
++add()
++getEmployees()
+}
+
+class CreateEmployeeUI {
+-Employee employee
+-CreateEmployeeController controller
+___
++run()
++registerNewEmployee()
++submitData(employee)
+}
+
+class CreateEmployeeController {
+-EmployeeRepository employeeRepository
+-AuthenticationRepository authenticationRepository
+-StoreRepository storeRepository
+___
++requestData()
++getEmail()
++requestAddress(email, name, role, \nphoneNumber, agency, ccNumber, taxNumber)
++choseRole()
++choseAgency()
++verifyData(employee)
++verifyIfNewEmployee(ccNumber, taxNumber, email)
++getOrganizationRepository
++createEmployee(employee, password)
++addAuthentication(copyOfEmployee)
+}
+
+class GenerateAndSavePassword {
+___
++generatePassword()
++sendEmployeePassword(employee)
+}
+
+class StoreRepository {
+___
++getStoreRepository()
+}
+
+class Store{
+- String storeName
+- String address
+- String phoneNumber
+- String id
+- String email
+___
++addEmployee()
+}
+
+class AuthenticationRepository{
+-AuthFacade authenticationFacade
+___
++addUserRole(id, description)
++addUserWithRole()
+}
+
+SystemAdministrator--> CreateEmployeeUI
+CreateEmployeeUI .> CreateEmployeeController
+CreateEmployeeUI -> GenerateAndSavePassword
+GenerateAndSavePassword "1" --> "1" Employee : makes password for
+SystemAdministrator "1" -- "*" Employee : registers >
+CreateEmployeeController .> Repositories : repositories
+Repositories --> StoreRepository : contains
+Repositories --> AuthenticationRepository : contains
+Repositories --> EmployeeRepository : contains
+CreateEmployeeController .> StoreRepository : Store Repository
+StoreRepository --> Store : Store
+CreateEmployeeController .> EmployeeRepository : Employee Repository
+EmployeeRepository --> Employee : Employee
+Store --> Employee : Employee
+CreateEmployeeController .> AuthenticationRepository : AuthenticationRepository
+AuthenticationRepository --> Employee : User
+
+
+'US4
+class Client {
+-String name
+-int passportNumber
+-String socialSecurityNumber
+-String email
+-String phoneNumber
+-String pwd
+----
+}
+
+class SendPropertyRequestUI{
+___
++run()
+}
+
+class SendPropertyRequestController{
+___
++chooseAgent(Scanner input, VerifyInput verifyInput)
++chooseNumberOfProperties(Scanner input, String agentName, VerifyInput verifyInput)
++fillRequest(Scanner input, Agent agent, VerifyInput verifyInput)
++fillRequestForApartment(float area, String location, float distanceFromCityCentre,\n  Agent agent, float requestedPrice, File[] photographs, Scanner input, VerifyInput verifyInput)
++fillRequestForHouse(float area, String location, float distanceFromCityCentre,\n  Agent agent, float requestedPrice, File[] photographs, Scanner input, VerifyInput verifyInput)
++insertType(Scanner input, VerifyInput verifyInput)
++insertPhotographs(Scanner input, VerifyInput verifyInput)
+}
+
+class AgentRepository {
+-List<Agent> agents
+___
++isEmpty()
++add(agent)
+-validateAgent(agent)
++printAgents()
++getAgents()
+}
+Client -> SendPropertyRequestUI : runs
+SendPropertyRequestUI --> SendPropertyRequestController : creates\nand runs
+
+SendPropertyRequestUI -> AgentRepository : gets list of all agents to choose\n one and send them the request
+SendPropertyRequestController --> Repositories :   get instance of PropertyRequestRepository\nand AgentRepository
+Repositories --> AgentRepository : contains
+SendPropertyRequestController -> Client : requests necessary\ninformation
+Client -> SendPropertyRequestController : provides requested\ninformation
+SendPropertyRequestController -> PropertyRequestRepository : stores\ninformation in
+PropertyRequestRepository -> Agent : requested agent\ngets access to\nspecified property request
+
+AgentRepository --> Agent : contains
+
+
+'US5
+class SystemAdministrator {
+-String role
+-String name
+-String email
+-String password
+___
+}
+class CreateStoreUI {
+___
++run()
++registerNewStore()
++verifyData(storeName, address,\n phoneNumber, id, taxIdentificationNumber,\n businessLicensee, bankAccountInformation,\n products, website, email)
+}
+class CreateStoreController {
+___
++verifyIfNewStore(storeName, address,\n phoneNumber, id, taxIdentificationNumber,\n businessLicensee, bankAccountInformation,\n products, website, email)
++createStore(storeName, address,\n phoneNumber, id, taxIdentificationNumber,\n businessLicensee, bankAccountInformation,\n products, website, email)
+}
+
+SystemAdministrator --> CreateStoreUI : runs and gives\ndetails about store
+CreateStoreUI .> CreateStoreController : creates
+CreateStoreController -> Repositories : gets instance of
+CreateStoreController -> Store : creates
+CreateStoreController --> StoreRepository : adds new store in
+StoreRepository ---> CreateStoreController : storeList
+
+
+'US7
+class SignUpUI {
+___
++run()
++signUp()
++submitData(user)
+}
+
+class SignUpController{
+___
++requestData()
++getPassword()
++getEmail()
++verifyData(client)
++verifyIfNewUser(email)
++createNewUser(user)
++addAuthentication(copyOfUser)
+}
+class ClientRepository{
+-List<Client> clients
+___
++isEmpty()
++add(user)
++validateUser(user)
++getUser()
+}
+
+class UserRepository{
+-List<User> users
+___
++isEmpty()
++add(user)
++validateUser(user)
++getUser()
+}
+
+class User {
+-String name
+-String email
+-String pwd
+}
+UnregisteredUser --> SignUpUI : runs
+SignUpUI -> SignUpController : creates
+
+SignUpController -up-> UnregisteredUser : request necessary\ninformation
+UnregisteredUser -> SignUpController : provides requested\ninformation
+SignUpController --> Repositories : gets\ninstance of
+
+Repositories -> UserRepository : contains
+SignUpController -> GenerateAndSavePassword : gets password through
+SignUpController -> AuthenticationRepository : registers new user
+SignUpController -> UserRepository : registers if successful,\nloops "requests necessary\ninformation" if not
+SignUpController -> ClientRepository : registers if successful,\nloops "requests necessary\ninformation" if not
+UserRepository --> User : contains
+ClientRepository --> Client : contains
+
+
+'US8
+class SetCommissionUI {
+___
++run()
+}
+
+class SetCommissionController{
+___
+}
+Agent -> SetCommissionUI : runs and answers\ngiven questions
+SetCommissionUI -> Repositories : gets property\nlist through..
+SetCommissionUI --> SetCommissionController : creates
+SetCommissionUI --> Agent : asks agent about what\nfilters they want
+SetCommissionUI --> SetCommissionController : tells it to filter\nthe list according\nto the agent's request
+
+SetCommissionController -> EditAndSortList : runs the necessary methods\nfor the requested result
+
+
+'US9
+class LeaveMessageUI{
+-Message message
+-List<Property> propertyList
+-LeaveMessageController controller
+___
++run()
++requestToVisit()
++sendMessageToAgent()
++writeMessage()
++showPropertyList()
++askAboutFilters(properties, sc)
++printPropertyList(propertyList)
+}
+
+class LeaveMessageController{
+___
++ LeaveMessageController(authenticationRepository, clientRepository, messageRepository)
++ verifyMessage(message)
++ selectProperty(propertyList, input, verifyInput)
++ requestData(propertyList)
++ getEndOfVisit (start, input, verifyInput)
++ askAboutTypeOfSale(properties, sc)
++ askAboutTypeOfProperty(properties, sc)
++ askAboutAgent(properties, sc, agentList)
++ sortList(properties)
++ createMessage(text, name, phoneNumber, preferredDate, timeSlot)
+}
+LeaveMessageUI .> LeaveMessageController
+LeaveMessageController .> Repositories : repositories
+LeaveMessageController ..> ClientRepository : clientRepository
+LeaveMessageController ...> MessageRepository : messageRepository
+LeaveMessageController ..> AgentRepository : agentRepository
+LeaveMessageController ..> PropertyAnnouncementRepository : propertyAnnouncementRepository
+LeaveMessageController ..> EditAndSortLists : editAndSortLists
+LeaveMessageController ..> "1" Client : client
+LeaveMessageController ..> "*" Message : message
+Client --> "*" Message : sends
+
+
+'US10
+class PlaceOrderUI
+{
+    + askAboutFilters(properties, scanner)
+    + printPropertyList(propertyList)
+    + verifyOption(properties)
+}
+
+class PlaceOrderController
+{
+    - float correctAmount
+    ___
+    + askAboutTypeOfSale(properties, scanner)
+    + askAboutTypeOfProperty(properties, scanner)
+    + chooseProperty(properties, option)
+    + printPropertyList(propertyList)
+    + requestAmount(property)
+    + verifyAmount(amount)
+    + verifyOrder(amount, email, property)
+    + createAndRegisterNewOrder(amount, email, property)
+}
+
+class OrderRepository {
+    - List<Order> orders
+    ___
+    - validateOrder(order)
+    + getOrders()
+    + add(order)
+    + remove(Object o)
+}
+
+class Order {
+    - String clientEmail;
+    - Property property;
+    - float amount;
+    - String state;
+    ___
+    + getClientEmail()
+    + getProperty()
+    + getAmount()
+    + getState()
+    + setState(String state)
+    + toString()
+    + clone()
+    + compareTo(Order o)
+}
+Client -> PlaceOrderUI : interacts with
+PlaceOrderUI -> Repositories : request properties
+Repositories ------> OrderRepository : contains
+Repositories -> PlaceOrderUI : send properties
+PlaceOrderUI <--> EditAndSortLists : sort properties
+PlaceOrderUI --> PlaceOrderController : request to\nsort the properties
+PlaceOrderController --> PlaceOrderUI : send the\nsorted properties
+PlaceOrderController --> OrderRepository : request to\nstore the order
+OrderRepository -> Order : contains
+
+
+'US11
+class AcceptOffersUI {
+-AcceptOffersController ctrl
+___
++run()
++manageOrdersByProperty(property)
+-printAllOrdersForXProperty(orderList)
+}
+
+class AcceptOffersController{
+-EditAndSortLists editAndSortLists
+___
++getPropertiesByCurrentAgent(email)
++getOrdersToXProperty(property)
++acceptOffer(property, listOfOrders, index)
++declineOffer(index)
+}
+
+Agent ----> AcceptOffersUI : asks for\nproperty offers
+AcceptOffersUI --> Agent: send the list of\nproperty offers
+
+Agent --> AcceptOffersUI: sends the answer\nto each offer
+AcceptOffersUI --> AcceptOffersController : creates
+AcceptOffersController -> Repositories : gets instance of
+AcceptOffersController -> OrderRepository : gets order list from
+AcceptOffersController -> PropertyAnnouncementRepository : gets announcement list from
+AcceptOffersController -> PropertySoldRepository : gets sold\nproperties list from
+
+AcceptOffersController --> Client: notify the client via email
+
+
+'US12
+class ImportLegacySystemUI {
+___
++run()
+}
+
+class ImportLegacySystemController {
+___
++importFile(fileReader)
++useLine(line)
++createOwner(itemsPerLine)
++createRequest(itemsPerLine)
+}
+
+ImportLegacySystemUI -> ImportLegacySystemController : verifyFile(file)
+
+ImportLegacySystemController -> ImportLegacySystemController : reads each file's line
+
+
+ImportLegacySystemController --> Property : creates one\nfor each line
+ImportLegacySystemController --> Repositories : gets instance of
+
+
+
+'US13
+
+class NetworkManager {
+-String name
+-String email
+-String password
+}
+
+class ListEveryEmployeeUI{
+-ListEveryEmployeeController ctrl
+___
++run()
++printAllStoresAndItsEmployees(storeList)
+}
+
+class ListEveryEmployeeController{
+___
++getListOfStores()
++sortStoresByNumOfProperties(listOfStores)
++printAllEmployeesByStore(store)
+-sortEmployeesAlphabetically(employeeList)
+}
+
+NetworkManager -> ListEveryEmployeeUI : asks for a list of all employees\ngrouped by stores
+
+ListEveryEmployeeController -> ListEveryEmployeeController : sorts store list by\nnumber of properties
+ListEveryEmployeeController -left-> ListEveryEmployeeController : sorts employees\nalphabetically
+
+ListEveryEmployeeUI --left--> NetworkManager : prints list of stores, each with their own\nlist of employees
+
+ListEveryEmployeeUI --> ListEveryEmployeeController : runs
+ListEveryEmployeeController --> Repositories : gets\ninstance of
+ListEveryEmployeeController --> StoreRepository : gets store\nlist from
+ListEveryEmployeeController --> EmployeeRepository : gets employee\nlist from
+Store -left-> Property : contains list of
+Store -> Employee : contains list of
+
+
+'US15
+class CheckVisitsUI{
+-CheckVisitsController controller
+___
+}
+
+class CheckVisitsController{
+-AuthenticationRepository authenticationRepository
+-MessageRepository messageRepository
+___
++CheckVisitsController()
+-getMessageRepository()
+-getAuthenticationRepository()
+}
+
+Agent -> CheckVisitsUI
+CheckVisitsUI --> CheckVisitsController : controller
+CheckVisitsController --> Repositories : repositories
+
+
+'US16
+class Response {
+-String subject;
+-String text;
+-Agent sender;
+-Client recipient;
+-String state;
+-String reason;
+___
++equals(object)
++setState(state)
++setReason(reason)
++getRecipient()
++clone()
+}
+class ResponseRepository {
+-List<Response> responses
+___
++isEmpty()
++add(response)
+-validateResponse(response)
++remove(object)
++getResponses()
+}
+class SendEmail {
+___
++sendAnEmail(message, agent, client, responseText)
+}
+
+object configProperties{
+email.username
+email.password
+email.smtp.host
+email.smtp.port
+email.smtp.auth
+mail.smtp.ssl.protocols
+email.smtp.starttls.enable
+mail.smtp.ssl.trust
+}
+Agent -> CheckVisitsUI : asks to respond\nto a booking request
+Agent -> CheckVisitsUI : writes full response\nto booking request
+
+CheckVisitsUI -> CheckVisitsController : creates
+CheckVisitsController --> Repositories : gets instance of
+CheckVisitsController -> Response : creates
+
+CheckVisitsController --> MessageRepository : deletes answered\nmessage from
+CheckVisitsController --> ResponseRepository : adds new\nresponse to
+
+CheckVisitsController -> SendEmail : asks to send\nemail to the client
+SendEmail ---> configProperties : gets configurations from
+
+
+'US17
+class ListAllDealsUI{
+-ListAllDealsController listAllDealsController
+___
++run()
+}
+
+class ListAllDealsController {
+___
++getProperties()
++sortProperties(option, option2, properties)
+}
+User -> ListAllDealsUI : asks to see all deals made
+ListAllDealsUI --> ListAllDealsController : controller
+ListAllDealsController --> Repositories : repositories
+
+
+'US18
+class StoreManager {
+-Store store
+-String name
+-String email
+-String password
+}
+
+class AnalyzeDealsUI {
+-AnalyzeDealsController ctrl
+-String item
+___
++run()
+-getOption()
+-doLinearRegression()
+-getDesiredLinearRegression(option)
+-doMultipleLinearRegression(listOfValues)
++askAboutFilters(properties)
++askAboutSortSetting(properties)
++printPropertyList(propertyList, listOfValues)
+}
+
+class AnalyzeDealsController {
+-OLSMultipleLinearRegression multipleRegression
+-SimpleRegression simpleRegression
+___
++getApartmentsAndHouses()
++getAreaToPriceLinearRegression()
++getDistanceToPriceLinearRegression()
++getNumOfBedroomsToPriceLinearRegression()
++getNumOfBathroomsToPriceLinearRegression()
++getNumOfParkingSpacesToPriceLinearRegression()
++getRRating(r)
++getMultipleLinearRegression()
++calculateSimpleLinearPrice(listOfValues, item, property)
+}
+
+StoreManager -> AnalyzeDealsUI : requests to get\nforecast values\nfrom a chosen\nregression model
+AnalyzeDealsUI -> AnalyzeDealsController : creates
+AnalyzeDealsController --> PropertySoldRepository : gets all deals from\n(except lands)
+AnalyzeDealsController --> Apartment : gets
+AnalyzeDealsController --> House : gets
+
+AnalyzeDealsController -----> AnalyzeDealsUI : delivers list of\nparameters regarding the\nchosen regression model
+AnalyzeDealsUI --> StoreManager : prints all apartments and houses\nalong with their new estimated\nprice (calculated using the chosen\nregression model)
+
+AnalyzeDealsController --> Repositories : gets instance of
+
+'US19
+class Tuple{
+-int storeID
+-int numberOfProperties
+___
++getID()
++getNumberOfProperties()
+}
+
+class CreateSubsetsOfStoresUI{
+-CreateSubsetsOfStoresController ctrl
+___
++run()
+}
+
+class CreateSubsetsOfStoresController{
+___
++generatePartitions(stores)
++getTotalProperties(tuples)
+}
+
+NetworkManager -> CreateSubsetsOfStoresUI : interacts with
+CreateSubsetsOfStoresUI --> CreateSubsetsOfStoresController : creates
+CreateSubsetsOfStoresController -> Repositories : gets instance of
+
+StoreRepository -> CreateSubsetsOfStoresController : storeList
+
+CreateSubsetsOfStoresController --> CreateSubsetsOfStoresUI : tuples
+CreateSubsetsOfStoresUI --> NetworkManager : subsets of\nstores, with\nthe closest\nnumber of\nproperty\nlistings
+
+Store -> CreateSubsetsOfStoresController : ID and Property List's Size
+CreateSubsetsOfStoresController --> Tuple : creates
+
+
+'US20
+class ReadResponseUI{
+- ReadResponseController controller
+___
++ printResponseList\n(responseList)
++ chooseResponse\n(responseList)
++ AcceptOrDeclineResponse()
++ specifyTheReasonToDecline()
+}
+
+class ReadResponseController{
+___
++ getResponsesToClient()
++ changeResponse\n(response)
++ changeResponseWithReason\n(response, reason)
+}
+Client -> ReadResponseUI : asks to read a response
+Client -> ReadResponseUI : accepts or declines the response
+
+ReadResponseUI -> ReadResponseController : creates
+ReadResponseController --> Repositories : gets instance of
+ReadResponseController -> Response : creates
+
+ReadResponseController --> ResponseRepository : change the state \nof the response
+ReadResponseController --> ResponseRepository : add a reason if the \nresponse is declined
+
+@enduml

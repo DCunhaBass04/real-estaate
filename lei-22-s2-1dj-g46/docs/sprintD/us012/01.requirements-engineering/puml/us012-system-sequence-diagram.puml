@@ -1,0 +1,50 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 012 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "System Administrator" as User
+participant ":System" as System
+
+activate User
+
+    activate User
+    User -> System : asks to list import information from a legacy system
+    activate System
+
+    System --> User : asks if the user wants to list requested format for the .csv file
+    deactivate System
+
+    User -> System : answers the question (Yes/No)
+    activate System
+
+    alt answer is 'Yes'
+    System --> User : prints requested format (what each line is and must have)
+    end
+
+    System --> User : asks for the file's full path
+    deactivate System
+
+    User -> System : writes full path to .csv file
+    activate System
+
+    alt file doesn't exist
+    System --> User : tells user that the given file does not exist
+    else file isn't .csv
+    System --> User : tells user to insert a .csv file
+    else file exists and is .csv
+    alt file isn't in the requested format
+    System --> User : displays operation fail
+    else file is valid
+    System --> User : registers all key information from the given file and displays operation success
+    end
+    end
+
+    deactivate System
+
+
+@enduml

@@ -1,0 +1,140 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+title  US011 Accept offers - Domain Model
+
+class Employee {
+-role
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+class Order {
+-clientEmail
+-property
+-amount
+}
+
+class Agent {
+-email
+-name
+-phoneNumber
+-address
+-store
+-ccNumber
+-taxNumber
+-password
+}
+
+class Client {
+-name
+-passportNumber
+-socialSecurityNumber
+-email
+-phoneNumber
+-pwd
+}
+
+class System {
+-listOfAnnouncements
+-listOfSoldProperties
+-listOfOrders
+}
+
+interface Property {
+}
+
+class Request{
+-type
+-price
+-priceUnit
+-isItPublished
+-commissionDate
+-owner
+-commissionValue
+-duration
+}
+
+class Land{
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-request
+}
+
+class Apartment {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-photographs
+-finalPrice
+-announcementDate
+-request
+}
+
+class House {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-basement
+-inhabitableLoft
+-sunExposure
+-photographs
+-finalPrice
+-announcementDate
+-request
+}
+
+
+Agent "1" - "1" System : asks for property offers >
+System "1" --- "1" Agent: send the list of\nproperty offers >
+System "1" - "1" System : updates list of orders, deleting\nevery one of them and sending an\nemail to the respective clients
+
+Agent "1" -- "1" System: sends the answer to each offer >
+System "1" -- "1..*" Client: notify the client via email >
+
+System --> System : updates the list of\nannouncements, deleting\nthe accepted offer
+System -- System : updates the list of\nsold properties, adding\nthe accepted offer
+
+Agent "1" -- "1" Employee : is a >
+
+Client "1" -- "1..*" Order : placed order(s) on >
+
+Order "1" - "1" Property : regarding >
+
+Agent "1" -- "*" Property : is responsible for >
+
+Property "1" - "1" Request : has >
+
+Property "1" -- "1" Apartment : can be >
+Property "1" -- "1" Land : can be >
+Property "1" -- "1" House : can be >
+
+@enduml

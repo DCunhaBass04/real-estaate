@@ -1,0 +1,47 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+title US019 Getting Close Subsets - Domain Model
+
+class NetworkManager {
+-role
+-name
+-email
+-password
+}
+
+interface Property {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class Store {
+-address
+-emailAddress
+-name
+-email
+-phoneNumber
+-ID
+-properties
+}
+
+Store "1" -- "1..*" Property : has some >
+
+Store - Store : divides stores into\ntwo sublists >
+
+NetworkManager "1" - "2" Store : gets the two\nstore sublists >
+
+@enduml

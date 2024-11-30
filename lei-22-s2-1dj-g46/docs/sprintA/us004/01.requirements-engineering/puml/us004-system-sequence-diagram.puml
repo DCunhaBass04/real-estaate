@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 004 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Owner" as Owner
+participant ":System" as System
+
+activate Owner
+
+    Owner -> System : asks to submit a request for listing a property sale or rent\n(with description, informal description, technical description, cost)
+    activate System
+
+        System --> Owner : lists all available agents
+    deactivate System
+
+    Owner -> System : chooses the agent that will the responsible for that property
+    activate System
+
+        System --> Owner : registers the owner's request to the System
+    deactivate System
+
+
+@enduml

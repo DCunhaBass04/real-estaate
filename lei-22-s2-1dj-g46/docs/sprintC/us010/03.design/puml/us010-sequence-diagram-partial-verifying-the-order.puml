@@ -1,0 +1,34 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Client" as CLT
+participant ":PlaceOrderUI" as UI
+participant ":PlaceOrderController" as CTRL
+
+ UI -> CTRL : request to validate the amount and the order
+        activate CTRL
+
+            UI<-- CTRL : send the validation
+            deactivate CTRL
+
+        CLT <-- UI : print: Order placed!
+
+
+        alt if there is an order already placed for this property from this buyer
+
+        CLT <-- UI : Print: Order already placed for this property
+
+        end
+
+
+        alt if there is the amount is equal to another client order in the same property
+
+        CLT <-- UI : Print: An order with the same amount has already been registered by another client for this property
+
+        end
+@enduml

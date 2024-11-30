@@ -1,0 +1,57 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 010 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Client" as Client
+participant ":System" as UI
+
+activate Client
+
+    Client -> UI : asks to place an order
+    activate UI
+
+    alt there are no properties in the system
+        UI --> Client : tells the user that there are no properties in the system
+    else there are properties in the system
+
+        UI --> Client : request to select desired Filters to list the properties
+    deactivate UI
+
+    Client -> UI : selects the desired filters (or not)
+    activate UI
+
+    alt there are no properties in the system that meet the chosen filters
+        UI --> Client : tells the user that there are no properties in the system with those criteria
+    else there are properties in the system that meet\nthose criteria or they didn't choose any criteria
+        UI --> Client : list properties and request to select one
+    deactivate UI
+
+    Client -> UI : selects one property
+    activate UI
+
+    alt if the client hasn't registered an offer for this property
+
+        UI --> Client : request the amount
+    deactivate UI
+
+    Client -> UI : sends the requested amount
+    activate UI
+    alt client has sent an amount that is equal to the amount \nfrom another client for this property
+            UI --> Client : displays: "An order with the same amount has already been registered \nby another client for this property"
+            else otherwise
+        UI --> Client : displays: ""Order placed!"
+        end
+
+    else if client has already registered an offer for this property
+        UI --> Client : displays: "Order already placed for this property"
+        deactivate UI
+        end
+        end
+        end
+
+@enduml

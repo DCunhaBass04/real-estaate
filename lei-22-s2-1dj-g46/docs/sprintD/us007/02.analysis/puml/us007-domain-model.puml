@@ -1,0 +1,26 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+hide circle
+hide methods
+
+title US007 Sign Up - Domain Model
+
+class UnregisteredUser {
+}
+
+class User {
+-name
+-cardNumber
+-taxNumber
+-emailAddress
+-telephoneNumber
+-password
+-address
+}
+
+UnregisteredUser "1" --> "1" User : creates user with\nprovided information
+@enduml

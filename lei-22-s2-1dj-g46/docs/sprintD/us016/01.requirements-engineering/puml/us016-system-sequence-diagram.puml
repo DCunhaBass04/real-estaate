@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title User Story 16 - System Sequence Diagram
+autonumber
+actor "Agent" as Agent
+participant "System" as System
+activate Agent
+
+Agent -> System: chooses a booking request to answer
+activate System
+
+System --> Agent : requests an answer to that specific request
+deactivate System
+
+Agent -> System : writes the full response, registering (or not) the visit
+activate System
+
+alt if the operation fails at any point
+System --> Agent : displays operation failure
+else otherwise
+System --> Agent : displays operation success
+end
+deactivate System
+deactivate Agent
+
+@enduml

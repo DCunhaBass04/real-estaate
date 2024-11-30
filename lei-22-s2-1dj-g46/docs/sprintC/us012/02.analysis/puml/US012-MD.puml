@@ -1,0 +1,154 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title US012 Import a Legacy File - Domain Model
+
+hide methods
+
+class Admin {
+-name
+-email
+-password
+}
+
+class File {
+-ownerNames
+-ownerPassportNumbers
+-ownerSSNs
+-ownerEmails
+-ownerPhoneNumbers
+-propertyTypes
+-propertyAreas
+-propertyLocations
+-propertyDistances
+-propertyNumOfBedrooms
+-propertyNumOfBathrooms
+-propertyNumOfParkingSpaces
+-propertyCentralHeating
+-propertyAirConditioning
+-propertyBasement
+-propertyLoft
+-propertySunExposure
+-propertyRequestedPrice
+-propertyPrice
+-commissionValue
+-contractDuration
+-propertyRequestDate
+-propertySaleDate
+-requestType
+-storeID
+-storeName
+-storeLocation
+-storePhoneNumber
+-storeEmail
+}
+
+class Owner {
+-name
+-passportNumber
+-socialSecurityNumber
+-email
+-phoneNumber
+}
+
+class Store {
+-name
+-location
+-phoneNumber
+-email
+}
+
+interface Property {
+}
+
+class Request{
+-type
+-price
+-priceUnit
+-isItPublished
+-commissionDate
+-owner
+-commissionValue
+-duration
+}
+
+class Land{
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class Apartment {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class House {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-numOfBedrooms
+-numOfBathrooms
+-numOfParkingSpaces
+-centralHeating
+-airConditioning
+-basement
+-inhabitableLoft
+-sunExposure
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+class System {
+-advertisements
+-application
+}
+
+Admin -> File : owns
+Admin -> System : sends .csv\nfile to
+System --> File : validates\nfile
+
+System -> System : registers needed information\nfor each line on the file
+
+System --> Owner : registers
+System --> Property : registers
+System --> Store : registers if unique
+
+Property -> Request : contains
+
+Property --> Apartment : can be
+Property --> House : can be
+Property --> Land : can be
+
+@enduml

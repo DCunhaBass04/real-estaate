@@ -1,0 +1,58 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 002 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Real Estate Agent" as User
+participant ":System" as System
+
+
+    activate User
+    User -> System : asks to list registered properties
+    activate System
+
+    System --> User : asks if the user only wants to see 'for rent', 'for sale' or both
+    deactivate System
+
+    User -> System : answers the question
+    activate System
+
+    System --> User : asks if they only want to see lands, apartments, houses or all of those
+    deactivate System
+
+    User -> System : answers the question
+    activate System
+
+    alt there aren't any requests with the given specifications
+        System --> User : shows message saying that there aren't any\nrequests that meet the given requirements
+    else there are
+        System --> User : shows all property requests done to the current agent
+        loop while there are property requests
+            User -> System : selects a property to set commission
+            System --> User : asks if there is an agreement on the current commission value
+            deactivate System
+            User -> System : answers the question
+            activate System
+            alt if the answer is no
+                System --> User : requests new commission value (% or flat value)
+                User -> System : inserts new commission value
+            end
+            System --> User : asks if there is an agreement on the final price
+            deactivate System
+            User -> System : answers the question
+            activate System
+            alt if the answer is no
+                System --> User : requests new final property price
+                User -> System : inserts new final property price
+            end
+            System --> User : displays operation success
+        end
+    end
+
+    deactivate User
+
+@enduml

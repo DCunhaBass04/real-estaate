@@ -1,0 +1,156 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+title US012 Import a Legacy File - Class Diagram
+
+class Admin {
+-String name
+-String email
+-String password
+}
+
+class File {
+-String ownerNames
+-int ownerPassportNumbers
+-String ownerSSNs
+-String ownerEmails
+-String ownerPhoneNumbers
+-String propertyTypes
+-int propertyAreas
+-String propertyLocations
+-int propertyDistances
+-int propertyNumOfBedrooms
+-int propertyNumOfBathrooms
+-int propertyNumOfParkingSpaces
+-boolean propertyCentralHeating
+-boolean propertyAirConditioning
+-boolean propertyBasement
+-boolean propertyLoft
+-String propertySunExposure
+-float propertyRequestedPrice
+-float propertyPrice
+-float commissionValue
+-int contractDuration
+-String propertyRequestDate
+-String propertySaleDate
+-String requestType
+-int storeID
+-String storeName
+-String storeLocation
+-String storePhoneNumber
+-String storeEmail
+}
+
+class Owner {
+-String name
+-int passportNumber
+-String socialSecurityNumber
+-String email
+-String phoneNumber
+}
+
+class Store {
+-int id
+-String name
+-String location
+-String phoneNumber
+-String email
+}
+
+interface Property{
+-Request request
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-png photographs
+___
+}
+
+class Request{
+-String type;
+-float price;
+-String priceUnit;
+-boolean isItPublished;
+-String commissionDate;
+-String ownerEmail;
+-String commissionValue;
+-int duration;
+}
+
+class House{
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+-boolean basement
+-boolean inhabitableLoft
+-float sunExposure
+___
+}
+
+class Apartment{
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+___
+}
+
+class Land{
+___
+}
+
+class ImportLegacySystemUI {
+___
++run()
+}
+
+class ImportLegacySystemController {
+___
++importFile(fileReader)
++useLine(line)
++createOwner(itemsPerLine)
++createRequest(itemsPerLine)
+}
+
+class Repositories {
+-PropertyRepository propertyRepository
+___
++getInstance()
++getPropertyRepository()
+}
+
+class PropertyRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+Admin -> File : owns
+Admin -> ImportLegacySystemUI : runs and sends .csv\nfile to
+ImportLegacySystemUI -> ImportLegacySystemController : verifyFile(file)
+ImportLegacySystemController --> File : validates\nfile
+
+ImportLegacySystemController -> ImportLegacySystemController : reads each file's line
+
+File --> Property : has info about
+File --> Owner : has info about
+File --> Store : has info about
+
+ImportLegacySystemController --> Property : creates
+ImportLegacySystemController --> Repositories : gets instance of
+Repositories -> PropertyRepository : contains
+PropertyRepository -> Property : contains list of
+
+Property -> Request : contains
+Property --> Apartment : can be
+Property --> House : can be
+Property --> Land : can be
+
+@enduml

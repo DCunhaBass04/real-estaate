@@ -1,0 +1,16 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+title US001 Display Listed Properties - Domain Model
+
+class UnregisteredUser {
+___
++listProperties()
+}
+
+@enduml

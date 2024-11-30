@@ -1,0 +1,41 @@
+@startuml
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 002 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Agent" as Agent
+participant ":SetCommissionController" as CTRL
+participant ":Repository" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant ":PropertyRepository" as Property
+
+activate Agent
+
+activate CTRL
+
+loop for every PropertyRequest
+Agent -> CTRL : setCommission() (percentage or fixed value)
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL : repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getPropertyRepository()
+activate PLAT
+
+PLAT --> CTRL : propertyRepository
+deactivate PLAT
+
+CTRL -> Property : adds Property to..
+deactivate CTRL
+activate Property
+Property --> Agent : displays operation's (un)success
+deactivate Property
+end
+@enduml

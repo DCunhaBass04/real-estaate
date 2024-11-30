@@ -1,0 +1,29 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US004 -  Sequence Diagram (SD)
+
+autonumber
+
+'hide footbox
+actor "Owner" as ADM
+participant ":SendPropertyRequestUI" as UI
+
+activate ADM
+
+    ADM -> UI : selects responsible agent
+    activate UI
+
+        UI --> ADM : requests data about property
+    deactivate UI
+
+    ADM -> UI : types requested data about property
+    activate UI
+
+        UI -> UI : validateData
+
+        UI --> ADM : shows selected agent and requested data
+    deactivate UI
+@enduml

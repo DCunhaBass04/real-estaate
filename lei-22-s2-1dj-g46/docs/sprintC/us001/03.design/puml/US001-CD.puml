@@ -1,0 +1,157 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+title US001 Display Listed Properties - Class Diagram
+
+class UnregisteredUser {
+___
+}
+
+class ListPropertiesUI {
+ListPropertyController listPropertyController
+___
++run()
+}
+
+class ListPropertyController {
+PropertyRepository propertyRepository
+___
++printPropertiesToUser()
+}
+
+class Repositories {
+-Repositories instance
+-PropertyRepository propertyRepository
+___
++getInstance()
++getPropertyRepository()
+}
+
+class PropertyRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+interface Property {
+___
++equals(object)
++clone()
+}
+
+class Request{
+-String type
+-float price
+-String priceUnit
+-boolean isItPublished
+-String commissionDate
+-Owner owner
+-String commissionValue
+-int duration
+}
+
+class Land{
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class Apartment {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class House {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-boolean basement
+-boolean inhabitableLoft
+-String sunExposure
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+
+class EditAndSortLists{
+___
++getPropertiesWithXTypeOfSale(propertyList, type)
++getPropertiesIfTheyAreLand(propertyList)
++getPropertiesIfTheyAreApartment(propertyList)
++getPropertiesIfTheyAreHouse(propertyList)
+getPropertiesByXAgent(propertyList, agentEmail)
++sortPropertiesByAscendingPrice(propertyList)
++sortPropertiesByDescendingPrice(propertyList)
++sortPropertiesByAscendingArea(propertyList)
++sortPropertiesByDescendingArea(propertyList)
++sortPropertiesByAscendingDistance(propertyList)
++sortPropertiesByDescendingDistance(propertyList)
++sortPropertiesByAscendingNumOfPhotographs(propertyList)
++sortPropertiesByDescendingNumOfPhotographs(propertyList)
+}
+
+UnregisteredUser -> ListPropertiesUI : \n\nrequests to list properties
+
+ListPropertiesUI --> UnregisteredUser : asks about what\nfilters and sorting settings\nthey want
+ListPropertiesUI --> ListPropertyController : tells it to filter\nand sort the list according\nto the agent's request
+
+ListPropertyController -> EditAndSortLists : runs the necessary methods\nfor the requested result
+
+ListPropertiesUI --> ListPropertiesUI : implements Runnable\ninterface
+ListPropertiesUI --> ListPropertyController : runs
+ListPropertyController --> Repositories : gets\ninstance of
+Repositories -> PropertyRepository : contains
+ListPropertyController --> PropertyRepository : gets property\nlist from
+
+PropertyRepository --> Property : contains
+
+Property -> Request : contains
+
+Property --> Apartment : can be
+Property --> House : can be
+Property --> Land : can be
+
+
+@enduml

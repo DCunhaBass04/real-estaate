@@ -1,0 +1,34 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 001 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Unregistered User" as User
+participant ":MainMenuUI" as MainUI
+participant ":MenuItem" as Menu
+participant ":ListPropertiesUI" as ListUI
+participant ":ListPropertiesController" as CTRL
+
+
+activate User
+
+    User -> MainUI : requests to see all listed properties
+    activate MainUI
+
+    MainUI -> Menu** : create
+    MainUI -> Menu : getProperties()
+    deactivate MainUI
+    activate Menu
+
+    Menu -> ListUI** : create
+    Menu -> ListUI : run()
+    deactivate Menu
+    activate ListUI
+
+    ListUI -> CTRL : runs item from class..
+
+    activate CTRL
+@enduml

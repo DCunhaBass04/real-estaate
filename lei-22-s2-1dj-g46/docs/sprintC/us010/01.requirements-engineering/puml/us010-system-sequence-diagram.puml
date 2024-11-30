@@ -1,0 +1,47 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 010 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Client" as Client
+participant ":System" as System
+
+activate Client
+
+    Client -> System : asks to place an order
+    activate System
+
+        System --> Client : request to select desired Filters to list the properties
+    deactivate System
+
+    Client -> System : selects the desired Filters
+    activate System
+
+        System --> Client : list properties and request to select one
+    deactivate System
+
+    Client -> System : selects one property
+    activate System
+
+    alt if the client hasn't registered an offer for this property
+
+        System --> Client : request the amount
+    deactivate System
+
+    Client -> System : sends the requested amount
+    activate System
+    alt Client has sent an amount that is equal to the amount \nfrom another client for this property
+            System --> Client : Displays "An order with the same amount has already been registered \nby another client for this property"
+            else else
+        System --> Client : displays: Order placed!
+        end
+
+    else if client has already registered an offer for this property
+        System --> Client : Displays "Order already placed for this property"
+        end
+
+@enduml

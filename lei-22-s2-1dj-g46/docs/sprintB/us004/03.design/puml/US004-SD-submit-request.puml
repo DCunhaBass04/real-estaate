@@ -1,0 +1,63 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US004 -  Sequence Diagram (SD)
+
+autonumber
+
+'hide footbox
+actor "Owner" as ADM
+participant ":SendPropertyRequestUI" as UI
+participant ":SendPropertyRequestController" as CTRL
+participant "manageRequests\n:ManageRequests" as manageRequests
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "requestRepository:\nRequestRepository" as RequestRepository
+
+
+activate ADM
+
+    ADM -> UI : submits request
+    activate UI
+
+        UI -> CTRL : submitRequest(request)
+        activate CTRL
+
+
+                    CTRL -> manageRequests : addRequest(request)
+                    activate manageRequests
+
+
+                         manageRequests -> RepositorySingleton : getInstance()
+                                activate RepositorySingleton
+
+                                    RepositorySingleton --> manageRequests: repositories
+                                deactivate RepositorySingleton
+
+                                manageRequests -> PLAT : getRequestRepository()
+                                activate PLAT
+
+                                    PLAT --> manageRequests: RequestRepository
+                                deactivate PLAT
+
+                                manageRequests -> RequestRepository : addRequest(request)
+                                activate RequestRepository
+
+                                RequestRepository --> manageRequests : true/false
+                                deactivate RequestRepository
+
+                                manageRequests --> CTRL : Show operation success
+                            deactivate manageRequests
+
+          CTRL --> UI: show operation success
+          deactivate CTRL
+    UI --> ADM: show operation success
+    deactivate UI
+
+deactivate ADM
+
+
+
+@enduml

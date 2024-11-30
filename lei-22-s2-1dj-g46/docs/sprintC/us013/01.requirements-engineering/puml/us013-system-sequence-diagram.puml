@@ -1,0 +1,24 @@
+@startuml
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 013 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Network Manager" as NetworkManager
+participant "System" as System
+
+activate NetworkManager
+
+NetworkManager -> System : request to see the list of all employees by store
+activate System
+alt if list isn't empty
+System--> NetworkManager: return the list of all registered employees, grouped by stores. Stores are\nsorted in descending order by the number of property listings they own\n(the list must show the exact number). Employees inside a Store must be sorted alphabetically.
+else if list is empty
+System --> NetworkManager: informs the user that the list of stores is empty
+end
+deactivate System
+@enduml

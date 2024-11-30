@@ -1,0 +1,175 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title Domain Model
+
+class UnregisteredUser {
+___
++requestToListProperties()
++signIn(name, cardNumber, taxNumber,\nemailAddress, telephoneNumber,\npassword, address)
+}
+
+class User {
+-name
+-cardNumber
+-taxNumber
+-emailAddress
+-telephoneNumber
+-password
+-address
+___
++listProperties()
+}
+
+class Organization {
+-name
+-vatNumber
+-website
+-phoneNumber
+-email
+}
+
+class Task {
+-reference
+-description
+-informalDesc
+-technicalDesc
+-duration
+-cost
+}
+
+class Category {
+-description
+}
+
+class Employee {
+-role
+-cardNumber
+-taxNumber
+-address
+-email
+-phone
+-agency
+___
+}
+
+class Platform {
+-description
+}
+
+class System {
+-advertisements
+-application
+___
++registerUser(name, cardNumber, taxNumber,\nemailAddress, telephoneNumber,\npassword, address)
+}
+
+class SystemAdministrator {
+___
+}
+
+class Agent {
+-ID
+___
+}
+
+class Owner {
+___
+}
+
+class NetworkBranch {
+-designation
+-location
+-email
+-phone number
+___
+}
+
+class Store {
+-location
+___
+}
+
+class Property {
+-type
+-area
+-location
+-distanceFromCityCentre
+-requestedPrice
+-photographs
+___
+}
+
+class Apartment {
+___
+}
+
+class House {
+-basement
+-inhabitableLoft
+-sunExposure
+___
+}
+
+class Client {
+___
+}
+
+class ApartmentOrHouse {
+-bedrooms
+-bathrooms
+-parkingSpaces
+-availableEquipment
+___
+}
+class Land{
+}
+
+UnregisteredUser "1" -- "1" System : requests to list properties >
+System "1" - "*" Property : lists >
+
+UnregisteredUser "1" --> "1" System : provides information\nneeded to sign up
+System -> System : verifies sign up\nwith given information
+System "1" --> "1" User : creates user with\nprovided information
+
+SystemAdministrator "1" -- "*" Employee : registers >
+SystemAdministrator "1" -- "*" NetworkBranch : registers >
+SystemAdministrator "1" -- "*" Store : registers >
+SystemAdministrator "1" -- "1" System : prepares >
+
+Agent "1" -- "1" System : publishes sale\nannouncement on >
+Agent "1" -- "1..*" Property : published >
+
+Owner "1" -- "1" Agent : sends property\nrequest to >
+Owner "1" -- "1" Property : sends request about\nthis to agent >
+
+Property "1" -- "1" ApartmentOrHouse : can be >
+Property "1" -- "1" Land : can be >
+
+ApartmentOrHouse "1" -- "1" Apartment : can be >
+ApartmentOrHouse "1" -- "1" House : can be >
+
+User "1" -- "1" Client : can be >
+User "1" -- "1" Employee : can be >
+
+Employee "1" -- "1" Agent : can be >
+Employee "1" -- "1" Owner : can be >
+Employee "1" -- "1" SystemAdministrator : can be >
+
+Client "1" -- "1" Agent : request to\nschedule a\nvisit >
+
+Platform "1" -- "*" Organization : has registered >
+Platform "1" -- "*" Category : defines >
+
+Organization "1" -- "0..*" Employee : has >
+Organization "1" -- "0..*" Task: owns >
+
+Task "*" -- "1" Category: cataloged as >
+
+Employee "1" -- "*" Task : creates >
+@enduml

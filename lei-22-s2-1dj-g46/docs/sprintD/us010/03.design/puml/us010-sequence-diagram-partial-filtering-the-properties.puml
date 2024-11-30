@@ -1,0 +1,74 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Client" as CLT
+participant ":PlaceOrderUI" as UI
+participant ":PlaceOrderController" as CTRL
+participant "EditAndSortLists" as EAS
+participant "Repositories" as RE
+participant "PropertyAnnouncementRepository " as REP
+
+
+activate CLT
+
+    CLT -> UI : asks to place an order
+    activate UI
+
+        UI -> RE : request properties
+        activate RE
+
+            RE -> REP : request properties
+            activate REP
+
+                RE <-- REP : send properties
+                deactivate REP
+
+            UI <-- RE : send properties
+            deactivate RE
+
+            UI -> EAS : sort properties if not from the same owner
+            activate EAS
+
+                UI <-- EAS : send the sorted properties
+                deactivate EAS
+
+
+            alt if there is no propertys
+
+            CLT <-- UI : print No properties to be listed
+
+            end
+
+
+            UI -> CTRL : request to sort the properties
+            activate CTRL
+
+                CLT <-- CTRL : request to choose the Filters
+                deactivate CTRL
+                deactivate UI
+
+    CLT -> CTRL : send the Filters
+    activate CTRL
+
+        CTRL -> EAS : request to sort the properties with the Filters
+        activate EAS
+
+            CTRL <-- EAS : send the sorted properties
+            deactivate EAS
+
+        CLT <-- CTRL : print the properties
+        deactivate CTRL
+        activate UI
+
+
+        alt if there is no propertys
+
+        CLT <-- UI : print No properties to be listed
+
+        end
+@enduml

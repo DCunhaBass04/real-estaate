@@ -1,0 +1,75 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+title US012 Import a Legacy File - Class Diagram
+
+class Admin {
+-String name
+-String email
+-String password
+}
+
+class Store {
+-int id
+-String name
+-String location
+-String phoneNumber
+-String email
+}
+
+interface Property{
+-Request request
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-File[] photographs
+___
+}
+
+class ImportLegacySystemUI {
+___
++run()
+}
+
+class ImportLegacySystemController {
+___
++importFile(fileReader)
++useLine(line)
++createOwner(itemsPerLine)
++createRequest(itemsPerLine)
+}
+
+class Repositories {
+-PropertySoldRepository propertyRepository
+-
+___
++getInstance()
++getPropertyRepository()
+}
+
+class PropertySoldRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+Admin -> ImportLegacySystemUI : runs and sends .csv\nfile to
+ImportLegacySystemUI -> ImportLegacySystemController : verifyFile(file)
+
+ImportLegacySystemController -> ImportLegacySystemController : reads each file's line
+
+
+ImportLegacySystemController --> Property : creates one\nfor each line
+ImportLegacySystemController --> Repositories : gets instance of
+Repositories -> PropertySoldRepository : contains
+PropertySoldRepository -> Property : contains list of
+
+Property -> Store : associated to
+
+@enduml

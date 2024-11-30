@@ -1,0 +1,65 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 007 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Unregistered User" as User
+participant ":MainMenuUI" as firstUI
+participant ":MenuItem" as Menu
+participant ":SignUpUI" as secondUI
+participant ":SignUpController" as CTRL
+participant ":UserRepository" as Repository
+
+activate User
+
+User -> firstUI : asks to register in the system
+activate firstUI
+
+firstUI -> Menu** : create
+firstUI -> Menu : signUp()
+deactivate firstUI
+activate Menu
+
+Menu -> secondUI** : runs
+deactivate Menu
+
+
+secondUI --> User : requests necessary data
+activate secondUI
+deactivate firstUI
+
+loop invalid
+
+User -> secondUI : types needed information (name, citizen's card number, tax number, \nemail and contact telephone number) and optional information (address)
+secondUI -> CTRL** : create
+secondUI -> CTRL : runs
+deactivate secondUI
+activate CTRL
+
+
+CTRL --> User : shows requested data
+
+User -> CTRL : submits data
+
+CTRL -> Repository : verifyData(name, citizen's card number, tax number, \nemail and contact telephone number (and address))
+activate Repository
+
+Repository --> CTRL : operation unsuccessful
+CTRL --> User : operation unsuccessful, try again
+
+end
+
+Repository --> CTRL : operation successful
+deactivate Repository
+CTRL --> User : operation successful
+
+CTRL -> CTRL : generatePassword()
+
+CTRL -> Repository : createUser(name, citizen's card number, tax number, \nemail and contact telephone number (and address))
+
+CTRL --> User : sendPassword(email, password)
+
+@enduml

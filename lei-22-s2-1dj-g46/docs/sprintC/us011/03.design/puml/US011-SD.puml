@@ -1,0 +1,178 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title User Story 11 - Sequence Diagram
+autonumber
+
+actor "Agent" as Agent
+
+participant ":AcceptOffersUI" as UI
+participant ":AcceptOffersController" as CTRL
+participant "EditAndSortLists" as ListEditor
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "propertyAnnouncementRepository\n:PropertyAnnouncementRepository" as PropertyRepository
+participant "orderRepository\n:OrderRepository" as OrderRepository
+participant "propertySoldRepository\n:PropertySoldRepository" as SoldRepository
+
+activate Agent
+Agent->UI: ask for the orders of properties
+activate UI
+
+UI->CTRL**: create
+UI -> CTRL : getPropertiesByCurrentAgent(email)
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getPropertyRepository()
+activate PLAT
+
+PLAT --> CTRL: propertyRepository
+deactivate PLAT
+
+CTRL -> PropertyRepository : getProperties()
+activate PropertyRepository
+
+PropertyRepository --> CTRL : propertyList
+deactivate PropertyRepository
+
+CTRL -> ListEditor : getPropertiesByXAgent(announcementList, email)
+activate ListEditor
+
+ListEditor --> CTRL : filteredList
+deactivate ListEditor
+
+CTRL --> UI : propertyList
+deactivate CTRL
+
+loop for every property
+    UI -> UI : manageOrdersByProperty(property)
+    activate UI
+    UI -> CTRL : getOrdersToXProperty(property)
+    activate CTRL
+    CTRL -> RepositorySingleton : getInstance()
+    activate RepositorySingleton
+
+    RepositorySingleton --> CTRL: repositories
+    deactivate RepositorySingleton
+
+    CTRL -> PLAT : getOrderRepository()
+    activate PLAT
+
+    PLAT --> CTRL: orderRepository
+    deactivate PLAT
+
+    CTRL -> OrderRepository : getOrders()
+    activate OrderRepository
+
+    OrderRepository --> CTRL : orderList
+    deactivate OrderRepository
+
+    CTRL -> ListEditor : getOrdersDoneToXProperty(orderList, property)
+    activate ListEditor
+
+    ListEditor --> CTRL : filteredList
+    deactivate ListEditor
+
+    CTRL -> ListEditor : sortOrdersByDescendingAmount(orderList)
+    activate ListEditor
+
+    ListEditor --> CTRL : sortedList
+    deactivate ListEditor
+
+    CTRL --> UI : orderList
+    UI -> UI : printAllOrdersForXProperty(listOfOrders)
+    activate UI
+    deactivate CTRL
+    alt property doesn't have any orders
+        UI --> Agent : displays empty list of orders
+    else property has orders
+        UI-->Agent:prints sorted list of orders
+        deactivate UI
+        loop the number of orders
+            UI --> Agent : ask if the agent accepts the order
+            deactivate UI
+            Agent-> UI: accepts or denies an order
+            activate UI
+            alt order is accepted
+                UI -> CTRL : acceptOffer(property, listOfOrders, i)
+                activate CTRL
+                CTRL -> RepositorySingleton : getInstance()
+                activate RepositorySingleton
+
+                RepositorySingleton --> CTRL: repositories
+                deactivate RepositorySingleton
+
+                CTRL -> PLAT : getPropertyRepository()
+                activate PLAT
+
+                PLAT --> CTRL: propertyRepository
+                deactivate PLAT
+
+                CTRL -> PropertyRepository : getOrders()
+                activate PropertyRepository
+
+                PropertyRepository --> CTRL : propertyAnnouncementList
+                deactivate PropertyRepository
+                CTRL -> RepositorySingleton : getInstance()
+                activate RepositorySingleton
+
+                RepositorySingleton --> CTRL: repositories
+                deactivate RepositorySingleton
+
+                CTRL -> PLAT : getPropertySoldRepository()
+                activate PLAT
+
+                PLAT --> CTRL: propertySoldRepository
+                deactivate PLAT
+
+                CTRL -> PropertySoldRepository : getSoldProperties()
+                activate PropertySoldRepository
+
+                PropertySoldRepository --> CTRL : propertySoldList
+                deactivate PropertySoldRepository
+
+                CTRL -> RepositorySingleton : getInstance()
+                activate RepositorySingleton
+
+                RepositorySingleton --> CTRL: repositories
+                deactivate RepositorySingleton
+
+                CTRL -> PLAT : getOrderRepository()
+                activate PLAT
+
+                PLAT --> CTRL: orderRepository
+                deactivate PLAT
+
+                CTRL -> OrderRepository : getOrders()
+                activate OrderRepository
+
+                OrderRepository --> CTRL : orderList
+                deactivate OrderRepository
+
+                CTRL -> CTRL : propertyAnnouncementRepository.remove(property)
+                CTRL -> CTRL : propertySoldRepository.add(property)
+                CTRL -> CTRL : orderRepository.getOrders().get(index).setState("Accepted")
+                loop all other orders (breaks out of loop 'number of orders' after this)
+                    CTRL -> CTRL : orderRepository.getOrders().get(index).setState("Declined")
+                end
+
+            else
+                UI -> CTRL : declineOffer(index)
+                CTRL -> CTRL : orderRepository.getOrders().get(index).setState("Declined")
+            end
+            deactivate CTRL
+
+            UI --> UI : sends a message to\nthe respective client
+            deactivate UI
+            UI-->Agent : shows operation success
+            deactivate UI
+        end
+    end
+end
+
+@enduml

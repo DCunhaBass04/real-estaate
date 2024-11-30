@@ -1,0 +1,85 @@
+@startuml
+
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 002 - Sequence Diagram (SD)
+
+autonumber
+
+actor "Owner" as Owner
+actor "Agent" as Agent
+participant ":AdminUI" as AdminUI
+participant ":MenuItem" as Menu
+participant ":SetCommissionUI" as SetCommissionUI
+participant ":SetCommissionController" as CTRL
+participant ":Repository" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant ":PropertyRequestRepository" as PropertyRequest
+participant ":PropertyRepository" as Property
+
+activate Owner
+Owner -> Agent : sends Property\nRequest to..
+deactivate Owner
+activate Agent
+
+Agent -> AdminUI : requests to set\ncommissions
+activate AdminUI
+
+AdminUI -> Menu** : create
+AdminUI -> Menu : setCommission()
+deactivate AdminUI
+activate Menu
+
+Menu -> SetCommissionUI : run()
+deactivate Menu
+activate SetCommissionUI
+
+
+SetCommissionUI -> CTRL** : create
+SetCommissionUI -> CTRL : getPropertyRequests()
+deactivate SetCommissionUI
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL : repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getPropertyRequestRepository()
+activate PLAT
+
+PLAT --> CTRL : propertyRequestRepository
+deactivate PLAT
+
+CTRL -> PropertyRequest : getPropertyRequests()
+activate PropertyRequest
+
+PropertyRequest --> CTRL : propertyRequestList
+deactivate PropertyRequest
+
+CTRL --> Agent : prints all property requests (along with the necessary information)
+
+loop for every PropertyRequest
+Agent -> CTRL : setCommission() (percentage or fixed value)
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL : repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getPropertyRepository()
+activate PLAT
+
+PLAT --> CTRL : propertyRepository
+deactivate PLAT
+
+CTRL -> Property : adds Property to..
+deactivate CTRL
+activate Property
+Property --> Agent : displays operation's (un)success
+deactivate Property
+end
+@enduml

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ipp.isep.dei.esoft.project.ui.gui.ListAllDealsUIFX">
+   <children>
+      <Button fx:id="exitButton" layoutX="550.0" layoutY="20.0" mnemonicParsing="false" onAction="#back" text="Exit" />
+      <Button fx:id="ascendingButton" layoutX="129.0" layoutY="67.0" mnemonicParsing="false" onAction="#ascending" prefHeight="33.0" prefWidth="101.0" text="Ascending" />
+      <Button fx:id="bubbleAscendingButton" layoutX="59.0" layoutY="134.0" mnemonicParsing="false" onAction="#bubbleAscending" prefHeight="33.0" prefWidth="101.0" text="Bubble" />
+      <Button fx:id="mergeAscendingButton" layoutX="199.0" layoutY="134.0" mnemonicParsing="false" onAction="#mergeAscending" prefHeight="33.0" prefWidth="101.0" text="Merge" />
+      <Button fx:id="descendingButton" layoutX="370.0" layoutY="67.0" mnemonicParsing="false" onAction="#descending" prefHeight="33.0" prefWidth="101.0" text="Descending" />
+      <Button fx:id="bubbleDescendingButton" layoutX="300.0" layoutY="134.0" mnemonicParsing="false" onAction="#bubbleDescending" prefHeight="33.0" prefWidth="101.0" text="Bubble" />
+      <Button fx:id="mergeDescendingButton" layoutX="438.0" layoutY="134.0" mnemonicParsing="false" onAction="#mergeDescending" prefHeight="33.0" prefWidth="101.0" text="Merge" />
+      <TextArea fx:id="areaText" layoutX="150.0" layoutY="189.0" prefHeight="200.0" prefWidth="300.0" />
+      <Label layoutX="205.0" layoutY="24.0" text="Sort all Properties by area in:" />
+   </children>
+</AnchorPane>

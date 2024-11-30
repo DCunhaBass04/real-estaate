@@ -1,0 +1,39 @@
+@startuml
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 005 - Sequence Diagram (SD)
+
+autonumber
+
+actor "System Administrator" as ADM
+participant ":AdminUI" as ADMUI
+participant ":CreateStoreUI" as CRTUI
+participant ":CreateStoreController" as CNTRL
+
+activate ADM
+
+ADM -> ADMUI : Requests to register a new Store
+
+activate ADMUI
+
+ADMUI -> CRTUI : Requests to register a new Store
+
+deactivate ADMUI
+
+activate CRTUI
+
+CRTUI -> CNTRL** : Creates
+
+CRTUI -> CNTRL : registerNewStore()
+
+activate CNTRL
+
+CNTRL --> CRTUI : requests data
+
+deactivate CNTRL
+
+CRTUI --> ADM : requests data
+@enduml

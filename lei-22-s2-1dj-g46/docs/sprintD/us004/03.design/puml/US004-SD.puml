@@ -1,0 +1,143 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title US004 -  Sequence Diagram (SD)
+
+autonumber
+
+'hide footbox
+actor "Owner" as Owner
+participant ":SendPropertyRequestUI" as System
+participant ":SendPropertyRequestController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant ":agentRepository\n:AgentRepository" as AgentRepository
+participant "requestRepository:\nRequestRepository" as RequestRepository
+
+activate Owner
+
+Owner -> System : asks to submit a request for listing a property sale or rent\n(with description, informal description, technical description, cost)
+    activate System
+
+    System -> CTRL** : creates
+
+    System -> CTRL : getProperties()
+    activate CTRL
+
+    CTRL -> RepositorySingleton : getInstance()
+    activate RepositorySingleton
+
+    RepositorySingleton --> CTRL: repositories
+    deactivate RepositorySingleton
+
+    CTRL -> PLAT : getAgentRepository()
+    activate PLAT
+
+    PLAT --> CTRL: agentRepository
+    deactivate PLAT
+
+    CTRL -> AgentRepository : getAgents()
+    activate AgentRepository
+
+    AgentRepository --> CTRL : agentList
+    deactivate AgentRepository
+
+    CTRL --> System : agentList
+    deactivate CTRL
+
+    System --> Owner : lists all available agents
+    deactivate System
+
+    Owner -> System : chooses the agent that will the responsible for that property
+    activate System
+
+    System --> Owner : asks how many property requests they want to send
+    deactivate System
+
+    Owner -> System : answers the question with number x
+    activate System
+
+    loop x times
+        System -> CTRL : fillRequest(scanner, agent, verifyInput)
+        activate CTRL
+        CTRL --> System : needs request's information
+        deactivate CTRL
+        System --> Owner : asks for general details about request like p if it is 'for sale' (it would be in €)\nor 'for rent' (it would be in €/month) (select one of those options),\ncontract duration if it is 'for rent' and commission value (% or fixed value)
+        deactivate System
+        Owner -> System : provides the needed information
+        activate System
+        System -> CTRL : delivers requested information
+        activate CTRL
+        CTRL --> CTRL : creates object\nRequest
+        CTRL --> System : needs information about property
+        deactivate CTRL
+        System --> Owner : asks if they want to publish a request for a land,\napartment or for a house
+        deactivate System
+
+        Owner -> System : selects one of those 3 options
+        activate System
+        alt answer is land
+            System --> Owner : asks the land's area (in m^2), location, distance from city centre (in km)
+            deactivate System
+            Owner -> System : selects and types the requested information
+            activate System
+            System -> CTRL : fillRequestForLand(information)
+            activate CTRL
+            CTRL --> CTRL : creates object\nLand
+            CTRL --> System : land
+            deactivate CTRL
+        else answer is apartment
+            System --> Owner : asks the apartment's area (in m^2), location, distance from city centre\n(in km), number of bedrooms, bathrooms and parking spaces,\navailability of central heating and air conditioning.
+            deactivate System
+            Owner -> System : selects and types the requested information
+            activate System
+            System -> CTRL : fillRequestForApartment(information)
+            activate CTRL
+            CTRL --> CTRL : creates object\nApartment
+            CTRL --> System : apartment
+            deactivate CTRL
+        else answer is house
+            System --> Owner : asks the house's area (in m^2), location, distance from city centre\n(in km), number of bedrooms, bathrooms and parking spaces,\navailability of central heating, air conditioning,\nbasement and inhabitable loft and direction of sun exposure (N/S/E/W)
+            deactivate System
+            Owner -> System : selects and types the requested information
+            activate System
+            System -> CTRL : fillRequestForApartment(information)
+            activate CTRL
+            CTRL --> CTRL : creates object\nHouse
+            CTRL --> System : house
+            deactivate CTRL
+        end
+        System --> Owner : asks if the user wants to submit the given request
+        deactivate System
+        Owner -> System : gives their answer (Yes/No)
+        activate System
+        alt answer is Yes
+            System -> CTRL : sends signal\nto controller
+            activate CTRL
+            CTRL -> RepositorySingleton : getInstance()
+            activate RepositorySingleton
+
+            RepositorySingleton --> CTRL: repositories
+            deactivate RepositorySingleton
+
+            CTRL -> PLAT : getRequestRepository()
+            activate PLAT
+
+            PLAT --> CTRL: requestRepository
+            deactivate PLAT
+
+            activate RequestRepository
+            CTRL --> RequestRepository : registers property to
+            deactivate RequestRepository
+            CTRL --> System : sends signal to UI
+            deactivate CTRL
+        end
+        System --> Owner : displays operation (un)success
+        deactivate System
+    end
+
+deactivate Owner
+
+@enduml

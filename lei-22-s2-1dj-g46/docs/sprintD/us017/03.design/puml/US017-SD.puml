@@ -1,0 +1,175 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title User Story 017 - Sequence Diagram (SD)
+autonumber
+actor "Network Manager" as ADM
+participant "LeastAllDealsUI" as UI
+participant "LeastAllDealsController" as CTRL
+participant ":EditAndSortLists" as EDIT
+
+
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "propertySoldRepository\n:PropertySoldRepository" as SOLD
+
+
+
+activate ADM
+
+ADM -> UI: asks to list all deals made
+activate UI
+
+UI -> CTRL** : create
+
+activate CTRL
+
+CTRL -> EDIT** : create
+
+deactivate CTRL
+
+UI -> CTRL : getProperties()
+
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getPropertySoldRepository()
+
+activate PLAT
+
+PLAT --> CTRL: propertySoldRepository
+
+deactivate PLAT
+
+CTRL -> SOLD : getProperties()
+
+activate SOLD
+
+SOLD --> CTRL : properties
+
+deactivate SOLD
+
+CTRL --> UI : properties
+
+deactivate CTRL
+
+UI --> ADM : asks if the user wants to sort by\nascending/descending order of property's area
+deactivate UI
+
+ADM -> UI : picks an option
+activate UI
+
+UI --> ADM : asks what sorting algorithm they desire\nto use (bubble or merge)
+deactivate UI
+
+ADM -> UI : picks an option
+
+activate UI
+
+UI -> CTRL : sortProperties(option, option2, properties)
+
+activate CTRL
+
+alt if the user picked ascending order
+
+    alt bubble sort
+
+        CTRL -> EDIT : bubbleSortAscending(properties)
+
+        activate EDIT
+
+        EDIT --> CTRL : properties
+
+        deactivate EDIT
+
+    end
+
+    alt merge sort
+
+        CTRL -> EDIT : genericMergeSortStart(properties, true)
+
+        activate EDIT
+
+            EDIT -> EDIT : mergeSortPropertyList(list, ascending)
+
+            activate EDIT
+
+                EDIT -> EDIT : mergeAscendingPropertyArrayList(propertyList, leftSideOfList, rightSideOfList)
+
+                activate EDIT
+
+                EDIT --> EDIT : mutablePropertyList
+
+                deactivate EDIT
+
+            EDIT --> EDIT : list
+
+            deactivate EDIT
+
+        EDIT --> CTRL : properties
+
+        deactivate EDIT
+
+    end
+
+end
+
+alt if the user picked descending order
+
+    alt bubble sort
+
+        CTRL -> EDIT : bubbleSortDescending(properties)
+
+        activate EDIT
+
+        EDIT --> CTRL : propertyList
+
+        deactivate EDIT
+
+    end
+
+    alt merge sort
+
+        CTRL -> EDIT : genericMergeSortStart(properties, false)
+
+        activate EDIT
+
+            EDIT -> EDIT : mergeSortPropertyList(list, ascending)
+
+            activate EDIT
+
+                EDIT -> EDIT : mergeDescendingPropertyArrayList(propertyList, leftSideOfList, rightSideOfList)
+
+                activate EDIT
+
+                EDIT --> EDIT : mutablePropertyList
+
+                deactivate EDIT
+
+            EDIT --> EDIT : list
+
+            deactivate EDIT
+
+        EDIT --> CTRL : properties
+
+        deactivate EDIT
+
+    end
+
+end
+
+CTRL --> UI : properties
+
+deactivate CTRL
+
+UI --> ADM : prints the sorted list of deals
+
+deactivate UI
+
+@enduml

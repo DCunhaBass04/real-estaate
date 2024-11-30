@@ -1,0 +1,23 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 001 - System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Unregistered User" as User
+participant ":System" as System
+
+activate User
+
+    User -> System : asks to see all listed properties
+    activate System
+
+        System --> User : prints all properties (along with price, location and agent)
+    deactivate System
+
+
+
+@enduml

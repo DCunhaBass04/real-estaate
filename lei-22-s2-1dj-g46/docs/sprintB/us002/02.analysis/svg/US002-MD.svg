@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="444px" preserveAspectRatio="none" style="width:417px;height:444px;background:#FFFFFF;" version="1.1" viewBox="0 0 417 444" width="417px" zoomAndPan="magnify"><defs/><g><text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="335" x="34.5" y="18.6855">US002 Real Estate Agent - Domain Model</text><!--MD5=[9d44916250b776386006c440668bcfbb]
+class Agent--><rect codeLine="13" fill="#F8F8F8" height="54.9297" id="Agent" style="stroke:#383838;stroke-width:1.5;" width="37" x="171.5" y="164.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="31" x="174.5" y="182.0977">Agent</text><line style="stroke:#383838;stroke-width:1.5;" x1="172.5" x2="207.5" y1="189.7344" y2="189.7344"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="9" x="177.5" y="205.1533">ID</text><line style="stroke:#383838;stroke-width:1.5;" x1="172.5" x2="207.5" y1="211.5703" y2="211.5703"/><!--MD5=[08d6a551530ab71b272f9c2c40bfb385]
+class Owner--><rect codeLine="18" fill="#F8F8F8" height="41.0938" id="Owner" style="stroke:#383838;stroke-width:1.5;" width="42" x="224" y="29.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="36" x="227" y="47.0977">Owner</text><line style="stroke:#383838;stroke-width:1.5;" x1="225" x2="265" y1="54.7344" y2="54.7344"/><line style="stroke:#383838;stroke-width:1.5;" x1="225" x2="265" y1="62.7344" y2="62.7344"/><!--MD5=[6b626634f3bb0842bebd5e499c80b711]
+class Property--><rect codeLine="22" fill="#F8F8F8" height="124.1094" id="Property" style="stroke:#383838;stroke-width:1.5;" width="132" x="188" y="313.6406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="45" x="231.5" y="331.0977">Property</text><line style="stroke:#383838;stroke-width:1.5;" x1="189" x2="319" y1="338.7344" y2="338.7344"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="21" x="194" y="354.1533">type</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="22" x="194" y="367.9893">area</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="37" x="194" y="381.8252">location</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="120" x="194" y="395.6611">distance from city centre</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="76" x="194" y="409.4971">requested price</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="61" x="194" y="423.333">photographs</text><line style="stroke:#383838;stroke-width:1.5;" x1="189" x2="319" y1="429.75" y2="429.75"/><!--MD5=[f8e092794d52bf9a252466252ae7bd1c]
+class System--><rect codeLine="37" fill="#F8F8F8" height="68.7656" id="System" style="stroke:#383838;stroke-width:1.5;" width="86" x="7" y="341.1406"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="41" x="29.5" y="358.5977">System</text><line style="stroke:#383838;stroke-width:1.5;" x1="8" x2="92" y1="366.2344" y2="366.2344"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="74" x="13" y="381.6533">advertisements</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="51" x="13" y="395.4893">application</text><line style="stroke:#383838;stroke-width:1.5;" x1="8" x2="92" y1="401.9063" y2="401.9063"/><!--MD5=[8215ad9c7e54ff5cf1374c31e0205fa8]
+link Agent to System--><path codeLine="33" d="M171.14,196.3606 C144.12,202.0406 94.91,216.5106 70,249.6406 C50.32,275.8106 46.77,313.8606 47.25,341.1006 " fill="none" id="Agent-System" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="83" x="87.5" y="264.1357">publishes sale</text><polygon fill="#000000" points="72.7487,278.9665,80.8631,274.006,76.3977,270.1838,72.7487,278.9665" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="103" x="84" y="280.4873">announcement on</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="156.4537" y="192.6289">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="39.0195" y="330.2784">1</text><!--MD5=[3b272f57340c94200d2bad2ac4dd7911]
+link Owner to Property--><path codeLine="35" d="M262.61,70.8606 C269.09,79.4006 275.66,89.8906 279,100.6406 C300.98,171.4706 287.11,257.1606 272.78,313.6406 " fill="none" id="Owner-Property" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="118" x="291" y="189.6357">sends request about</text><polygon fill="#000000" points="312.7093,205.6636,315.2671,196.5034,309.3943,196.7494,312.7093,205.6636" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="72" x="320.5" y="205.9873">this to agent</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="259.4021" y="92.1089">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="267.6423" y="302.6193">1</text><!--MD5=[f9a1c0be8553c24e55b3d1af5dfee800]
+link Agent to Property--><path codeLine="42" d="M192.1,219.8406 C194.09,238.1706 197.9,262.8406 205,283.6406 C208.36,293.4906 212.72,303.5506 217.44,313.2106 " fill="none" id="Agent-Property" style="stroke:#383838;stroke-width:1.0;"/><polygon fill="#000000" points="211.3096,271.6419,211.7768,262.1428,206.1042,263.6823,211.3096,271.6419" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="55" x="219" y="272.1357">published</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="184.7938" y="241.1913">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="20" x="192.0565" y="302.5763">1..*</text><!--MD5=[230ed26534a71a562bcbb34f1061110d]
+link Owner to Agent--><path codeLine="43" d="M223.98,62.6106 C210.67,71.1506 194.6,84.1706 187,100.6406 C177.78,120.6306 179.54,145.8206 183.03,164.5406 " fill="none" id="Owner-Agent" style="stroke:#383838;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="86" x="188" y="115.1357">sends property</text><polygon fill="#000000" points="198.6361,130.8076,204.735,123.5101,199.2809,121.3189,198.6361,130.8076" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="58" x="208.5" y="131.4873">request to</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="208.8577" y="61.6291">1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="7" x="173.6088" y="153.852">1</text><!--MD5=[29a0b10e0d9057f0e38545ac95265381]
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title US002 Real Estate Agent - Domain Model
+
+hide methods
+
+class Agent {
+ID
+___
+}
+
+class Owner {
+___
+}
+
+class Property {
+type
+area
+location
+distance from city centre
+requested price
+photographs
+___
+}
+
+
+Agent "1" - - "1" System : publishes sale\nannouncement on >
+
+Owner "1" - - "1" Property : sends request about\nthis to agent >
+
+class System {
+advertisements
+application
+___
+}
+Agent "1" - - "1..*" Property : published >
+Owner "1" - - "1" Agent : sends property\nrequest to >
+
+@enduml
+
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+
+title US002 Real Estate Agent - Domain Model
+
+hide methods
+
+class Agent {
+ID
+___
+}
+
+class Owner {
+___
+}
+
+class Property {
+type
+area
+location
+distance from city centre
+requested price
+photographs
+___
+}
+
+
+Agent "1" - - "1" System : publishes sale\nannouncement on >
+
+Owner "1" - - "1" Property : sends request about\nthis to agent >
+
+class System {
+advertisements
+application
+___
+}
+Agent "1" - - "1..*" Property : published >
+Owner "1" - - "1" Agent : sends property\nrequest to >
+
+@enduml
+
+PlantUML version 1.2022.1(Tue Feb 01 18:19:58 GMT 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: Cp1252
+Language: pt
+Country: PT
+--></g></svg>

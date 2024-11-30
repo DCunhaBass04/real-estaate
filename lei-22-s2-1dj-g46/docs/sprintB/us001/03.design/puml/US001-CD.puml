@@ -1,0 +1,138 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+
+title US001 Display Listed Properties - Class Diagram
+
+class UnregisteredUser {
+___
+}
+
+class MainMenuUI {
+-List<MenuItem> options
+___
++run()
+}
+
+class MenuItem {
+-String description
+-Runnable ui
+___
++run()
+}
+
+class ListPropertiesUI {
+ListPropertyController listPropertyController
+___
++run()
+}
+
+class ListPropertyController {
+PropertyRepository propertyRepository
+___
++printPropertiesToUser()
+}
+
+class Repositories {
+-Repositories instance
+-PropertyRepository propertyRepository
+___
++getInstance()
++getPropertyRepository()
+}
+
+class PropertyRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+interface Property {
+___
++equals(object)
++clone()
+}
+
+class Apartment {
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+-File[] photographs
+-String commissionDate
+-float commissionValue
+___
++equals(object)
++clone()
++toString()
+}
+
+class House {
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+-boolean basement
+-boolean inhabitableLoft
+-float sunExposure
+-File[] photographs
+-String commissionDate
+-float commissionValue
+___
++equals(object)
++clone()
++toString()
+}
+
+class Land{
+-String type
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-File[] photographs
+-String commissionDate
+-float commissionValue
+___
++equals(object)
++clone()
++toString()
+}
+
+
+UnregisteredUser --> MainMenuUI : interacts with
+
+MainMenuUI -> MenuItem : creates
+MainMenuUI -> MenuItem : requests to get\nall properties
+
+MenuItem -> ListPropertiesUI : runs
+
+ListPropertiesUI --> ListPropertiesUI : implements Runnable\ninterface
+ListPropertiesUI --> ListPropertyController : runs
+ListPropertyController --> Repositories : gets\ninstance of
+Repositories -> PropertyRepository : contains
+ListPropertyController --> PropertyRepository : gets property\nlist from
+
+PropertyRepository --> Property : contains
+
+Property --> Apartment : can be
+Property --> House : can be
+Property --> Land : can be
+
+
+@enduml

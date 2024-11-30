@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+title User Story 17 - System Sequence Diagram
+autonumber
+actor "Network Manager" as NetworkManager
+participant "System" as System
+activate NetworkManager
+
+NetworkManager -> System: asks to list all deals made
+activate System
+
+System --> NetworkManager : asks if the user wants to sort by\nascending/descending order of a property's area
+deactivate System
+
+NetworkManager -> System : picks an option
+activate System
+
+System --> NetworkManager : asks what sorting algorithm they want\nto use (bubble or merge)
+deactivate System
+
+NetworkManager -> System : picks an option
+activate System
+
+System --> NetworkManager : prints the sorted list of deals
+deactivate System
+
+@enduml

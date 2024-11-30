@@ -1,0 +1,168 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+title US002 Real State Agent - Class Diagram
+
+class Agent {
+-String email
+-String name
+-String phoneNumber
+-String address
+-String store
+-int ccNumber
+-int taxNumber
+-String pwd
+----
++hasEmail(String email)
++getName()
++getEmail()
++toString()
++clone()
+}
+
+class Repositories {
+-Repositories instance
+-PropertyRepository propertyRepository
+___
++getInstance()
++getPropertyRepository()
+}
+
+class PropertyRequestRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+class PropertyRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
+}
+
+interface Property{
+-String type
+-float area
+-String location
+-float distance from city centre
+-float requested price
+---
++equals(object)
++clone()
+}
+
+class SetCommissionUI {
+___
++run()
+}
+
+class SetCommissionController{
+___
++setCommissionFromOwner()
++printPropertyRequests(List<PropertyRequest> propertyRequests)
++choosePropertyRequest(PropertyRequestRepository propertyRequestRepository,\nList<PropertyRequest> propertyRequests, Scanner ler)
++setCommission(PropertyRequest propertyRequest, VerifyInput verifyInput, Scanner input)
++setCommissionValue(float finalValue, String wantedRange, Scanner input, VerifyInput verifyInput)
+}
+
+class Request{
+-String type
+-float price
+-String priceUnit
+-boolean isItPublished
+-String commissionDate
+-Owner owner
+-String commissionValue
+-int duration
+}
+
+class Land{
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class Apartment {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class House {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-boolean basement
+-boolean inhabitableLoft
+-String sunExposure
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+Agent --> SetCommissionUI : runs and inputs the\nnecessary information\n(choosing the requests to set\ncommission and agreeing or not with commission\nvalue and final property price)
+SetCommissionUI -> SetCommissionController : creates
+SetCommissionUI -> PropertyRequestRepository : gets list of all requests done to\nthat agent with the requested filters
+SetCommissionController --> Repositories :   get instance of PropertyRequestRepository\nand PropertyRepository
+Repositories --> PropertyRepository : contains
+Repositories --> PropertyRequestRepository : contains
+
+SetCommissionController -> SetCommissionController : updates each request\naccording to the agents' choice\nto agree or not agree with the commission\nvalue and final property price
+
+SetCommissionController -> PropertyRequestRepository : removes published\nproperty from
+SetCommissionController -> PropertyRepository : adds published\nproperty to
+
+PropertyRepository --> Property : has
+PropertyRequestRepository --> Property : has
+
+Property -> Request : contains
+
+Property --> Apartment : can be
+Property --> House : can be
+Property --> Land : can be
+
+
+@enduml

@@ -1,0 +1,276 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+autonumber
+
+'hide footbox
+actor "Client" as CLT
+participant ":PlaceOrderUI" as UI
+participant ":PlaceOrderController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "propertyAnnouncementRepository:\nPropertyAnnouncementRepository" as REP
+participant ":authenticationRepository:\nAuthenticationRepository" as AUTHRepository
+participant "userSession\n:User Session" as SESSION
+participant "EditAndSortLists" as EAS
+participant "OrderRepository" as REO
+participant "Order" as ORDER
+
+
+
+activate CLT
+
+    CLT -> UI : asks to place an order
+    activate UI
+
+    UI -> CTRL** : create
+
+    UI -> CTRL : requests properties
+
+        activate CTRL
+
+            CTRL -> RepositorySingleton : getInstance()
+
+            activate RepositorySingleton
+
+            RepositorySingleton --> CTRL: repositories
+
+            deactivate RepositorySingleton
+
+                CTRL -> PLAT : getPropertyRepository()
+
+                activate PLAT
+
+                PLAT --> CTRL: propertyRepository
+
+                deactivate PLAT
+
+                CTRL -> REP : getProperties()
+
+                activate REP
+
+                REP --> CTRL : propertyList
+
+                deactivate REP
+
+                CTRL --> UI : propertyList
+
+                deactivate CTRL
+
+                UI -> CTRL
+
+                activate CTRL
+
+                            CTRL -> RepositorySingleton : getInstance()
+
+                            activate RepositorySingleton
+
+                            RepositorySingleton --> CTRL: repositories
+
+                            deactivate RepositorySingleton
+
+                                CTRL -> PLAT : getAuthenticationRepository()
+
+                                activate PLAT
+
+                                PLAT --> CTRL: authenticationRepository
+
+                                deactivate PLAT
+
+                                CTRL -> AUTHRepository: getCurrentUserSession()
+
+                                activate AUTHRepository
+
+                                AUTHRepository --> CTRL: userSession
+
+                                deactivate AUTHRepository
+
+                                 CTRL -> SESSION : getUserID
+
+                                    activate SESSION
+
+                        SESSION --> CTRL : email
+
+                    deactivate SESSION
+
+               CTRL --> UI : email
+
+            deactivate CTRL
+
+        UI --> EAS** : create
+
+        UI -> EAS : getPropertiesIfNotFromTheSameOwner(propertyList, email)
+
+        activate EAS
+
+                UI <-- EAS : propertyList
+                deactivate EAS
+
+
+
+            alt if there are no properties
+
+            CLT <-- UI : print No properties to be listed
+
+            end
+
+ '        if (!propertyList.isEmpty()) {
+ '            propertyList = askAboutFilters(propertyList, ler);
+ '            if (!propertyList.isEmpty()) {
+ '                printPropertyList(propertyList);
+ '                int option = verifyOption(propertyList);
+ '                if (option != 0) {
+ '                    controller.chooseProperty(propertyList, option);
+ '                    controller.requestAmount(propertyList.get(option - 1));
+ '                    float amount = verifyInput.verifyFloat(ler, "order amount");
+ '                    controller.verifyAmount(amount);
+ '                    boolean valid = controller.verifyOrder(amount, email, propertyList.get(option - 1));
+ '                    if (valid) {
+ '                        controller.createAndRegisterNewOrder(amount, email, propertyList.get(option - 1));
+ '                        System.out.println("Order placed!");
+ '                    }
+ '                }
+ '            } else {
+ '                System.out.println("No properties to be listed");
+ '            }
+ '        } else {
+ '            System.out.println("No properties to be listed");
+ '        }
+ '    }
+ '
+ '    /**
+ '     * Asks the user about filters to apply on the property list.
+ '     * Filters the list of properties based on the user's input.
+ '     *
+ '     * @param properties The list of properties to filter.
+ '     * @param sc         The Scanner object used for user input.
+ '     * @return The filtered list of properties.
+ '     */
+ '    public List<Property> askAboutFilters(List<Property> properties, Scanner sc) {
+ '        System.out.printf("Do you want to only see properties...%n1 - For Sale%n2 - For Rent%n3 - Both%n");
+ '        properties = controller.askAboutTypeOfSale(properties, sc);
+ '        System.out.printf("Do you want to only see...%n1 - Lands%n2 - Apartments%n3 - House%n4 - All of them");
+ '        properties = controller.askAboutTypeOfProperty(properties, sc);
+ '        return properties;
+ '    }
+ '
+ '    /**
+ '     * Prints the list of properties.
+ '     *
+ '     * @param propertyList The list of properties to print.
+ '     */
+ '    public void printPropertyList(List<Property> propertyList) {
+ '        if (!propertyList.isEmpty()) {
+ '            System.out.println();
+ '            for (int i = 0; i < propertyList.size(); i++) {
+ '                Property property = propertyList.get(i);
+ '                System.out.println((i + 1) + ". " + property);
+ '            }
+ '        } else {
+ '            System.out.println("There are no properties with the requested characteristics");
+ '        }
+ '    }
+ '
+ '    /**
+ '     * Verifies and validates the user's option for choosing a property.
+ '     *
+ '     * @param properties The list of properties to choose from.
+ '     * @return The validated option chosen by the user.
+ '     */
+ '    public int verifyOption(List<Property> properties) {
+ '        Scanner scanner = new Scanner(System.in);
+ '        boolean valid = false;
+ '        int option = 0;
+ '        while (!valid) {
+ '            System.out.println("Choose the number of the property that you want to purchase\nOr 0 to cancel");
+ '            option = scanner.nextInt();
+ '            if (option == 0) {
+ '                System.out.println("Canceled.");
+ '                valid = true;
+ '            } else if (option <= properties.size() && option > 0) {
+ '                valid = true;
+ '            } else {
+ '                System.out.println("Invalid option. Please try again.");
+ '            }
+ '        }
+ '        return option;
+ '    }
+
+
+ '        List<Property> propertyList = Repositories.getInstance().getPropertyRepository().getProperties();
+
+
+
+                UI --> CLT : request to choose the Filters
+                deactivate CTRL
+                deactivate UI
+
+    CLT -> UI : chooses the filters
+
+    activate UI
+
+        CTRL -> EAS : request to sort the properties with the Filters
+        activate EAS
+
+            CTRL <-- EAS : send the sorted properties
+            deactivate EAS
+
+        CLT <-- CTRL : print the properties
+        deactivate CTRL
+        activate UI
+
+
+        alt if there are no properties
+
+        CLT <-- UI : print No properties to be listed
+
+        end
+
+
+        CLT <-- UI : request to select a property with an option and to send the correct amount
+        deactivate UI
+
+    CLT -> UI : send the selected option property and the amount
+    activate UI
+
+
+        alt if the amount is higher
+
+        CLT <-- UI : Incorrect amount. Please insert the amount again.
+
+        end
+
+        UI -> CTRL : request to validate the amount and the order
+        activate CTRL
+
+            UI<-- CTRL : send the validation
+            deactivate CTRL
+
+        CLT <-- UI : print: Order placed!
+
+
+        alt if there is an order already placed for this property from this buyer
+
+        CLT <-- UI : Print: Order already placed for this property
+
+        end
+
+
+        alt if the amount is equal to another client's order in the same property
+
+        CLT <-- UI : Print: An order with the same amount has already been registered by another client for this property
+
+        end
+
+
+
+
+
+
+
+
+
+
+@enduml

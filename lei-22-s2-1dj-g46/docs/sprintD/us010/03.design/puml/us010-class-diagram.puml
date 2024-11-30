@@ -1,0 +1,127 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam linetype polyline
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+'left to right direction
+
+title US010 Place an Order - Class Diagram
+
+
+class PlaceOrderUI
+{
+    + askAboutFilters(List<Property> \nproperties, Scanner sc)
+    + printPropertyList(List<Property> propertyList)
+    + verifyOption(List<Property> properties)
+}
+
+class PlaceOrderController
+{
+    - float correctAmount
+    ___
+    + askAboutTypeOfSale(List<Property> \nproperties, Scanner sc)
+    + askAboutTypeOfProperty(List<Property> \nproperties, Scanner sc)
+    + chooseProperty(List<Property> \nproperties, int option)
+    + printPropertyList(List<Property> \npropertyList)
+    + requestAmount(Property property)
+    + verifyAmount(float amount)
+    + verifyOrder(float amount, String email, \nProperty property)
+    + createAndRegisterNewOrder(float amount, \nString email, Property property)
+}
+
+class OrderRepository {
+    - List<Order> orders
+    - boolean validateOrder(Order order)
+    + List<Order> getOrders()
+    + Optional<Order> add(Order order)
+    + remove(Object o)
+}
+
+class Client {
+-String name
+-int passportNumber
+-socialSecurityNumber
+-String email
+-String phoneNumber
+-String pwd
+___
++ Client(email, name, phoneNumber)
++ getPhoneNumber()
++ getName()
+}
+
+class EditAndSortLists {
+    + List<Property> getPropertiesIfNotFromTheSameOwner\n(List<Property> propertyList, String ownerEmail)
+    + List<Property> getPropertiesWithXTypeOfSale\n(List<Property> propertyList, String type)
+    + List<Property> getPropertiesIfTheyAreLand\n(List<Property> propertyList)
+    + List<Property> getPropertiesIfTheyAreApartment\n(List<Property> propertyList)
+    + List<Property> getPropertiesIfTheyAreHouse\n(List<Property> propertyList)
+
+}
+
+class Repositories {
+-Repositories instance
+-OrderRepository orderRepository
+-PropertyAnnouncementRepository announcementRepository
+___
++getInstance()
++getOrderRepository()
++getPropertyAnnouncementRepository()
+}
+
+class Order {
+    - final String clientEmail;
+    - final Property property;
+    - final float amount;
+    - String state;
+    ___
+    + Order(String clientEmail, \nProperty property, float amount, String state)
+    + String getClientEmail()
+    + Property getProperty()
+    + float getAmount()
+    + String getState()
+    + setState(String state)
+    + String toString()
+    + Order clone()
+    + int compareTo(Order o)
+}
+
+class PropertyAnnouncementRepository {
+-List<Property> propertyList
+___
+    + getAgentEmail();
+    + getRequest()
+}
+
+
+interface Property{
+-Request request
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-File[] photographs
+___
+}
+
+PropertyAnnouncementRepository --> Property : contains announcements
+
+Client -> PlaceOrderUI : interacts with
+PlaceOrderUI -> Repositories : request properties
+Repositories --> PropertyAnnouncementRepository : contains
+Repositories --> OrderRepository : contains
+Repositories -> PlaceOrderUI : send properties
+PlaceOrderUI <--> EditAndSortLists : sort properties
+PlaceOrderUI --> PlaceOrderController : request to\nsort the properties
+PlaceOrderController <-> EditAndSortLists : sort properties
+PlaceOrderController --> PlaceOrderUI : send the\nsorted properties
+PlaceOrderUI <--> PlaceOrderController : choose property
+PlaceOrderUI <--> PlaceOrderController : request, send\nand verify the amount
+PlaceOrderUI <---> PlaceOrderController : request to complete\nand verify the order
+PlaceOrderController --> OrderRepository : request to\nstore the order
+OrderRepository -> Order : contains
+@enduml

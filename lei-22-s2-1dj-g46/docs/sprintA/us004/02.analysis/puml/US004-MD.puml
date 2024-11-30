@@ -1,0 +1,81 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title Domain Model
+
+class Employee {
+role
+card number
+tax number
+address
+email
+phone
+agency
+___
+}
+
+class System {
+advertisements
+application
+___
+}
+
+class Agent {
+ID
+___
+}
+
+class Owner {
+___
+}
+
+class Property {
+type
+area
+location
+distance from city centre
+requested price
+photographs
+___
+}
+
+class Apartment {
+___
+}
+
+class House {
+existence of a basement
+existence of an inhabitable loft
+sun exposure
+___
+}
+
+class ApartmentOrHouse {
+no. of bedrooms
+no. of bathrooms
+no. of parking spaces
+available equipment
+___
+}
+
+class Land{
+}
+
+Owner "1" -- "1" Agent : sends property\nrequest to >
+Owner "1" -- "1" Property : sends request about\nthis to agent >
+
+
+Property "1" -- "1" ApartmentOrHouse : can be >
+Property "1" -- "1" Land : can be >
+
+ApartmentOrHouse "1" -- "1" Apartment : can be >
+ApartmentOrHouse "1" -- "1" House : can be >
+
+Employee "1" -- "1" Agent : can be >
+Employee "1" -- "1" Owner : can be >
+@enduml

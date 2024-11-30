@@ -1,0 +1,43 @@
+@startuml
+
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+'hide methods
+
+title US012 Import a Legacy File - Domain Model
+
+hide methods
+
+class Admin {
+-name
+-email
+-password
+}
+
+class Store {
+-name
+-location
+-phoneNumber
+-email
+}
+
+interface Property {
+-area
+-location
+-distanceFromCityCentre
+-agent
+-photographs
+-finalPrice
+-announcementDate
+-saleDate
+-request
+-store
+}
+
+Admin "1" -- "*" Property : creates through\ntheir .csv file
+Property "1" -- "1" Store : associated to
+
+@enduml

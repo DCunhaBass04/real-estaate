@@ -1,0 +1,96 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title User Story 013 - Sequence Diagram (SD)
+
+autonumber
+
+'hide footbox
+actor "Network Manager" as NetworkManager
+participant ":ListEveryEmployeeUI" as UI
+participant ":ListEveryEmployeeController" as CTRL
+participant ":Repositories" as RepositorySingleton
+participant "repositories\n:Repositories" as PLAT
+participant "storeRepository\n:StoreRepository" as StoreRepository
+participant "employeeRepository\n:EmployeeRepository" as EmployeeRepository
+
+activate NetworkManager
+
+NetworkManager -> UI : request to see the list of all employees by store
+activate UI
+
+UI -> CTRL** : create
+
+UI -> CTRL : getStores()
+activate CTRL
+
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getStoreRepository()
+activate PLAT
+
+PLAT --> CTRL: storeRepository
+deactivate PLAT
+
+CTRL -> StoreRepository : getStores()
+activate StoreRepository
+
+StoreRepository --> CTRL : storeList
+deactivate StoreRepository
+
+CTRL --> UI : storeList
+deactivate CTRL
+
+UI -> CTRL : sortStoresByNumOfProperties(storeList)
+activate CTRL
+
+CTRL -> CTRL: sorts given list in\ndescending order of area
+CTRL --> UI : storeList
+deactivate CTRL
+
+UI -> UI : printAllStoresAndItsEmployees(storeList)
+activate UI
+loop for every store in storeList
+UI -> CTRL : printAllEmployeesByStore(store)
+deactivate UI
+activate CTRL
+CTRL -> RepositorySingleton : getInstance()
+activate RepositorySingleton
+
+RepositorySingleton --> CTRL: repositories
+deactivate RepositorySingleton
+
+CTRL -> PLAT : getEmployeeRepository()
+activate PLAT
+
+PLAT --> CTRL: employeeRepository
+deactivate PLAT
+
+CTRL -> EmployeeRepository : getEmployees()
+activate EmployeeRepository
+
+EmployeeRepository --> CTRL : employeeList
+deactivate EmployeeRepository
+
+alt if list is empty
+CTRL --> UI: returns warning saying that list is empty
+UI --> NetworkManager: informs the user that the list of stores is empty
+else if list isn't empty
+CTRL -> CTRL : sortEmployeesAlphabetically(employeeList)
+activate CTRL
+CTRL --> CTRL : sorted List
+deactivate CTRL
+CTRL --> UI : every employee working on that store, sorted alphabetically,\ngrouped by store
+deactivate CTRL
+UI --> NetworkManager: return the list of all registered employees, grouped by stores. Stores are\nsorted in descending order by the number of property listings they own\n(the list must show the exact number). Employees inside a Store must be sorted alphabetically.
+end
+end
+deactivate UI
+
+@enduml

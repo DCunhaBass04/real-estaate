@@ -1,0 +1,29 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+title US015 Listing all bookings - Domain Model
+
+class Agent {
+-role
+-citizenCardNumber
+-taxNumber
+-address
+-email
+-phone
+-agency
+-password
+}
+
+class Message {
+-clientName
+-clientPhoneNumber
+-preferredDate
+-timeSlot
+}
+
+Message "*" --> "1" Agent : available to
+
+@enduml

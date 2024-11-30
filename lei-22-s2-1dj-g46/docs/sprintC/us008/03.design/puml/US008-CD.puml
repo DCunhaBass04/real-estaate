@@ -1,0 +1,112 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+title US008 List Property Announcement Requests - Class Diagram
+
+class Agent {
+-name
+-email
+-pwd
+----
++hasEmail(String email)
++getName()
++getEmail()
++toString()
++clone()
+}
+
+class Repositories {
+-PropertyRepository propertyRepository
+___
++getInstance()
++getPropertyRepository()
+}
+
+class PropertyRequestRepository {
+-List<Property> properties
+___
++isEmpty()
++add(property)
++validateProperty(property)
++printProperties()
++getProperties()
++getPropertyRequestedToXAgent(String agentEmail)
+}
+
+interface Property{
+-Request request
+-float area
+-String location
+-float distanceFromCityCentre
+-float requestedPrice
+-png photographs
+___
+}
+
+class SetCommissionUI {
+___
++run()
+}
+
+class SetCommissionController{
+___
+}
+class Request{
+-String type;
+-float price;
+-String priceUnit;
+-boolean isItPublished;
+-String commissionDate;
+-String ownerEmail;
+-String commissionValue;
+-int duration;
+}
+
+class House{
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+-boolean basement
+-boolean inhabitableLoft
+-float sunExposure
+___
+}
+
+class Apartment{
+-int bedrooms
+-int bathrooms
+-int parkingSpaces
+-String availableEquipment
+___
+}
+
+class Land{
+___
+}
+
+class EditAndSortList{
+___
++getPropertiesWithXTypeOfSale(propertyList, type)
++getPropertiesIfTheyAreLand(propertyList)
++getPropertiesIfTheyAreApartment(propertyList)
++getPropertiesIfTheyAreHouse(propertyList)
+}
+
+Agent -> SetCommissionUI : runs and answers\ngiven questions
+SetCommissionUI -> Repositories : gets property\nlist through..
+SetCommissionUI --> SetCommissionController : creates
+SetCommissionUI --> Agent : asks agent about what\nfilters they want
+SetCommissionUI --> SetCommissionController : tells it to filter\nthe list according\nto the agent's request
+
+SetCommissionController -> EditAndSortList : runs the necessary methods\nfor the requested result
+
+Repositories -> PropertyRequestRepository : contains
+PropertyRequestRepository -> Property : contains
+Property -> Request : contains
+Property --> Land : can be
+Property --> Apartment : can be
+Property --> House : can be
+
+@enduml

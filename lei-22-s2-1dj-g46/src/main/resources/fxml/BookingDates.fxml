@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pt.ipp.isep.dei.esoft.project.ui.gui.BookingsUI">
+   <children>
+      <Text layoutX="52.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select the end and begin date of the time period of messages you want to see (Select the same date if you want to only see the messages from one date)" textAlignment="CENTER" wrappingWidth="413.4347229003906" />
+      <DatePicker fx:id="beginDatePicker" layoutX="362.0" layoutY="112.0" onAction="#chooseBeginDate" promptText="Select Begin Date" />
+      <DatePicker fx:id="endDatePicker" layoutX="362.0" layoutY="157.0" onAction="#chooseEndDate" promptText="Select End Date" visible="false" />
+      <Button fx:id="dateSubmission" layoutX="362.0" layoutY="200.0" mnemonicParsing="false" onAction="#submitDate" text="Submit" visible="false" />
+      <ListView fx:id="dateList" layoutX="52.0" layoutY="102.0" prefHeight="230.0" prefWidth="258.0" />
+      <Text fx:id="invalid" layoutX="362.0" layoutY="251.0" strokeType="OUTSIDE" strokeWidth="0.0" text="The submitted values are invalid. The end date must not come prior to the begin date. Try again" visible="false" wrappingWidth="175.20000000000005" />
+      <Button fx:id="back" layoutX="477.0" layoutY="20.0" mnemonicParsing="false" onAction="#back" text="Go back" />
+   </children>
+</AnchorPane>

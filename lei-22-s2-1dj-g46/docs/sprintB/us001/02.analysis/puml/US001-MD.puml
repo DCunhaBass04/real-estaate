@@ -1,0 +1,65 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+title US001 Display Listed Properties - Domain Model
+
+class UnregisteredUser {
+___
++requestToListProperties()
+}
+
+class System {
+-advertisements
+-application
+___
++listProperties()
+}
+
+class Property {
+-type
+-area
+-location
+-distanceFromCityCentre
+-requestedPrice
+-photographs
+___
+}
+
+class Apartment {
+___
+}
+
+class House {
+-basement
+-inhabitableLoft
+-sunExposure
+___
+}
+
+class ApartmentOrHouse {
+-bedrooms
+-bathrooms
+-parkingSpaces
+-availableEquipment
+___
+}
+
+class Land{
+}
+
+UnregisteredUser "1" -- "1" System : requests to list properties >
+System "1" - "*" Property : lists >
+
+Property "1" -- "1" ApartmentOrHouse : can be >
+Property "1" -- "1" Land : can be >
+
+ApartmentOrHouse "1" -- "1" Apartment : can be >
+ApartmentOrHouse "1" -- "1" House : can be >
+
+
+@enduml

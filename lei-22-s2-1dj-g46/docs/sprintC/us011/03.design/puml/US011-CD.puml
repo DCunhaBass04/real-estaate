@@ -1,0 +1,229 @@
+@startuml
+'skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+'skinparam linetype orto
+
+skinparam classAttributeIconSize 0
+
+title US011 Accept Offers - Class Diagram
+
+'left to right direction
+class PropertyAnnouncementRepository {
+-List<Property> announcements
+___
++isEmpty()
++add(property)
+-validateProperty(property)
++remove(object)
++getProperties()
+}
+
+class PropertySoldRepository {
+-List<Property> soldProperties
+___
++isEmpty()
++add(property)
+-validateProperty(property)
++getProperties()
+}
+
+class OrderRepository {
+-List<Order> orders
+___
++add(order)
+-validateOrder(order)
++remove(object)
++getOrders()
+}
+
+class Employee {
+-String role
+-String email
+-String name
+-String phoneNumber
+-String address
+-String store
+-int ccNumber
+-int taxNumber
+-String pwd
+}
+
+class Order {
+-String clientEmail
+-Property property
+-float amount
+-String state
+}
+
+class Agent {
+-String email
+-String name
+-String phoneNumber
+-String address
+-String store
+-int ccNumber
+-int taxNumber
+-String pwd
+----
++hasEmail(String email)
++getName()
++getEmail()
++toString()
++clone()
+}
+
+class Client {
+-String name
+-int passportNumber
+-String socialSecurityNumber
+-String email
+-String phoneNumber
+-String pwd
+}
+
+interface Property{
+-String type
+-float area
+-String location
+-float distance from city centre
+-float requested price
+---
++equals(object)
++clone()
+}
+
+class AcceptOffersUI {
+-AcceptOffersController ctrl
+___
++run()
++manageOrdersByProperty(property)
+-printAllOrdersForXProperty(orderList)
+}
+
+class AcceptOffersController{
+-EditAndSortLists editAndSortLists
+___
++getPropertiesByCurrentAgent(email)
++getOrdersToXProperty(property)
++acceptOffer(property, listOfOrders, index)
++declineOffer(index)
+}
+
+class Repositories {
+-Repositories instance
+-PropertyRepository propertyRepository
+___
++getInstance()
++getPropertyRepository()
+}
+
+class Request{
+-String type
+-float price
+-String priceUnit
+-boolean isItPublished
+-String commissionDate
+-Owner owner
+-String commissionValue
+-int duration
+}
+
+class Land{
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class Apartment {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+class House {
+-float area
+-String location
+-float distanceFromCityCentre
+-Agent agent
+-int numOfBedrooms
+-int numOfBathrooms
+-int numOfParkingSpaces
+-boolean centralHeating
+-boolean airConditioning
+-boolean basement
+-boolean inhabitableLoft
+-String sunExposure
+-File[] photographs
+-float finalPrice
+-String announcementDate
+-Request request
+___
++equals(object)
++clone()
++toString()
+}
+
+
+Agent ----> AcceptOffersUI : asks for\nproperty offers
+AcceptOffersUI --> Agent: send the list of\nproperty offers
+AcceptOffersController -> OrderRepository : updates list of orders, an\nemail to the respective clients
+
+Agent --> AcceptOffersUI: sends the answer\nto each offer
+AcceptOffersUI --> AcceptOffersController : creates
+AcceptOffersController -> Repositories : gets instance of
+Repositories --> OrderRepository : contains
+Repositories --> PropertySoldRepository : contains
+Repositories --> PropertyAnnouncementRepository : contains
+
+AcceptOffersController -> OrderRepository : gets order list from
+AcceptOffersController -> PropertyAnnouncementRepository : gets announcement list from
+AcceptOffersController -> PropertySoldRepository : gets sold\nproperties list from
+
+AcceptOffersController --> Client: notify the client via email
+
+AcceptOffersController --> PropertyAnnouncementRepository : updates the list of\nannouncements, deleting\nthe accepted offer
+AcceptOffersController --> PropertySoldRepository : updates the list of\nsold properties, adding\nthe accepted offer
+
+Agent --> Employee : is a
+
+Client --> Order : placed\norder(s) on
+
+Order -> Property : regarding
+
+Agent --> Property : is responsible for
+
+PropertyAnnouncementRepository --> Property : contains\nannounced properties
+PropertySoldRepository --> Property : contains\nsold properties
+OrderRepository --> Order : contains
+
+Property -> Request : has
+
+Property --> Apartment : can be
+Property --> Land : can be
+Property --> House : can be
+
+@enduml

@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Main-Class: pt.ipp.isep.dei.esoft.project.ui.Main
+Class-Path: apiguardian-api-1.1.2.jar byte-buddy-agent-1.12.22.jar junit
+ -platform-engine-1.9.2.jar junit-jupiter-api-5.9.2.jar junit-platform-c
+ ommons-1.9.2.jar opentest4j-1.2.0.jar bcrypt-0.9.0.jar commons-lang3-3.
+ 12.0.jar junit-jupiter-engine-5.9.2.jar mockito-all-1.10.19.jar byte-bu
+ ddy-1.12.22.jar AuthLib-1.0-20220308.131530-2.jar bytes-1.3.0.jar mocki
+ to-core-5.1.1.jar objenesis-3.3.jar
+
